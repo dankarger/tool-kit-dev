@@ -11,7 +11,6 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { api } from "@/utils/api";
-import { type NextPage } from "next";
 import { buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
