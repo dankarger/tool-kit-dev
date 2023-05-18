@@ -22,8 +22,8 @@ model Example {
 model ChatMessage {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
-    message String @db.VarChar(255)
-    response  String @db.VarChar(255)
+    message String @db.VarChar(500)
+    response  String @db.VarChar(1500)
     authorId String
 
     @@index([authorId])
