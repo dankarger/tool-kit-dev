@@ -10,8 +10,21 @@ datasource db {
   url = env("DATABASE_URL")
   relationMode = "prisma"
 }
+
+
 model Example {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+
+model ChatMessage {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    message String @db.VarChar(255)
+    response  String @db.VarChar(255)
+    authorId String
+
+    @@index([authorId])
 }
