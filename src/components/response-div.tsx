@@ -1,7 +1,13 @@
 import { Separator } from "@/components/ui/separator";
-import type { Response } from "@/types";
+// import type { Response } from "@/types";
 
-export const ResponseDiv = ({ message, response, authorId }: Response) => {
+interface Response {
+  message?: string;
+  response?: string;
+  authorId?: string;
+}
+
+export const ResponseDiv = ({ message, response }: Response) => {
   // if (!text) return null;
 
   return (

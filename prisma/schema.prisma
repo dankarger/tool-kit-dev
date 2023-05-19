@@ -25,13 +25,13 @@ model ChatMessage {
     response  String @db.VarChar(1500)
     authorId String
     session ChatSession? @relation(fields: [sessionId],references: [id])
-    sessionId String? 
+    sessionId String?
     @@index([authorId])
 }
 
 model ChatSession {
     id        String   @id @default(cuid())
-    name String
+    name String @default(cuid())
     createdAt DateTime @default(now())
     messages ChatMessage[] 
     authorId String  

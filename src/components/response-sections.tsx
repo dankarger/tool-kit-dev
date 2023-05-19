@@ -7,7 +7,7 @@ export const ResponseSection = ({ responses }: ResponseSectionProps) => {
   if (!responses) return null;
 
   return (
-    <div className="flex h-full w-full flex-col justify-start rounded-md border-2 border-gray-300 p-4 align-middle">
+    <div className="flex h-full w-full flex-col justify-start rounded-md  p-4 align-middle">
       {responses.map((response, index) => (
         <Fragment key={index}>
           <ResponseDiv

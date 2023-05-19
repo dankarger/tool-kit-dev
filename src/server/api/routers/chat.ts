@@ -74,26 +74,6 @@ const ratelimit = new Ratelimit({
 });
 
 export const chatRouter = createTRPCRouter({
-  sendPrompt: privateProcedure
-    .input(z.string().min(1).max(280))
-    .mutation(async ({ input }) => {
-      // const response = await openai.createChatCompletion({
-      //   model: "gpt-3.5-turbo",
-      //   messages: [{ role: "user", content: input }],
-      //   // prompt: "Say it s party time",
-      //   max_tokens: 90,
-      //   stop: "\n",
-      //   temperature: 0.9,
-      // });
-      // console.log("response2", response.data.choices);
-      // const data = response.data.choices[0].message.content;
-      // const data = `mock response ${input}`;
-      // if (!data) throw new TRPCError({ code: "NOT_FOUND" });
-      // return {
-      //   response: data,
-      // };
-    }),
-
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.example.findMany();
   }),
@@ -149,6 +129,7 @@ export const chatRouter = createTRPCRouter({
     .input(
       z.object({
         message: z.string().min(1).max(480),
+        sessionId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -166,7 +147,6 @@ export const chatRouter = createTRPCRouter({
         stop: "\n",
         temperature: 0.5,
       });
-      console.log("response2", response);
 
       if (!response) throw new TRPCError({ code: "NOT_FOUND" });
       const data = response.data?.choices[0]?.message?.content;
@@ -177,6 +157,7 @@ export const chatRouter = createTRPCRouter({
           authorId,
           message: input.message,
           response: data,
+          sessionId: input.sessionId,
         },
       });
       // // const chat = `it will be the responce fropm openai for prompt: ${input.content}`;
