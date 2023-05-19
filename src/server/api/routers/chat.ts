@@ -15,7 +15,7 @@ import {
 } from "openai";
 import { Analytics, Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis";
-import { CompletionOpts, Completion, Choice } from "openai-api";
+// import { CompletionOpts, Completion, Choice } from "openai-api";
 interface ChatCompletionResponse {
   data: {
     id: string;
