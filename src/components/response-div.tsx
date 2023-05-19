@@ -1,8 +1,8 @@
 import { Separator } from "@/components/ui/separator";
 
 interface Props {
-  text: String;
-  author?: String;
+  text: string;
+  author?: string;
 }
 
 export const ResponseDiv = ({ text, author = "Assistense" }: Props) => {

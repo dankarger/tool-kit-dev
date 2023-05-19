@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 
 interface InputWithButtonProps {
   value: string;
-  handleSubmitButton: (value: string) => void;
+  handleSubmitButton: (value: string) => void | Promise<void>;
   placeholder: string;
   buttonText: string;
   buttonVariant?: string;
