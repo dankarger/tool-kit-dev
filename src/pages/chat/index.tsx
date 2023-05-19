@@ -72,7 +72,7 @@ const ChatPage: NextPage = () => {
             <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
               <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
                 {isLoading && <p>Loading...</p>}
-                {data && <ResponseDiv text={data.response.message} />}
+                {data && <ResponseDiv text={data.response?.message ?? ""} />}
               </div>
             </section>
           </main>
