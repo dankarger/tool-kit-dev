@@ -150,17 +150,17 @@ export const chatRouter = createTRPCRouter({
 
       if (!response) throw new TRPCError({ code: "NOT_FOUND" });
       const data = response.data?.choices[0]?.message?.content;
-      // if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+      if (!data) throw new TRPCError({ code: "NOT_FOUND" });
 
-      // const chatMessage = await ctx.prisma.chatMessage.create({
-      //   data: {
-      //     authorId,
-      //     message: input.message,
-      //     response: data,
-      //   },
-      // });
+      const chatMessage = await ctx.prisma.chatMessage.create({
+        data: {
+          authorId,
+          message: input.message,
+          response: data,
+        },
+      });
       // // const chat = `it will be the responce fropm openai for prompt: ${input.content}`;
-      const chatMessage = { response: data };
+      // const chatMessage = { response: data };
       console.log("chatMessage/,", chatMessage);
       return chatMessage;
     }),
