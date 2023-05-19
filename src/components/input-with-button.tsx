@@ -41,6 +41,7 @@ export function InputWithButton({
           } catch (e) {
             console.log("e", e);
           }
+
           void resetField("prompt");
         })}
       >
