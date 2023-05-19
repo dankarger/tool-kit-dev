@@ -37,12 +37,12 @@ const ChatPage: NextPage = () => {
     },
   });
 
-  const handleSubmitButton = async (value: string) => {
+  const handleSubmitButton = (value: string) => {
     // e.preventDefault();
     setPromptValue(value);
     console.log("value", value);
 
-    mutate({
+    void mutate({
       message: value,
     });
   };
