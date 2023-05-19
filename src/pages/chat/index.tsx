@@ -10,7 +10,9 @@ import { DashboardHeader } from "@/components/header";
 import { DashboardNav } from "@/components/nav";
 import { InputWithButton } from "@/components/input-with-button";
 import { ResponseDiv } from "@/components/response-div";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+// import { useMutation, useQueryClient } from "@tanstack/react-query";
+// const ctx = api.useContext();
 
 const ChatPage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
@@ -21,16 +23,16 @@ const ChatPage: NextPage = () => {
   const { mutate, isLoading, data } = api.chat.create.useMutation({
     onSuccess: () => {
       setPromptValue("");
-      // void ctx.posts.getAll.invalidate();
+      // void ctx.chat.getAll.invalidate();
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
       if (errorMessage && errorMessage[0]) {
-        // toast.error(errorMessage[0]);
-        console.log("errorMessage", errorMessage[0]);
+        toast.error(errorMessage[0]);
+        // console.log("errorMessage", errorMessage[0]);
       } else {
-        // toast.error("Failed to create post, please try again");
-        console.log("Failed to create post, please try again");
+        toast.error("Failed to create post, please try again");
+        // console.log("Failed to create post, please try again");
       }
     },
   });
