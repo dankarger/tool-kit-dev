@@ -1,5 +1,4 @@
 import React from "react";
-
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -10,20 +9,38 @@ import { DashboardHeader } from "@/components/header";
 import { DashboardNav } from "@/components/nav";
 import { InputWithButton } from "@/components/input-with-button";
 import { ResponseDiv } from "@/components/response-div";
+import { ResponseSection } from "@/components/response-sections";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 // import { useMutation, useQueryClient } from "@tanstack/react-query";
 // const ctx = api.useContext();
+const Sessionfeed = () => {
+  const { data, isLoading, isError } =
+    api.chat.getAllChatMessagesByAuthorId.useQuery({
+      authorId: "user_2PyMrNlCa1UWxngPWVC6NTTkyxC",
+    });
+  if (!data) return null;
 
+  return <ResponseSection responses={data} />;
+};
 const ChatPage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
   const [chatResponce, setChatResponse] = React.useState("");
   const [chatHistory, setChatHistory] = React.useState([]);
-  // const res = api.chat.sendPrompt.useQuery({ prompt: promptValue });
+  const router = useRouter();
 
+  const session = api.chat.getAllChatMessagesByAuthorId.useQuery({
+    authorId: "user_2PyMrNlCa1UWxngPWVC6NTTkyxC",
+  });
+
+  console.log("session", session);
+
+  // const {data : sessionData, isLoading: sessionLoading, isError: sessionError} = api.chat.getAllChatMessagesByAuthorId.useQuery({authorId: "user_2PyMrNlCa1UWxngPWVC6NTTkyxC"})
   const { mutate, isLoading, data } = api.chat.create.useMutation({
     onSuccess: () => {
       setPromptValue("");
       // void ctx.chat.getAll.invalidate();
+      // router.refresh();
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -74,6 +91,8 @@ const ChatPage: NextPage = () => {
                 {isLoading && <p>Loading...</p>}
                 {data && <ResponseDiv text={data.response ?? ""} />}
               </div>
+              {/* {session.data && <ResponseSection responses={session.data} />} */}
+              <Sessionfeed />
             </section>
           </main>
         </div>

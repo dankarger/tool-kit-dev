@@ -18,15 +18,14 @@ model Example {
     updatedAt DateTime @updatedAt
 }
 
-
 model ChatMessage {
     id        String   @id @default(cuid())  
     createdAt DateTime @default(now())
     message String @db.VarChar(500)
     response  String @db.VarChar(1500)
     authorId String
-    // session ChatSession? @relation(fields: [sessionId],references: [id])
-    // sessionId String 
+    session ChatSession? @relation(fields: [sessionId],references: [id])
+    sessionId String? 
     @@index([authorId])
 }
 
@@ -34,8 +33,8 @@ model ChatSession {
     id        String   @id @default(cuid())
     name String
     createdAt DateTime @default(now())
-    // messages ChatMessage[] 
-    // authorId String  
+    messages ChatMessage[] 
+    authorId String  
 
-    // @@index([authorId])
+    @@index([authorId])
 }

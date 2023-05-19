@@ -97,7 +97,27 @@ export const chatRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.example.findMany();
   }),
+  getAllChatMessagesByAuthorId: privateProcedure
+    .input(z.object({ authorId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const chatMessages = await ctx.prisma.chatMessage.findMany({
+        where: { authorId: input.authorId },
+      });
 
+      if (!chatMessages) throw new TRPCError({ code: "NOT_FOUND" });
+
+      return chatMessages;
+    }),
+
+  getChatSessionByAuthorId: privateProcedure
+    .input(z.object({ authorId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const chatSession = await ctx.prisma.chatSession.findMany({
+        where: { authorId: input.authorId },
+      });
+      if (!chatSession) throw new TRPCError({ code: "NOT_FOUND" });
+      return chatSession;
+    }),
   getSecretMessage: privateProcedure.query(() => {
     return "you can now see this secret message!";
   }),
