@@ -64,7 +64,7 @@ const ChatPage: NextPage = () => {
 
             <section className="space-y-6 px-3 pb-10 pt-6 md:pb-12 md:pt-10 lg:py-12"></section>
             <InputWithButton
-              value={promptValue}
+              // value={promptValue}
               handleSubmitButton={handleSubmitButton}
               placeholder={"Type your message here."}
               buttonText={"Send"}

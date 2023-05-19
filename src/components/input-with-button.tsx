@@ -4,15 +4,17 @@ import { Input } from "@/components/ui/input";
 import { useForm, Controller } from "react-hook-form";
 
 interface InputWithButtonProps {
-  value: string;
-  handleSubmitButton: (value: string) => void | Promise<void>;
-  placeholder: string;
-  buttonText: string;
+  // value: string;
+  handleSubmitButton: (value: string) => Promise<void> | any;
+  placeholder?: string;
+  buttonText?: string;
   buttonVariant?: string;
 }
+// export interface InputProps
+//   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 export function InputWithButton({
-  value,
+  // value,
   handleSubmitButton,
   placeholder,
 }: InputWithButtonProps) {
@@ -20,7 +22,6 @@ export function InputWithButton({
     register,
     formState: { errors },
     handleSubmit,
-    reset,
     resetField,
   } = useForm({
     mode: "onChange",
@@ -35,8 +36,8 @@ export function InputWithButton({
     <div className=" p-21 flex w-full  items-center gap-2 space-x-2">
       <form
         onSubmit={handleSubmit((value) => {
-          handleSubmitButton(value.prompt);
-          resetField("prompt");
+          void handleSubmitButton(value.prompt);
+          void resetField("prompt");
         })}
       >
         <div className="flex w-full max-w-sm items-center space-x-2">
