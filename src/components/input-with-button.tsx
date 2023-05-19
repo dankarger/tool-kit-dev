@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import type { SubmitHandler } from "react-hook-form";
 
 import * as z from "zod";
+import e from "express";
 // import { zodResolver } from "@hookform/resolvers/zod";
 interface InputWithButtonProps {
   // value: string;
@@ -83,7 +84,7 @@ InputWithButtonProps) {
   console.log("dsdsd");
   return (
     <div className=" p-21 flex w-full  items-center gap-2 space-x-2">
-      <form onSubmit={void handleSubmit(onSubmit)}>
+      <form onSubmit={(e) => void handleSubmit(onSubmit)(e)}>
         <div className="flex w-full max-w-sm items-center space-x-2">
           <Input
             type="text"
