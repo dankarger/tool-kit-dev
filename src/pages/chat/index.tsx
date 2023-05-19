@@ -12,16 +12,23 @@ import { ResponseDiv } from "@/components/response-div";
 import { ResponseSection } from "@/components/response-sections";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 // import { useMutation, useQueryClient } from "@tanstack/react-query";
 // const ctx = api.useContext();
+
 const Sessionfeed = () => {
+  // const ctx = api.useContext();
+  const user = useUser();
+  if (!user.user?.id) return null;
+  console.log("user", user.user?.id);
   const { data, isLoading, isError } =
     api.chat.getAllChatMessagesByAuthorId.useQuery({
-      authorId: "user_2PyMrNlCa1UWxngPWVC6NTTkyxC",
+      authorId: user.user.id,
     });
   if (!data) return null;
-
+  if (isLoading) return <div>Loading</div>;
   return <ResponseSection responses={data} />;
+  // return <div>seesssison</div>;
 };
 const ChatPage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");

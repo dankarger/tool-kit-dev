@@ -1,14 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { ResponseDiv } from "./response-div";
 import { Fragment } from "react";
-
-interface Response {
-  message?: string;
-  authorId?: string;
-}
-interface ResponseSectionProps {
-  responses: Response[];
-}
+import type { ResponseSectionProps } from "@/types";
 
 export const ResponseSection = ({ responses }: ResponseSectionProps) => {
   if (!responses) return null;
@@ -17,7 +10,10 @@ export const ResponseSection = ({ responses }: ResponseSectionProps) => {
     <div className="flex h-full w-full flex-col justify-start rounded-md border-2 border-gray-300 p-4 align-middle">
       {responses.map((response, index) => (
         <Fragment key={index}>
-          <ResponseDiv text={response.message ?? ""} />
+          <ResponseDiv
+            message={response.message}
+            response={response.response}
+          />
           {index !== responses.length - 1 && <Separator />}
         </Fragment>
       ))}
