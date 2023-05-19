@@ -69,7 +69,7 @@ interface ChatCompletionRequestCustom {
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(3, "1 m"),
+  limiter: Ratelimit.slidingWindow(20, "1 m"),
   analytics: true,
 });
 
@@ -112,7 +112,7 @@ export const chatRouter = createTRPCRouter({
         temperature: z.number().min(0).max(1),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(({ input }) => {
       // const response = await openai.createChatCompletion(input);
       // console.log("response2", response);
       // // const result = response.data?.choices[0]?.message.content ?? "#error";
@@ -121,8 +121,8 @@ export const chatRouter = createTRPCRouter({
       const data = setTimeout(() => {
         return "mock";
       }, 100);
-      const result = await data;
-      return result;
+
+      return data;
     }),
 
   create: privateProcedure
