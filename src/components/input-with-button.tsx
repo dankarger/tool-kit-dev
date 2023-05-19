@@ -35,7 +35,7 @@ export function InputWithButton({
   return (
     <div className=" p-21 flex w-full  items-center gap-2 space-x-2">
       <form
-        onSubmit={handleSubmit(async (value) => {
+        onSubmit={handleSubmit((value) => {
           try {
             void handleSubmitButton(value.prompt);
           } catch (e) {
