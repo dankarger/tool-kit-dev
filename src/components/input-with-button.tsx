@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import type { SubmitHandler } from "react-hook-form";
+
 import * as z from "zod";
 // import { zodResolver } from "@hookform/resolvers/zod";
 interface InputWithButtonProps {
@@ -53,27 +55,35 @@ InputWithButtonProps) {
     e: Event;
   };
 
-  function onSubmit(data: FormData, e?: React.BaseSyntheticEvent) {
+  // function onSubmit(data: FormData, e?: React.BaseSyntheticEvent) {
+  //   e?.preventDefault();
+  //   handleSubmitButton(data.prompt);
+  //   console.log("from form2", data.prompt);
+  //   resetField("prompt");
+  // const response = await fetch(`/api/posts/${post.id}`, {
+  //   method: "PATCH",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({
+  //     title: data.title,
+  //     content: blocks,
+  //   }),
+  // router.refresh();
+  // }
+  const onSubmit: SubmitHandler<FormData> = (
+    data,
+    e?: React.BaseSyntheticEvent
+  ) => {
     e?.preventDefault();
-    handleSubmitButton(data.prompt);
+    void handleSubmitButton(data.prompt);
     console.log("from form2", data.prompt);
     resetField("prompt");
-    // const response = await fetch(`/api/posts/${post.id}`, {
-    //   method: "PATCH",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     title: data.title,
-    //     content: blocks,
-    //   }),
-    // router.refresh();
-  }
-
+  };
   console.log("dsdsd");
   return (
     <div className=" p-21 flex w-full  items-center gap-2 space-x-2">
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={void handleSubmit(onSubmit)}>
         <div className="flex w-full max-w-sm items-center space-x-2">
           <Input
             type="text"
