@@ -38,7 +38,6 @@ const ChatPage: NextPage = () => {
   });
 
   const handleSubmitButton = (value: string) => {
-    // e.preventDefault();
     setPromptValue(value);
     console.log("value", value);
 

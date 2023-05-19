@@ -2,10 +2,12 @@ import { use, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm, Controller } from "react-hook-form";
-
+import { useRouter } from "next/navigation";
+import * as z from "zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
 interface InputWithButtonProps {
   // value: string;
-  handleSubmitButton: (value: string) => Promise<void> | any;
+  handleSubmitButton: (value: string) => void;
   placeholder?: string;
   buttonText?: string;
   buttonVariant?: string;
@@ -13,36 +15,65 @@ interface InputWithButtonProps {
 // export interface InputProps
 //   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
+const postPatchSchema = z.object({
+  prompt: z.string(z.string().min(3).max(128)),
+});
+
 export function InputWithButton({
   // value,
   handleSubmitButton,
-  placeholder,
-}: InputWithButtonProps) {
+}: // placeholder,
+InputWithButtonProps) {
+  // const {
+  //   register,
+  //   formState: { errors },
+  //   handleSubmit,
+  //   resetField,
+  // } = useForm({
+  //   mode: "onChange",
+  //   reValidateMode: "onChange",
+  //   defaultValues: {
+  //     prompt: "",
+  //   },
+  const router = useRouter();
   const {
     register,
-    formState: { errors },
     handleSubmit,
     resetField,
-  } = useForm({
+    formState: { errors },
+  } = useForm<FormData>({
     mode: "onChange",
     reValidateMode: "onChange",
-    defaultValues: {
-      prompt: "",
-    },
+    // resolver: zodResolver(postPatchSchema),
   });
+
+  // });
+  type FormData = {
+    prompt: string;
+    e: Event;
+  };
+
+  function onSubmit(data: FormData, e?: React.BaseSyntheticEvent) {
+    e?.preventDefault();
+    handleSubmitButton(data.prompt);
+    console.log("from form2", data.prompt);
+    resetField("prompt");
+    // const response = await fetch(`/api/posts/${post.id}`, {
+    //   method: "PATCH",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     title: data.title,
+    //     content: blocks,
+    //   }),
+    // router.refresh();
+  }
 
   console.log("dsdsd");
   return (
     <div className=" p-21 flex w-full  items-center gap-2 space-x-2">
-      <form
-        onSubmit={handleSubmit((value) => {
-          void handleSubmitButton(value.prompt).then(() => {});
-
-          console.log("e");
-
-          void resetField("prompt");
-        })}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex w-full max-w-sm items-center space-x-2">
           <Input
             type="text"
@@ -64,3 +95,6 @@ export function InputWithButton({
     </div>
   );
 }
+// function zodResolver(postPatchSchema: z.ZodObject<{ prompt: z.ZodString; }, "strip", z.ZodTypeAny, { prompt: string; }, { prompt: string; }>): import("react-hook-form").Resolver<{ prompt: string; }, any> | undefined {
+//   throw new Error("Function not implemented.");
+// }
