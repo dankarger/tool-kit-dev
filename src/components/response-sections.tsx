@@ -16,7 +16,7 @@ export const ResponseSection = ({ responses }: ResponseSectionProps) => {
     <div className="flex h-full w-full flex-col justify-start rounded-md border-2 border-gray-300 p-4 align-middle">
       {responses.map((response, index) => (
         <>
-          <ResponseDiv key={response.text + index} text={response.text} />
+          <ResponseDiv key={index} text={response.text} />
           {index !== responses.length - 1 && <Separator />}
         </>
       ))}
