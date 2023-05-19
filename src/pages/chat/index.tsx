@@ -13,8 +13,6 @@ import { ResponseDiv } from "@/components/response-div";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const ChatPage: NextPage = () => {
-  // const hello = api.example.hello.useQuery({ text: "from Chat page" });
-
   const [promptValue, setPromptValue] = React.useState("");
   const [chatResponce, setChatResponse] = React.useState("");
   const [chatHistory, setChatHistory] = React.useState([]);
@@ -72,43 +70,15 @@ const ChatPage: NextPage = () => {
             />
             <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
               <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
-                {/* <Textarea2 placeholder="Type your message here." /> */}
-
                 {isLoading && <p>Loading...</p>}
                 {data && <ResponseDiv text={data.response} />}
-                {/* {hello.data?.greeting} */}
               </div>
             </section>
           </main>
         </div>
       </DashboardShell>
-      {/* <AuthShowcase /> */}
     </>
   );
 };
 
 export default ChatPage;
-
-// <div className="flex min-h-screen flex-col space-y-6">
-// <header className="sticky top-0 z-40 border-b bg-background">
-//   <div className="container flex h-16 items-center justify-between py-4">
-//     <MainNav items={dashboardConfig.mainNav} />
-//     <UserAccountNav
-//       user={{
-//         name: user.name,
-//         image: user.image,
-//         email: user.email,
-//       }}
-//     />
-//   </div>
-// </header>
-// <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
-//   <aside className="hidden w-[200px] flex-col md:flex">
-//     <DashboardNav items={dashboardConfig.sidebarNav} />
-//   </aside>
-//   <main className="flex w-full flex-1 flex-col overflow-hidden">
-//     {children}
-//   </main>
-// </div>
-// <SiteFooter className="border-t" />
-// </div>
