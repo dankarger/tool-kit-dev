@@ -15,7 +15,7 @@ import {
 } from "openai";
 import { Analytics, Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis";
-
+import { CompletionOpts, Completion, Choice } from "openai-api";
 interface ChatCompletionResponse {
   data: {
     id: string;
@@ -133,24 +133,23 @@ export const chatRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const authorId = ctx.userId;
-      const { success } = await ratelimit.limit(authorId);
+      // const { success } = await ratelimit.limit(authorId);
 
-      if (!success) {
-        throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
-      }
-      // const response: ChatCompletionResponseMessage =
-      //   await openai.createChatCompletion({
-      //     model: "gpt-3.5-turbo",
-      //     messages: [{ role: "user", content: input.message }],
-      //     // prompt: "Say it s party time",
-      //     max_tokens: 90,
-      //     stop: "\n",
-      //     temperature: 0.5,
-      //   } );
-      // console.log("response2", response);
+      // if (!success) {
+      //   throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+      // }
+      const response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: input.message }],
+        // prompt: "Say it s party time",
+        max_tokens: 90,
+        stop: "\n",
+        temperature: 0.5,
+      });
+      console.log("response2", response);
 
-      // if (!response) throw new TRPCError({ code: "NOT_FOUND" });
-      // const data = response.data.choices[0]?.message.content;
+      if (!response) throw new TRPCError({ code: "NOT_FOUND" });
+      const data = response.data?.choices[0]?.message?.content;
       // if (!data) throw new TRPCError({ code: "NOT_FOUND" });
 
       // const chatMessage = await ctx.prisma.chatMessage.create({
@@ -161,7 +160,7 @@ export const chatRouter = createTRPCRouter({
       //   },
       // });
       // // const chat = `it will be the responce fropm openai for prompt: ${input.content}`;
-      const chatMessage = { response: input };
+      const chatMessage = { response: data };
       console.log("chatMessage/,", chatMessage);
       return chatMessage;
     }),

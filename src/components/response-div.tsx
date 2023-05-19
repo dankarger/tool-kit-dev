@@ -5,7 +5,7 @@ interface Props {
   author?: string;
 }
 
-export const ResponseDiv = ({ text, author = "Assistense" }: Props) => {
+export const ResponseDiv = ({ text, author = "Ai: " }: Props) => {
   if (!text) return null;
 
   return (
