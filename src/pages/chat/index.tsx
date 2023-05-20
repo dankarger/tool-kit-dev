@@ -2,7 +2,6 @@ import React, { useEffect, useId } from "react";
 import { type NextPage } from "next";
 import type { Session } from "@/types";
 import Head from "next/head";
-import Link from "next/link";
 import { dashboardConfig } from "@/config/dashboard";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
@@ -16,7 +15,6 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
-import { set } from "mongoose";
 // const ctx = api.useContext();
 
 const Sessionfeed = ({ id }: { id: string }) => {
