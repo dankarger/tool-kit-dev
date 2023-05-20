@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useId } from "react";
 import { type NextPage } from "next";
+import type { Session } from "@/types";
 import Head from "next/head";
 import Link from "next/link";
 import { dashboardConfig } from "@/config/dashboard";
@@ -10,10 +11,12 @@ import { DashboardNav } from "@/components/nav";
 import { InputWithButton } from "@/components/input-with-button";
 import { ResponseDiv } from "@/components/response-div";
 import { ResponseSection } from "@/components/response-sections";
+import { SessionsSection } from "@/components/sessions-section";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
+import { set } from "mongoose";
 // const ctx = api.useContext();
 
 const Sessionfeed = ({ id }: { id: string }) => {
@@ -21,6 +24,7 @@ const Sessionfeed = ({ id }: { id: string }) => {
     api.chat.getSessionMessagesBySessionId.useQuery({
       id: id,
     });
+  console.log("data from sessionfeed", data, id);
   if (!data) return null;
   if (isLoading)
     return (
@@ -31,20 +35,47 @@ const Sessionfeed = ({ id }: { id: string }) => {
   if (isError) return <div>Error</div>;
   return <ResponseSection responses={data} />;
 };
+
+const SessionsSectionFeed = ({
+  authorId,
+  onClick,
+}: {
+  authorId: string;
+  onClick: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}) => {
+  const { data, isLoading, isError } =
+    api.session.getChatSessionsByAuthorId.useQuery({
+      authorId: authorId,
+    });
+  if (!data) return null;
+  if (isLoading)
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
+  if (isError) return <div>Error</div>;
+  return <SessionsSection sessions={data} onClick={onClick} />;
+};
 const ChatPage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
   const [chatResponce, setChatResponse] = React.useState("");
   const [chatHistory, setChatHistory] = React.useState([]);
-
-  const [currentSession, setCurrenSession] = React.useState({ id: "random2" });
+  const [isSessionActivated, setIsSessionActivated] = React.useState(false);
+  const [currentSession, setCurrenSession] = React.useState({
+    id: "defaultId",
+  });
   const router = useRouter();
   const user = useUser();
+  const randomName = useId();
+
   const session = api.chat.getSessionMessagesBySessionId.useQuery({
     id: currentSession.id,
   });
   console.log("session", session);
   const createNewSession = api.session.createChatSession.useMutation({
     onSuccess: (data) => {
+      console.log("dattttaaa", data);
       if (data?.id) {
         setCurrenSession({ id: data?.id });
       }
@@ -75,14 +106,26 @@ const ChatPage: NextPage = () => {
     },
   });
 
-  useEffect(() => {
-    if (currentSession.id === "random2") {
-      createNewSession.mutate({ authorId: user.user?.id ?? "random3" });
-      console.log("hi");
-      void session.refetch();
-      // handleSubmitButton(value);
+  // useEffect(() => {
+  const handleCreateNewSession = () => {
+    if (currentSession.id === "defaultId") {
+      createNewSession.mutate({
+        authorId: user.user?.id ?? "random3",
+        name: randomName + user.user?.username,
+      });
+      // setCurrenSession({ id:newSession ?? "default-session" });
+      console.log("currentSession", currentSession);
+      session.refetch();
     }
-  }, []);
+    session.refetch();
+  };
+  // }, []);
+  useEffect(() => {
+    if (isSessionActivated) {
+      handleCreateNewSession();
+      session.refetch();
+    }
+  }, [isSessionActivated, currentSession.id]);
 
   const handleCreateNewChateMessage = (value: string) => {
     mutate({
@@ -91,12 +134,16 @@ const ChatPage: NextPage = () => {
     });
   };
 
-  const handleSubmitButton = (value: string) => {
+  const handleSubmitButton = async (value: string) => {
     setPromptValue(value);
     console.log("value", value);
     if (!user.user?.id) {
       return toast.error("Please login to continue");
     }
+    setIsSessionActivated(true);
+    const newSession = handleCreateNewSession();
+
+    console.log("newSession", newSession);
     // if (currentSession.id === "random2") {
     //   createNewSession.mutate({ authorId: user.user.id });
     //   console.log("hi");
@@ -105,8 +152,22 @@ const ChatPage: NextPage = () => {
 
     console.log("currentSession", currentSession);
     handleCreateNewChateMessage(value);
+    session.refetch();
   };
-
+  const handleSelectSession = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    console.log("e.target.value", e.target.dataset.valueid);
+    const selectedSessionId = e.target.dataset?.valueId;
+    // if (e.target.value === "random2") {
+    //   createNewSession.mutate({ authorId: user.user.id });
+    //   console.log("hi");
+    //   // handleSubmitButton(value);
+    // }
+    setCurrenSession({ id: selectedSessionId ?? "default-session" });
+    // console.log("currentSession", currentSession);
+    // handleCreateNewChateMessage(value);
+    // setCurrenSession({ id: e.target.value });
+    session.refetch();
+  };
   return (
     <>
       <Head>
@@ -130,7 +191,12 @@ const ChatPage: NextPage = () => {
               buttonText={"Send"}
               // buttonVariant={buttonVariants.}
             />
-
+            <div className="z-150  top-59 left-1  h-40 overflow-y-auto  ">
+              <SessionsSectionFeed
+                authorId={user.user?.id ?? "anonimous"}
+                onClick={handleSelectSession}
+              />
+            </div>
             <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
               <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
                 {isLoading && (
@@ -147,7 +213,7 @@ const ChatPage: NextPage = () => {
               </div>
               {/* {session.data && <ResponseSection responses={session.data} />} */}
               {/* {user.user?.id && <Sessionfeed id={user.user.id} />} */}
-              {currentSession.id !== "random2" && (
+              {currentSession.id !== "defaultId" && (
                 <Sessionfeed id={currentSession.id} />
               )}
             </section>

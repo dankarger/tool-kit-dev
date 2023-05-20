@@ -12,15 +12,15 @@ import { prisma } from "@/server/db";
 
 export const sessionRouter = createTRPCRouter({
   createChatSession: privateProcedure
-    .input(z.object({ authorId: z.string() }))
+    .input(z.object({ authorId: z.string(), name: z.string().optional() }))
     .mutation(async ({ ctx, input }) => {
       const authorId = ctx.userId;
       if (!authorId) throw new TRPCError({ code: "UNAUTHORIZED" });
 
       const newSession = await prisma.chatSession.create({
-        data: { authorId: authorId, name: "name" },
+        data: { authorId: authorId, name: input.name },
       });
-      console.log("newsession", newSession.id);
+      // console.log("newsession", newSession.id);
       const sessionId = await ctx.prisma.chatSession.findUnique({
         where: { id: newSession.id },
         // select: { id: true }

@@ -189,7 +189,7 @@ export const chatRouter = createTRPCRouter({
       });
       // // const chat = `it will be the responce fropm openai for prompt: ${input.content}`;
       // const chatMessage = { response: data };
-      console.log("chatMessage/,", chatMessage);
+      // console.log("chatMessage/,", chatMessage);
       return chatMessage;
     }),
 });

@@ -38,15 +38,6 @@ export type SiteConfig = {
   };
 };
 
-// export type DocsConfig = {
-//   mainNav: MainNavItem[]
-//   sidebarNav: SidebarNavItem[]
-// }
-
-// export type MarketingConfig = {
-//   mainNav: MainNavItem[]
-// }
-
 export type DashboardConfig = {
   mainNav: MainNavItem[];
   sidebarNav: SidebarNavItem[];
@@ -68,6 +59,7 @@ export type DashboardConfig = {
 //     isPro: boolean
 //   }
 
+//chat
 export interface Response {
   message?: string;
   response?: string;
@@ -75,4 +67,12 @@ export interface Response {
 }
 export interface ResponseSectionProps {
   responses: Response[];
+}
+
+// sessions
+
+export interface Session {
+  name: string;
+  id: string;
+  type?: string;
 }
