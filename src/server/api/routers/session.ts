@@ -28,4 +28,13 @@ export const sessionRouter = createTRPCRouter({
       console.log("sessionIdn222222-3333--222222", sessionId);
       return sessionId;
     }),
+
+  getChatSessionMessagesBySessionId: privateProcedure
+    .input(z.object({ sessionId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const session = await ctx.prisma.chatSession.findFirst({
+        where: { sessionId: input.sessionId },
+      });
+      return session;
+    }),
 });

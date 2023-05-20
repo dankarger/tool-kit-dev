@@ -26,8 +26,11 @@ const Sessionfeed = ({ id }: { id: string }) => {
   // if (!user.user?.id) return null;
   // console.log("user", user.user?.id);
   const { data, isLoading, isError } =
-    api.chat.getAllChatMessagesByAuthorId.useQuery({
-      authorId: id,
+    // api.chat.getAllChatMessagesByAuthorId.useQuery({
+    //   authorId: id,
+    // });
+    api.chat.getSessionMessagesBySessionId.useQuery({
+      id: id,
     });
   if (!data) return null;
   if (isLoading) return <div>Loading</div>;
@@ -42,10 +45,12 @@ const ChatPage: NextPage = () => {
   const [currentSession, setCurrenSession] = React.useState({ id: "random2" });
   const router = useRouter();
   const user = useUser();
-  const session = api.chat.getAllChatMessagesByAuthorId.useQuery({
-    authorId: "user_2PyMrNlCa1UWxngPWVC6NTTkyxC",
+  // const session = api.chat.getAllChatMessagesByAuthorId.useQuery({
+  //   authorId: "user_2PyMrNlCa1UWxngPWVC6NTTkyxC",
+  // });
+  const session = api.chat.getSessionMessagesBySessionId.useQuery({
+    id: currentSession.id,
   });
-
   console.log("session", session);
   const createNewSession = api.session.createChatSession.useMutation({
     onSuccess: (data) => {
@@ -75,6 +80,7 @@ const ChatPage: NextPage = () => {
       setPromptValue("");
       // void ctx.chat.getAll.invalidate();
       // router.refresh();
+      session.refetch();
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -92,6 +98,7 @@ const ChatPage: NextPage = () => {
     if (currentSession.id === "random2") {
       createNewSession.mutate({ authorId: user.user?.id ?? "random3" });
       console.log("hi");
+      session.refetch();
       // handleSubmitButton(value);
     }
   }, []);
@@ -153,15 +160,18 @@ const ChatPage: NextPage = () => {
             <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
               <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
                 {isLoading && <p>Loading...</p>}
-                {data && (
+                {/* {data && (
                   <ResponseDiv
                     response={data.response}
                     message={data.message}
                   />
-                )}
+                )} */}
               </div>
               {/* {session.data && <ResponseSection responses={session.data} />} */}
-              {user.user?.id && <Sessionfeed id={user.user.id} />}
+              {/* {user.user?.id && <Sessionfeed id={user.user.id} />} */}
+              {currentSession.id !== "random2" && (
+                <Sessionfeed id={currentSession.id} />
+              )}
             </section>
           </main>
         </div>

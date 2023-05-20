@@ -6,7 +6,7 @@ import {
   publicProcedure,
   privateProcedure,
 } from "@/server/api/trpc";
-import { ChatMessage } from "@prisma/client";
+import { ChatMessage, ChatSession } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import {
   ChatCompletionRequestMessage,
@@ -97,6 +97,16 @@ export const chatRouter = createTRPCRouter({
       });
       if (!chatSession) throw new TRPCError({ code: "NOT_FOUND" });
       return chatSession;
+    }),
+
+  getSessionMessagesBySessionId: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const messages = await ctx.prisma.chatMessage.findMany({
+        where: { sessionId: input.id },
+      });
+      if (!messages) throw new TRPCError({ code: "NOT_FOUND" });
+      return messages;
     }),
   getSecretMessage: privateProcedure.query(() => {
     return "you can now see this secret message!";
