@@ -3,7 +3,7 @@ import type { Session } from "@/types";
 
 interface SessionsSectionProps {
   sessions: Session[];
-  onClick: (e: ChangeEvent<HTMLSelectElement>) => void;
+  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
 }
 
 export const SessionsSection = ({
