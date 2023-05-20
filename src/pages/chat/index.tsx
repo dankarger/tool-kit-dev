@@ -151,8 +151,10 @@ const ChatPage: NextPage = () => {
     void session.refetch();
     return message;
   };
-  const handleSelectSession = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedSessionId = e.target.dataset.valueid;
+  const handleSelectSession = (
+    e: React.MouseEvent<HTMLLIElement, MouseEvent>
+  ) => {
+    const selectedSessionId = e.currentTarget.dataset?.valueid;
     // if (e.target.value === "random2") {
     //   createNewSession.mutate({ authorId: user.user.id });
     console.log("hi", selectedSessionId);
