@@ -154,7 +154,8 @@ export const chatRouter = createTRPCRouter({
   create: privateProcedure
     .input(
       z.object({
-        message: z.string().min(1).max(480),
+        messages: z.array(z.object({ role: z.string(), content: z.string() })),
+        latestMessage: z.string().min(1).max(480),
         sessionId: z.string(),
       })
     )
@@ -165,6 +166,7 @@ export const chatRouter = createTRPCRouter({
       if (!success) {
         throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
       }
+      console.log("input.messages", input.messages);
       // const response = await openai.createChatCompletion({
       //   model: "gpt-3.5-turbo",
       //   messages: [{ role: "user", content: input.message }],
@@ -178,11 +180,11 @@ export const chatRouter = createTRPCRouter({
       // const data = response.data?.choices[0]?.message?.content;
       // if (!data) throw new TRPCError({ code: "NOT_FOUND" });
 
-      const data = `Mock for: ${input.message}`;
+      const data = `Mock for: ${input.latestMessage}`;
       const chatMessage = await ctx.prisma.chatMessage.create({
         data: {
           authorId,
-          message: input.message,
+          message: input.latestMessage,
           response: data,
           sessionId: input.sessionId,
         },

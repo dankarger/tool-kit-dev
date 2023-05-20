@@ -159,11 +159,15 @@ const ChatPage: NextPage = () => {
     console.log("currentSession", currentSession);
   }, [isSessionActivated]);
 
-  const handleCreateNewChateMessage = (value: string) => {
-    sessionRefetch();
+  const handleCreateNewChateMessage = (
+    chatHistory: { role: string; content: string }[],
+    value: string
+  ) => {
+    void sessionRefetch();
     console.log("sessionData", sessionData);
     mutate({
-      message: value,
+      latestMessage: value,
+      messages: chatHistory,
       sessionId: currentSession.id,
     });
   };
@@ -187,14 +191,14 @@ const ChatPage: NextPage = () => {
       // chatHistory.push(botMessage);
       return [{ ...userMessage }, { ...botMessage }];
     });
-    let result = chatHistory.flat();
+    const result = chatHistory.flat();
 
     console.log("chatHistory", result);
     return result;
   };
 
   const handleSubmitButton = (value: string) => {
-    let chatHistory = [];
+    let chatHistory: string | { role: string; content: string }[] = [];
     setPromptValue(value);
     if (!user.user?.id) {
       return toast.error("Please login to continue");
@@ -219,11 +223,11 @@ const ChatPage: NextPage = () => {
       }
     }
 
-    let prompt = { role: "user", content: value };
+    const prompt = { role: "user", content: value };
 
     chatHistory.push(prompt);
     console.log("prompt", prompt);
-    const message = handleCreateNewChateMessage(chatHistory);
+    const message = handleCreateNewChateMessage(chatHistory, value);
     void session.refetch();
     return message;
   };
