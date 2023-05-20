@@ -128,10 +128,10 @@ const ChatPage: NextPage = () => {
     //   message: value,
     //   sessionId: currentSession.id,
     // });
-    setTimeout(() => {
-      console.log("s------------------------------------", currentSession);
-      handleCreateNewChateMessage(value);
-    }, 200);
+    // setTimeout(() => {
+    console.log("s------------------------------------", currentSession);
+    handleCreateNewChateMessage(value);
+    // }, 200);
   };
 
   return (

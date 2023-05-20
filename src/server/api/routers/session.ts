@@ -29,12 +29,12 @@ export const sessionRouter = createTRPCRouter({
       return sessionId;
     }),
 
-  getChatSessionMessagesBySessionId: privateProcedure
-    .input(z.object({ sessionId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const session = await ctx.prisma.chatSession.findFirst({
-        where: { sessionId: input.sessionId },
-      });
-      return session;
-    }),
+  // getChatSessionMessagesBySessionId: privateProcedure
+  //   .input(z.object({ sessionId: z.string() }))
+  //   .query(async ({ ctx, input }) => {
+  //     const session = await ctx.prisma.chatSession.findFirst({
+  //       where: { sessionId: input.sessionId },
+  //     });
+  //     return session;
+  //   }),
 });

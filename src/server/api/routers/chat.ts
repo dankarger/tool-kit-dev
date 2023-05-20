@@ -112,30 +112,17 @@ export const chatRouter = createTRPCRouter({
     return "you can now see this secret message!";
   }),
   chatOpenAi: privateProcedure
-    .input(
-      z.object({
-        model: z.string(),
-        messages: z.array(z.object({ role: z.string(), content: z.string() })),
-        // prompt: "Say it s party time",
-        max_tokens: z.number().min(1).max(90),
-        stop: z.string().min(1).max(5),
-        temperature: z.number().min(0).max(1),
-      })
-    )
-    .mutation(({ input }) => {
-      // const response = await openai.createChatCompletion(input);
-      // console.log("response2", response);
-      // // const result = response.data?.choices[0]?.message.content ?? "#error";
-      // // return result;
-      // return input;
-      const data = setTimeout(() => {
-        return "mock";
-      }, 100);
 
-      return data;
-    }),
-
-  create: privateProcedure
+    // .input(
+    //   z.object({
+    //     model: z.string(),
+    //     messages: z.array(z.object({ role: z.string(), content: z.string() })),
+    //     // prompt: "Say it s party time",
+    //     max_tokens: z.number().min(1).max(90),
+    //     stop: z.string().min(1).max(5),
+    //     temperature: z.number().min(0).max(1),
+    //   })
+    // )
     .input(
       z.object({
         message: z.string().min(1).max(480),
@@ -144,11 +131,11 @@ export const chatRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const authorId = ctx.userId;
-      // const { success } = await ratelimit.limit(authorId);
+      const { success } = await ratelimit.limit(authorId);
 
-      // if (!success) {
-      //   throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
-      // }
+      if (!success) {
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+      }
       const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: input.message }],
@@ -161,7 +148,37 @@ export const chatRouter = createTRPCRouter({
       if (!response) throw new TRPCError({ code: "NOT_FOUND" });
       const data = response.data?.choices[0]?.message?.content;
       if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+      return data;
+    }),
 
+  create: privateProcedure
+    .input(
+      z.object({
+        message: z.string().min(1).max(480),
+        sessionId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const authorId = ctx.userId;
+      const { success } = await ratelimit.limit(authorId);
+
+      if (!success) {
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+      }
+      // const response = await openai.createChatCompletion({
+      //   model: "gpt-3.5-turbo",
+      //   messages: [{ role: "user", content: input.message }],
+      //   // prompt: "Say it s party time",
+      //   max_tokens: 90,
+      //   stop: "\n",
+      //   temperature: 0.5,
+      // });
+      // console.log("response-----------", response.data);
+      // if (!response) throw new TRPCError({ code: "NOT_FOUND" });
+      // const data = response.data?.choices[0]?.message?.content;
+      // if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const data = `Mock for: ${input.message}`;
       const chatMessage = await ctx.prisma.chatMessage.create({
         data: {
           authorId,
