@@ -40,9 +40,13 @@ export const sessionRouter = createTRPCRouter({
           messages: true,
         },
       });
-      if (!chatSession) throw new TRPCError({ code: "NOT_FOUND" });
+      const filteredSessions = chatSession.filter((session) => {
+        if (session.messages?.length !== 0) return session;
+      });
+      console.log("filteredSessions", filteredSessions);
+      if (!filteredSessions) throw new TRPCError({ code: "NOT_FOUND" });
 
-      return chatSession;
+      return filteredSessions;
     }),
   // getChatSessionMessagesBySessionId: privateProcedure
   //   .input(z.object({ sessionId: z.string() }))
