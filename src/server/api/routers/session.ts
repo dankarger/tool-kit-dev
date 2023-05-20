@@ -28,7 +28,16 @@ export const sessionRouter = createTRPCRouter({
       console.log("sessionIdn222222-3333--222222", sessionId);
       return sessionId;
     }),
+  getChatSessionsByAuthorId: privateProcedure
+    .input(z.object({ authorId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const chatSession = await ctx.prisma.chatSession.findMany({
+        where: { authorId: input.authorId },
+      });
+      if (!chatSession) throw new TRPCError({ code: "NOT_FOUND" });
 
+      return chatSession;
+    }),
   // getChatSessionMessagesBySessionId: privateProcedure
   //   .input(z.object({ sessionId: z.string() }))
   //   .query(async ({ ctx, input }) => {

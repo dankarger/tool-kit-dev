@@ -14,21 +14,10 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
 // const ctx = api.useContext();
 
 const Sessionfeed = ({ id }: { id: string }) => {
-  // const ctx = api.useContext();
-  // const user = useUser();
-  // if (!user) return null;
-  // const userId = user.user?.id;
-  // console.log("userId", userId);
-  // if (!user.user?.id) return null;
-  // console.log("user", user.user?.id);
   const { data, isLoading, isError } =
-    // api.chat.getAllChatMessagesByAuthorId.useQuery({
-    //   authorId: id,
-    // });
     api.chat.getSessionMessagesBySessionId.useQuery({
       id: id,
     });
@@ -41,7 +30,6 @@ const Sessionfeed = ({ id }: { id: string }) => {
     );
   if (isError) return <div>Error</div>;
   return <ResponseSection responses={data} />;
-  // return <div>seesssison</div>;
 };
 const ChatPage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
@@ -51,51 +39,38 @@ const ChatPage: NextPage = () => {
   const [currentSession, setCurrenSession] = React.useState({ id: "random2" });
   const router = useRouter();
   const user = useUser();
-  // const session = api.chat.getAllChatMessagesByAuthorId.useQuery({
-  //   authorId: "user_2PyMrNlCa1UWxngPWVC6NTTkyxC",
-  // });
   const session = api.chat.getSessionMessagesBySessionId.useQuery({
     id: currentSession.id,
   });
   console.log("session", session);
   const createNewSession = api.session.createChatSession.useMutation({
     onSuccess: (data) => {
-      // setPromptValue("");
-      // void ctx.chat.getAll.invalidate();
-      // router.refresh();
-      // console.log("success", data);
       if (data?.id) {
         setCurrenSession({ id: data?.id });
       }
-      // setCurrenSession({ id: data?.id || {id:""} });
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
       if (errorMessage && errorMessage[0]) {
         toast.error(errorMessage[0]);
-        // console.log("errorMessage", errorMessage[0]);
       } else {
         toast.error("Failed to create session, please try again");
-        // console.log("Failed to create post, please try again");
       }
     },
   });
-  // const {data : sessionData, isLoading: sessionLoading, isError: sessionError} = api.chat.getAllChatMessagesByAuthorId.useQuery({authorId: "user_2PyMrNlCa1UWxngPWVC6NTTkyxC"})
   const { mutate, isLoading, data } = api.chat.create.useMutation({
     onSuccess: () => {
       setPromptValue("");
-      // void ctx.chat.getAll.invalidate();
-      // router.refresh();
       void session.refetch();
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
       if (errorMessage && errorMessage[0]) {
         toast.error(errorMessage[0]);
-        // console.log("errorMessage", errorMessage[0]);
+        console.log("errorMessage", errorMessage[0]);
       } else {
         toast.error("Failed to create chat, please try again");
-        // console.log("Failed to create post, please try again");
+        console.log("Failed to create post, please try again");
       }
     },
   });
@@ -155,11 +130,7 @@ const ChatPage: NextPage = () => {
               buttonText={"Send"}
               // buttonVariant={buttonVariants.}
             />
-            {/* {isLoading && (
-              <div>
-                <LoadingSpinner />
-              </div>
-            )} */}
+
             <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
               <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
                 {isLoading && (
