@@ -76,3 +76,12 @@ export interface Session {
   id: string;
   type?: string;
 }
+export interface ChatMessage {
+  id: string;
+  createdAt: Date;
+  message: string;
+  response: string;
+  authorId: string;
+  session: ChatSession[];
+  sessionId: string?;
+}

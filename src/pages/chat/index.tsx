@@ -1,6 +1,6 @@
 import React, { useEffect, useId } from "react";
 import { type NextPage } from "next";
-import type { Session } from "@/types";
+import type { Session, Response, ChatMessage } from "@/types";
 import Head from "next/head";
 import { dashboardConfig } from "@/config/dashboard";
 import { api } from "@/utils/api";
@@ -15,13 +15,13 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
-// const ctx = api.useContext();
 
 const Sessionfeed = ({ id }: { id: string }) => {
-  const { data, isLoading, isError } =
+  const { data, isLoading, isError, refetch } =
     api.chat.getSessionMessagesBySessionId.useQuery({
       id: id,
     });
+
   if (!data) return null;
   if (isLoading)
     return (
@@ -36,39 +36,59 @@ const Sessionfeed = ({ id }: { id: string }) => {
 const SessionsSectionFeed = ({
   authorId,
   onClick,
+  needRefresh,
+  sessionData,
 }: {
+  sessionData: Session[];
+  needRefresh: boolean;
   authorId: string;
   onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
 }) => {
-  const { data, isLoading, isError } =
-    api.session.getChatSessionsByAuthorId.useQuery({
-      authorId: authorId,
-    });
-  if (!data) return null;
-  if (isLoading)
-    return (
-      <div>
-        <LoadingSpinner />
-      </div>
-    );
-  if (isError) return <div>Error</div>;
-  return <SessionsSection sessions={data} onClick={onClick} />;
+  // const { data, isLoading, isError, refetch } =
+  //   api.session.getChatSessionsByAuthorId.useQuery({
+  //     authorId: authorId,
+  //   });
+  useEffect(() => {
+    // refetch();
+  }, [sessionData]);
+  // if (!data) return null;
+  // if (isLoading)
+  //   return (
+  //     <div>
+  //       <LoadingSpinner />
+  //     </div>
+  //   );
+  // if (isError) return <div>Error</div>;
+  if (!sessionData) return null;
+  return <SessionsSection sessions={sessionData} onClick={onClick} />;
 };
 const ChatPage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
   const [chatResponce, setChatResponse] = React.useState("");
   const [chatHistory, setChatHistory] = React.useState([]);
   const [isSessionActivated, setIsSessionActivated] = React.useState(false);
+  const [needRefresh, setNeedRefresh] = React.useState(false);
   const [currentSession, setCurrenSession] = React.useState({
     id: "defaultId",
   });
   const router = useRouter();
   const user = useUser();
   const randomName = useId();
+  const ctx = api.useContext();
 
   const session = api.chat.getSessionMessagesBySessionId.useQuery({
     id: currentSession.id,
   });
+
+  const {
+    data: sessionData,
+    isLoading: sessionSectionLoading,
+    refetch: sessionRefetch,
+    isSuccess,
+  } = api.session.getChatSessionsByAuthorId.useQuery({
+    authorId: user.user?.id ?? "random3",
+  });
+
   const createNewSession = api.session.createChatSession.useMutation({
     onSuccess: (data) => {
       console.log("dattttaaa", data);
@@ -76,6 +96,8 @@ const ChatPage: NextPage = () => {
       const currenId = { id: data.id };
       setCurrenSession((prev) => currenId);
       void session.refetch();
+      void sessionRefetch();
+      setNeedRefresh(true);
       // }
     },
     onError: (error) => {
@@ -117,15 +139,20 @@ const ChatPage: NextPage = () => {
       // setCurrenSession({ id: data?.id ?? "default-session" });
       // session.refetch();
     }
+    setNeedRefresh(true);
+    void ctx.session.getChatSessionsByAuthorId.invalidate();
     void session.refetch();
+    void sessionRefetch();
   }, []);
   // };
   useEffect(() => {
     if (isSessionActivated && currentSession.id === "defaultId") {
       // handleCreateNewSession();
       void session.refetch();
+      void sessionRefetch();
     }
     void session.refetch();
+    void sessionRefetch();
   }, [isSessionActivated, currentSession.id]);
 
   useEffect(() => {
@@ -133,21 +160,70 @@ const ChatPage: NextPage = () => {
   }, [isSessionActivated]);
 
   const handleCreateNewChateMessage = (value: string) => {
+    sessionRefetch();
+    console.log("sessionData", sessionData);
     mutate({
       message: value,
       sessionId: currentSession.id,
     });
   };
 
+  const arrangeChatHistory = (
+    data: { message: string; response: string }[]
+  ) => {
+    if (!data) return [];
+    // let chatHistory;
+    const chatHistory = data.map((item) => {
+      // messages: [{ role: "user", content: input.message }],
+      const userMessage = {
+        role: "user",
+        content: item.message,
+      };
+      const botMessage = {
+        role: "bot",
+        content: item.response,
+      };
+      // chatHistory.push(userMessage);
+      // chatHistory.push(botMessage);
+      return [{ ...userMessage }, { ...botMessage }];
+    });
+    let result = chatHistory.flat();
+
+    console.log("chatHistory", result);
+    return result;
+  };
+
   const handleSubmitButton = (value: string) => {
+    let chatHistory = [];
     setPromptValue(value);
     if (!user.user?.id) {
       return toast.error("Please login to continue");
     }
     setIsSessionActivated(true);
-    // const sessionId = handleCreateNewSession();
-    // console.log("sessionIsessionIdsessionIdd", sessionId);
-    const message = handleCreateNewChateMessage(value);
+    console.log(
+      "sessionData2323232",
+      sessionData?.filter((session) => session.id === currentSession.id)
+    );
+    const currentSessionMesages =
+      sessionData?.filter((session) => session.id === currentSession.id) || [];
+    if (currentSessionMesages[0] !== undefined) {
+      if (
+        currentSessionMesages &&
+        currentSessionMesages[0]?.messages.length > 0
+      ) {
+        chatHistory = arrangeChatHistory(currentSessionMesages[0].messages);
+        console.log(
+          "currentSessionMesages-----222---",
+          currentSessionMesages[0]?.messages
+        );
+      }
+    }
+
+    let prompt = { role: "user", content: value };
+
+    chatHistory.push(prompt);
+    console.log("prompt", prompt);
+    const message = handleCreateNewChateMessage(chatHistory);
     void session.refetch();
     return message;
   };
@@ -155,18 +231,11 @@ const ChatPage: NextPage = () => {
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     const selectedSessionId = e.currentTarget.dataset?.valueid;
-    // if (e.target.value === "random2") {
-    //   createNewSession.mutate({ authorId: user.user.id });
     console.log("hi", selectedSessionId);
-    //   // handleSubmitButton(value);
-    // }
     const obj = {
       id: selectedSessionId ?? "default-session",
     };
     setCurrenSession((prev) => obj);
-    // console.log("currentSession", currentSession);
-    // handleCreateNewChateMessage(value);
-    // setCurrenSession({ id: e.target.value });
     void session.refetch();
   };
   return (
@@ -186,17 +255,20 @@ const ChatPage: NextPage = () => {
 
             <section className="space-y-6 px-3 pb-10 pt-6 md:pb-12 md:pt-10 lg:py-12"></section>
             <InputWithButton
-              // value={promptValue}
               handleSubmitButton={handleSubmitButton}
               placeholder={"Type your message here."}
               buttonText={"Send"}
               // buttonVariant={buttonVariants.}
             />
             <div className="z-150  top-59 left-1  h-40 overflow-y-auto  ">
-              <SessionsSectionFeed
-                authorId={user.user?.id ?? "anonimous"}
-                onClick={handleSelectSession}
-              />
+              {sessionData && (
+                <SessionsSectionFeed
+                  needRefresh={needRefresh}
+                  authorId={user.user?.id ?? "anonimous"}
+                  sessionData={sessionData}
+                  onClick={handleSelectSession}
+                />
+              )}
             </div>
             <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
               <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
@@ -212,8 +284,6 @@ const ChatPage: NextPage = () => {
                   />
                 )} */}
               </div>
-              {/* {session.data && <ResponseSection responses={session.data} />} */}
-              {/* {user.user?.id && <Sessionfeed id={user.user.id} />} */}
               {currentSession.id !== "defaultId" && (
                 <Sessionfeed id={currentSession.id} />
               )}
