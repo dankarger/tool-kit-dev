@@ -77,7 +77,7 @@ const ChatPage: NextPage = () => {
       // if (data?.id) {
       const currenId = { id: data.id };
       setCurrenSession((prev) => currenId);
-      session.refetch();
+      void session.refetch();
       // }
     },
     onError: (error) => {
@@ -92,7 +92,7 @@ const ChatPage: NextPage = () => {
   const { mutate, isLoading, data } = api.chat.create.useMutation({
     onSuccess: () => {
       setPromptValue("");
-      session.refetch();
+      void session.refetch();
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -119,15 +119,15 @@ const ChatPage: NextPage = () => {
       // setCurrenSession({ id: data?.id ?? "default-session" });
       // session.refetch();
     }
-    session.refetch();
+    void session.refetch();
   }, []);
   // };
   useEffect(() => {
     if (isSessionActivated && currentSession.id === "defaultId") {
       // handleCreateNewSession();
-      session.refetch();
+      void session.refetch();
     }
-    session.refetch();
+    void session.refetch();
   }, [isSessionActivated, currentSession.id]);
 
   useEffect(() => {
@@ -141,7 +141,7 @@ const ChatPage: NextPage = () => {
     });
   };
 
-  const handleSubmitButton = async (value: string) => {
+  const handleSubmitButton = (value: string) => {
     setPromptValue(value);
     if (!user.user?.id) {
       return toast.error("Please login to continue");
@@ -150,7 +150,7 @@ const ChatPage: NextPage = () => {
     // const sessionId = handleCreateNewSession();
     // console.log("sessionIsessionIdsessionIdd", sessionId);
     const message = handleCreateNewChateMessage(value);
-    session.refetch();
+    void session.refetch();
     return message;
   };
   const handleSelectSession = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -167,7 +167,7 @@ const ChatPage: NextPage = () => {
     // console.log("currentSession", currentSession);
     // handleCreateNewChateMessage(value);
     // setCurrenSession({ id: e.target.value });
-    session.refetch();
+    void session.refetch();
   };
   return (
     <>
