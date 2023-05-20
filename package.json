@@ -7,6 +7,7 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
+    "lintq": "next lint --quiet",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },

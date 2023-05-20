@@ -67,3 +67,12 @@ export type DashboardConfig = {
 //     stripeCurrentPeriodEnd: number
 //     isPro: boolean
 //   }
+
+export interface Response {
+  message?: string;
+  response?: string;
+  authorId?: string;
+}
+export interface ResponseSectionProps {
+  responses: Response[];
+}

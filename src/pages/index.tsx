@@ -2,21 +2,26 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import {
-  SignIn,
-  useUser,
-  ClerkProvider,
-  SignedIn,
+  // SignIn,
+  // useUser,
+  // ClerkProvider,
+  // SignedIn,
   SignedOut,
   SignInButton,
-  UserButton,
+  // UserButton,
 } from "@clerk/nextjs";
 import { api } from "@/utils/api";
 import { buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
+// import { cn } from "@/lib/utils";
+import { INTERNAL_VERSION } from "@/config/site";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
+
+  console.log("%c---------------------------------", "color: yellow");
+  console.log("VERSION:", INTERNAL_VERSION);
+  console.log("%c---------------------------------", "color: yellow");
 
   return (
     <>
