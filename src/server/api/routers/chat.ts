@@ -15,6 +15,7 @@ import {
 } from "openai";
 import { Analytics, Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis";
+// import type {ChatCompletionRequestMessage} from ''
 // import { CompletionOpts, Completion, Choice } from "openai-api";
 interface ChatCompletionResponse {
   data: {
@@ -167,20 +168,25 @@ export const chatRouter = createTRPCRouter({
         throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
       }
       console.log("input.messages", input.messages);
-      // const response = await openai.createChatCompletion({
-      //   model: "gpt-3.5-turbo",
-      //   messages: [{ role: "user", content: input.message }],
-      //   // prompt: "Say it s party time",
-      //   max_tokens: 90,
-      //   stop: "\n",
-      //   temperature: 0.5,
-      // });
-      // console.log("response-----------", response.data);
-      // if (!response) throw new TRPCError({ code: "NOT_FOUND" });
-      // const data = response.data?.choices[0]?.message?.content;
-      // if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+      // const prompt = `we are having a chat ,this is our chat history so far: ${input.messages.flat()}`;
+      const response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        // @ts-ignore
+        messages: [
+          ...input.messages,
+          { role: "user", content: input.latestMessage },
+        ],
+        // prompt: input.latestMessage,
+        max_tokens: 90,
+        stop: "\n",
+        temperature: 0.5,
+      });
+      console.log("response-----------", response.data);
+      if (!response) throw new TRPCError({ code: "NOT_FOUND" });
+      const data = response.data?.choices[0]?.message?.content;
+      if (!data) throw new TRPCError({ code: "NOT_FOUND" });
 
-      const data = `Mock for: ${input.latestMessage}`;
+      // const data = `Mock for: ${input.latestMessage}`;
       const chatMessage = await ctx.prisma.chatMessage.create({
         data: {
           authorId,

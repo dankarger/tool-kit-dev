@@ -184,7 +184,7 @@ const ChatPage: NextPage = () => {
         content: item.message,
       };
       const botMessage = {
-        role: "bot",
+        role: "assistant",
         content: item.response,
       };
       // chatHistory.push(userMessage);
