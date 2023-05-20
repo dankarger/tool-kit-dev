@@ -91,6 +91,7 @@ const ChatPage: NextPage = () => {
   });
 
   const createNewSession = api.session.createChatSession.useMutation({
+    // mutationFn:
     onSuccess: (data) => {
       console.log("dattttaaa", data);
       // if (data?.id) {
@@ -130,11 +131,15 @@ const ChatPage: NextPage = () => {
   // const handleCreateNewSession = async () => {
   useEffect(() => {
     if (currentSession.id === "defaultId") {
-      const currentTime = new Date().getTime();
+      const currentTime = new Date();
+      const currentHour = currentTime.getHours();
+      const currentMinute = currentTime.getMinutes();
 
+      const currentSeconds = currentTime.getSeconds();
+      const time = `${currentHour}:${currentMinute}:${currentSeconds}`;
       createNewSession.mutate({
         authorId: user.user?.id ?? "random3",
-        name: `@${user.user?.username ?? "randomName"}-${currentTime}`,
+        name: `@${user.user?.username}-${time}`,
       });
 
       // setCurrenSession({ id: data?.id ?? "default-session" });
