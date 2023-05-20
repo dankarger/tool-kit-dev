@@ -25,6 +25,7 @@ export const sessionRouter = createTRPCRouter({
         where: { id: newSession.id },
         // select: { id: true }
       });
+      if (!sessionId) throw new TRPCError({ code: "NOT_FOUND" });
       console.log("sessionIdn222222-3333--222222", sessionId);
       return sessionId;
     }),
@@ -43,7 +44,7 @@ export const sessionRouter = createTRPCRouter({
       const filteredSessions = chatSession.filter((session) => {
         if (session.messages?.length !== 0) return session;
       });
-      console.log("filteredSessions", filteredSessions);
+      // console.log("filteredSessions", filteredSessions);
       if (!filteredSessions) throw new TRPCError({ code: "NOT_FOUND" });
 
       return filteredSessions;

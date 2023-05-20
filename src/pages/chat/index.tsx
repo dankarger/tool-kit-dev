@@ -74,9 +74,11 @@ const ChatPage: NextPage = () => {
   const createNewSession = api.session.createChatSession.useMutation({
     onSuccess: (data) => {
       console.log("dattttaaa", data);
-      if (data?.id) {
-        setCurrenSession({ id: data?.id });
-      }
+      // if (data?.id) {
+      const currenId = { id: data.id };
+      setCurrenSession((prev) => currenId);
+      session.refetch();
+      // }
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -90,7 +92,7 @@ const ChatPage: NextPage = () => {
   const { mutate, isLoading, data } = api.chat.create.useMutation({
     onSuccess: () => {
       setPromptValue("");
-      void session.refetch();
+      session.refetch();
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -104,8 +106,8 @@ const ChatPage: NextPage = () => {
     },
   });
 
-  // useEffect(() => {
-  const handleCreateNewSession = () => {
+  // const handleCreateNewSession = async () => {
+  useEffect(() => {
     if (currentSession.id === "defaultId") {
       const currentTime = new Date().getTime();
 
@@ -113,18 +115,24 @@ const ChatPage: NextPage = () => {
         authorId: user.user?.id ?? "random3",
         name: `@${user.user?.username ?? "randomName"}-${currentTime}`,
       });
-      // setCurrenSession({ id:newSession ?? "default-session" });
+
+      // setCurrenSession({ id: data?.id ?? "default-session" });
+      // session.refetch();
+    }
+    session.refetch();
+  }, []);
+  // };
+  useEffect(() => {
+    if (isSessionActivated && currentSession.id === "defaultId") {
+      // handleCreateNewSession();
       session.refetch();
     }
     session.refetch();
-  };
-  // }, []);
-  useEffect(() => {
-    if (isSessionActivated) {
-      handleCreateNewSession();
-      // session.refetch();
-    }
   }, [isSessionActivated, currentSession.id]);
+
+  useEffect(() => {
+    console.log("currentSession", currentSession);
+  }, [isSessionActivated]);
 
   const handleCreateNewChateMessage = (value: string) => {
     mutate({
@@ -139,16 +147,11 @@ const ChatPage: NextPage = () => {
       return toast.error("Please login to continue");
     }
     setIsSessionActivated(true);
-    const newSession = handleCreateNewSession();
-
-    // if (currentSession.id === "random2") {
-    //   createNewSession.mutate({ authorId: user.user.id });
-    //   console.log("hi");
-    //   // handleSubmitButton(value);
-    // }
-
-    handleCreateNewChateMessage(value);
+    // const sessionId = handleCreateNewSession();
+    // console.log("sessionIsessionIdsessionIdd", sessionId);
+    const message = handleCreateNewChateMessage(value);
     session.refetch();
+    return message;
   };
   const handleSelectSession = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedSessionId = e.target.dataset.valueid;
@@ -157,7 +160,10 @@ const ChatPage: NextPage = () => {
     console.log("hi", selectedSessionId);
     //   // handleSubmitButton(value);
     // }
-    setCurrenSession({ id: selectedSessionId ?? "default-session" });
+    const obj = {
+      id: selectedSessionId ?? "default-session",
+    };
+    setCurrenSession((prev) => obj);
     // console.log("currentSession", currentSession);
     // handleCreateNewChateMessage(value);
     // setCurrenSession({ id: e.target.value });
