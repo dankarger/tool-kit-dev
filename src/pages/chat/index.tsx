@@ -38,7 +38,7 @@ const SessionsSectionFeed = ({
   onClick,
 }: {
   authorId: string;
-  onClick: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
 }) => {
   const { data, isLoading, isError } =
     api.session.getChatSessionsByAuthorId.useQuery({
