@@ -12,23 +12,43 @@ import { prisma } from "@/server/db";
 
 export const sessionRouter = createTRPCRouter({
   createChatSession: privateProcedure
-    .input(z.object({ authorId: z.string() }))
+    .input(z.object({ authorId: z.string(), name: z.string().optional() }))
     .mutation(async ({ ctx, input }) => {
       const authorId = ctx.userId;
       if (!authorId) throw new TRPCError({ code: "UNAUTHORIZED" });
 
       const newSession = await prisma.chatSession.create({
-        data: { authorId: authorId, name: "name" },
+        data: { authorId: authorId, name: input.name },
       });
-      console.log("newsession", newSession.id);
+      // console.log("newsession", newSession.id);
       const sessionId = await ctx.prisma.chatSession.findUnique({
         where: { id: newSession.id },
         // select: { id: true }
       });
+      if (!sessionId) throw new TRPCError({ code: "NOT_FOUND" });
       console.log("sessionIdn222222-3333--222222", sessionId);
       return sessionId;
     }),
+  getChatSessionsByAuthorId: privateProcedure
+    .input(z.object({ authorId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const chatSession = await ctx.prisma.chatSession.findMany({
+        where: {
+          authorId: { equals: input.authorId },
+          // messages:{some:{}},
+        },
+        include: {
+          messages: true,
+        },
+      });
+      const filteredSessions = chatSession.filter((session) => {
+        if (session.messages?.length !== 0) return session;
+      });
+      // console.log("filteredSessions", filteredSessions);
+      if (!filteredSessions) throw new TRPCError({ code: "NOT_FOUND" });
 
+      return filteredSessions;
+    }),
   // getChatSessionMessagesBySessionId: privateProcedure
   //   .input(z.object({ sessionId: z.string() }))
   //   .query(async ({ ctx, input }) => {
