@@ -63,7 +63,7 @@ const ChatPage: NextPage = () => {
       // setPromptValue("");
       // void ctx.chat.getAll.invalidate();
       // router.refresh();
-      console.log("success", data);
+      // console.log("success", data);
       if (data?.id) {
         setCurrenSession({ id: data?.id });
       }
@@ -129,15 +129,7 @@ const ChatPage: NextPage = () => {
     // }
 
     console.log("currentSession", currentSession);
-    // const sessionId = currentSession "test";
-    // mutate({
-    //   message: value,
-    //   sessionId: currentSession.id,
-    // });
-    // setTimeout(() => {
-    console.log("s------------------------------------", currentSession);
     handleCreateNewChateMessage(value);
-    // }, 200);
   };
 
   return (
