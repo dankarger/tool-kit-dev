@@ -80,7 +80,7 @@ const ChatPage: NextPage = () => {
       setPromptValue("");
       // void ctx.chat.getAll.invalidate();
       // router.refresh();
-      session.refetch();
+      void session.refetch();
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -98,7 +98,7 @@ const ChatPage: NextPage = () => {
     if (currentSession.id === "random2") {
       createNewSession.mutate({ authorId: user.user?.id ?? "random3" });
       console.log("hi");
-      session.refetch();
+      void session.refetch();
       // handleSubmitButton(value);
     }
   }, []);
@@ -110,7 +110,7 @@ const ChatPage: NextPage = () => {
     });
   };
 
-  const handleSubmitButton = async (value: string) => {
+  const handleSubmitButton = (value: string) => {
     setPromptValue(value);
     console.log("value", value);
     if (!user.user?.id) {
