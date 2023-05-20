@@ -1,6 +1,7 @@
 import React, { useEffect, useId } from "react";
 import { type NextPage } from "next";
 import type { Session, Response, ChatMessage } from "@/types";
+import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import Head from "next/head";
 import { dashboardConfig } from "@/config/dashboard";
 import { api } from "@/utils/api";
@@ -180,11 +181,11 @@ const ChatPage: NextPage = () => {
     const chatHistory = data.map((item) => {
       // messages: [{ role: "user", content: input.message }],
       const userMessage = {
-        role: "user",
+        role: ChatCompletionRequestMessageRoleEnum.User,
         content: item.message,
       };
       const botMessage = {
-        role: "assistant",
+        role: ChatCompletionRequestMessageRoleEnum.Assistant,
         content: item.response,
       };
       // chatHistory.push(userMessage);

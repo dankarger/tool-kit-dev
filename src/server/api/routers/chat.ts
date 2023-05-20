@@ -169,13 +169,16 @@ export const chatRouter = createTRPCRouter({
       }
       console.log("input.messages", input.messages);
       // const prompt = `we are having a chat ,this is our chat history so far: ${input.messages.flat()}`;
+      if (!input.messages) throw new TRPCError({ code: "NOT_FOUND" });
       const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
-        // @ts-ignore
         messages: [
           ...input.messages,
-          { role: "user", content: input.latestMessage },
-        ],
+          {
+            role: ChatCompletionRequestMessageRoleEnum.User,
+            content: input.latestMessage,
+          },
+        ] as ChatCompletionRequestMessage[],
         // prompt: input.latestMessage,
         max_tokens: 90,
         stop: "\n",
