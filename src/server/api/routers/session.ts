@@ -32,7 +32,13 @@ export const sessionRouter = createTRPCRouter({
     .input(z.object({ authorId: z.string() }))
     .query(async ({ ctx, input }) => {
       const chatSession = await ctx.prisma.chatSession.findMany({
-        where: { authorId: input.authorId },
+        where: {
+          authorId: { equals: input.authorId },
+          // messages:{some:{}},
+        },
+        include: {
+          messages: true,
+        },
       });
       if (!chatSession) throw new TRPCError({ code: "NOT_FOUND" });
 

@@ -109,9 +109,11 @@ const ChatPage: NextPage = () => {
   // useEffect(() => {
   const handleCreateNewSession = () => {
     if (currentSession.id === "defaultId") {
+      const currentTime = new Date().getTime();
+
       createNewSession.mutate({
         authorId: user.user?.id ?? "random3",
-        name: randomName + user.user?.username,
+        name: `@${user.user?.username ?? "randomName"}-${currentTime}`,
       });
       // setCurrenSession({ id:newSession ?? "default-session" });
       console.log("currentSession", currentSession);
@@ -123,7 +125,7 @@ const ChatPage: NextPage = () => {
   useEffect(() => {
     if (isSessionActivated) {
       handleCreateNewSession();
-      session.refetch();
+      // session.refetch();
     }
   }, [isSessionActivated, currentSession.id]);
 
