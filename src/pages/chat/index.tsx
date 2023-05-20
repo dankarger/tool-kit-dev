@@ -13,6 +13,7 @@ import { ResponseSection } from "@/components/response-sections";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { LoadingSpinner } from "@/components/ui/spinner";
 // import { useMutation, useQueryClient } from "@tanstack/react-query";
 // const ctx = api.useContext();
 
@@ -32,7 +33,13 @@ const Sessionfeed = ({ id }: { id: string }) => {
       id: id,
     });
   if (!data) return null;
-  if (isLoading) return <div>Loading</div>;
+  if (isLoading)
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
+  if (isError) return <div>Error</div>;
   return <ResponseSection responses={data} />;
   // return <div>seesssison</div>;
 };
@@ -156,9 +163,18 @@ const ChatPage: NextPage = () => {
               buttonText={"Send"}
               // buttonVariant={buttonVariants.}
             />
+            {/* {isLoading && (
+              <div>
+                <LoadingSpinner />
+              </div>
+            )} */}
             <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
-              <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
-                {isLoading && <p>Loading...</p>}
+              <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
+                {isLoading && (
+                  <div className="flex w-full items-center justify-center">
+                    <LoadingSpinner size={40} />
+                  </div>
+                )}
                 {/* {data && (
                   <ResponseDiv
                     response={data.response}
