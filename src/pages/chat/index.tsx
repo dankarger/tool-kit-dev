@@ -24,7 +24,6 @@ const Sessionfeed = ({ id }: { id: string }) => {
     api.chat.getSessionMessagesBySessionId.useQuery({
       id: id,
     });
-  console.log("data from sessionfeed", data, id);
   if (!data) return null;
   if (isLoading)
     return (
@@ -72,7 +71,6 @@ const ChatPage: NextPage = () => {
   const session = api.chat.getSessionMessagesBySessionId.useQuery({
     id: currentSession.id,
   });
-  console.log("session", session);
   const createNewSession = api.session.createChatSession.useMutation({
     onSuccess: (data) => {
       console.log("dattttaaa", data);
@@ -116,7 +114,6 @@ const ChatPage: NextPage = () => {
         name: `@${user.user?.username ?? "randomName"}-${currentTime}`,
       });
       // setCurrenSession({ id:newSession ?? "default-session" });
-      console.log("currentSession", currentSession);
       session.refetch();
     }
     session.refetch();
@@ -138,30 +135,26 @@ const ChatPage: NextPage = () => {
 
   const handleSubmitButton = async (value: string) => {
     setPromptValue(value);
-    console.log("value", value);
     if (!user.user?.id) {
       return toast.error("Please login to continue");
     }
     setIsSessionActivated(true);
     const newSession = handleCreateNewSession();
 
-    console.log("newSession", newSession);
     // if (currentSession.id === "random2") {
     //   createNewSession.mutate({ authorId: user.user.id });
     //   console.log("hi");
     //   // handleSubmitButton(value);
     // }
 
-    console.log("currentSession", currentSession);
     handleCreateNewChateMessage(value);
     session.refetch();
   };
   const handleSelectSession = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log("e.target.value", e.target.dataset.valueid);
-    const selectedSessionId = e.target.dataset?.valueId;
+    const selectedSessionId = e.target.dataset.valueid;
     // if (e.target.value === "random2") {
     //   createNewSession.mutate({ authorId: user.user.id });
-    //   console.log("hi");
+    console.log("hi", selectedSessionId);
     //   // handleSubmitButton(value);
     // }
     setCurrenSession({ id: selectedSessionId ?? "default-session" });

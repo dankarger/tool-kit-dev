@@ -24,7 +24,10 @@ export const SessionsSection = ({
             data-valueid={session.id}
           >
             {/* <div key={session.id}> */}
-            <span className="[&:not(:first-child)]: leading-7 ">
+            <span
+              data-valueid={session.id}
+              className="[&:not(:first-child)]: leading-7 "
+            >
               {session.name}
             </span>
           </li>

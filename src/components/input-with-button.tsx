@@ -56,32 +56,14 @@ InputWithButtonProps) {
     e: Event;
   };
 
-  // function onSubmit(data: FormData, e?: React.BaseSyntheticEvent) {
-  //   e?.preventDefault();
-  //   handleSubmitButton(data.prompt);
-  //   console.log("from form2", data.prompt);
-  //   resetField("prompt");
-  // const response = await fetch(`/api/posts/${post.id}`, {
-  //   method: "PATCH",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     title: data.title,
-  //     content: blocks,
-  //   }),
-  // router.refresh();
-  // }
   const onSubmit: SubmitHandler<FormData> = (
     data,
     e?: React.BaseSyntheticEvent
   ) => {
     e?.preventDefault();
     void handleSubmitButton(data.prompt);
-    console.log("from form2", data.prompt);
     resetField("prompt");
   };
-  console.log("dsdsd");
   return (
     <div className=" p-21 flex w-full  items-center gap-2 space-x-2">
       <form onSubmit={(e) => void handleSubmit(onSubmit)(e)}>
