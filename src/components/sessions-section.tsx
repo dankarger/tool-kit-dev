@@ -1,5 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import type { Session } from "@/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Fragment } from "react";
 
 interface SessionsSectionProps {
   sessions: Session[];
@@ -12,7 +14,7 @@ export const SessionsSection = ({
 }: SessionsSectionProps) => {
   if (!sessions) return null;
   return (
-    <div className=" z-150 top-59 left-1  h-full  overflow-y-scroll rounded-md  border-slate-300 px-2 pb-4">
+    <div className=" z-150 top-59 left-1  h-full  px-2 pb-4">
       {/* <div className="position:sticky  left-0 top-0 w-full">
         <h2 className="   text-lg font-semibold">Sessions</h2>
       </div> */}
@@ -20,26 +22,29 @@ export const SessionsSection = ({
       <div className="w-50  h-full   ">
         <Separator />
         {/* <div className="flex flex-col-reverse"> */}
-        <ul className="   flex flex-col-reverse">
-          {sessions.map((session) => (
-            <li
-              key={session.id}
-              value={session.id}
-              className="lg:dark:hover: lg:dark:hover: lg:light:hover: lg:light:hover: flex  flex-col     justify-start  rounded-md  border-gray-300   align-middle  hover:cursor-pointer lg:dark:hover:border-gray-700 lg:dark:hover:bg-gray-800 lg:dark:hover:text-white lg:dark:hover:shadow-sm lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900"
-              onClick={onClick}
-              data-valueid={session.id}
-            >
-              {/* <div key={session.id}> */}
-              <span
-                data-valueid={session.id}
-                className="[&:not(:first-child)]: leading-7 "
-              >
-                {session.name}
-              </span>
-            </li>
-            // <Separator />
-          ))}
-        </ul>
+        <ScrollArea className="h-[150px] w-[350px] rounded-md border p-4">
+          <ul className="   flex flex-col-reverse">
+            {sessions.map((session) => (
+              <Fragment key={session.id}>
+                <li
+                  value={session.id}
+                  className="lg:dark:hover: lg:dark:hover: lg:light:hover: lg:light:hover: flex  flex-col     justify-start  rounded-md  border-gray-300   align-middle  hover:cursor-pointer lg:dark:hover:border-gray-700 lg:dark:hover:bg-gray-800 lg:dark:hover:text-white lg:dark:hover:shadow-sm lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900"
+                  onClick={onClick}
+                  data-valueid={session.id}
+                >
+                  {/* <div key={session.id}> */}
+                  <span
+                    data-valueid={session.id}
+                    className="[&:not(:first-child)]: leading-7 "
+                  >
+                    {session.name}
+                  </span>
+                </li>
+                <Separator />
+              </Fragment>
+            ))}
+          </ul>
+        </ScrollArea>
       </div>
     </div>
   );

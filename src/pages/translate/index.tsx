@@ -64,7 +64,7 @@ const SessionsSectionFeed = ({
   if (!sessionData) return null;
   return <SessionsSection sessions={sessionData} onClick={onClick} />;
 };
-const ChatPage: NextPage = () => {
+const TranslatePage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
   const [chatResponce, setChatResponse] = React.useState("");
   const [chatHistory, setChatHistory] = React.useState([]);
@@ -276,7 +276,7 @@ const ChatPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Chat</title>
+        <title>Translate</title>
         <meta name="description" content="GPTool kit" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -286,12 +286,17 @@ const ChatPage: NextPage = () => {
             <DashboardNav items={dashboardConfig.chat} />
           </aside>
           <main className="flex w-full flex-1 flex-col overflow-hidden">
-            <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
+            <DashboardHeader
+              heading="Translate"
+              text="Translate a text with GPTool."
+            />
 
             <section className="  space-y-1  pb-4 md:pb-2 md:pt-2 lg:py-2"></section>
             <div className=" z-150 top-59   left-1  h-40 ">
               <div className=" flex  w-full items-center justify-between ">
-                <h2 className="  pl-2 text-lg font-semibold">Sessions</h2>
+                <h2 className="  pl-2 text-lg font-semibold">
+                  Previous Sessions
+                </h2>
                 <Button className="w-16" onClick={handleCreateNewSession}>
                   <span>+</span>NEW
                 </Button>
@@ -338,4 +343,4 @@ const ChatPage: NextPage = () => {
   );
 };
 
-export default ChatPage;
+export default TranslatePage;
