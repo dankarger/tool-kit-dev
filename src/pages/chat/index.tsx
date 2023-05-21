@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
 
 const Sessionfeed = ({ id }: { id: string }) => {
   const { data, isLoading, isError, refetch } =
@@ -128,20 +129,32 @@ const ChatPage: NextPage = () => {
     },
   });
 
-  // const handleCreateNewSession = async () => {
+  const handleCreateNewSession = () => {
+    const currentTime = new Date();
+    const currentHour = currentTime.getHours();
+    const currentMinute = currentTime.getMinutes();
+
+    const currentSeconds = currentTime.getSeconds();
+    const time = `${currentHour}:${currentMinute}:${currentSeconds}`;
+    createNewSession.mutate({
+      authorId: user.user?.id ?? "random3",
+      name: `@${user.user?.username}-${time}`,
+    });
+  };
+
   useEffect(() => {
     if (currentSession.id === "defaultId") {
-      const currentTime = new Date();
-      const currentHour = currentTime.getHours();
-      const currentMinute = currentTime.getMinutes();
+      // const currentTime = new Date();
+      // const currentHour = currentTime.getHours();
+      // const currentMinute = currentTime.getMinutes();
 
-      const currentSeconds = currentTime.getSeconds();
-      const time = `${currentHour}:${currentMinute}:${currentSeconds}`;
-      createNewSession.mutate({
-        authorId: user.user?.id ?? "random3",
-        name: `@${user.user?.username}-${time}`,
-      });
-
+      // const currentSeconds = currentTime.getSeconds();
+      // const time = `${currentHour}:${currentMinute}:${currentSeconds}`;
+      // createNewSession.mutate({
+      //   authorId: user.user?.id ?? "random3",
+      //   name: `@${user.user?.username}-${time}`,
+      // });
+      handleCreateNewSession();
       // setCurrenSession({ id: data?.id ?? "default-session" });
       // session.refetch();
     }
@@ -248,6 +261,13 @@ const ChatPage: NextPage = () => {
     setCurrenSession((prev) => obj);
     void session.refetch();
   };
+  const handleNewSessionButton = () => {
+    // setCurrenSession({ id: "defaultId" });
+    setIsSessionActivated(true);
+
+    void session.refetch();
+    void sessionRefetch();
+  };
   return (
     <>
       <Head>
@@ -263,14 +283,14 @@ const ChatPage: NextPage = () => {
           <main className="flex w-full flex-1 flex-col overflow-hidden">
             <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
 
-            <section className="space-y-6 px-3 pb-10 pt-6 md:pb-12 md:pt-10 lg:py-12"></section>
-            <InputWithButton
-              handleSubmitButton={handleSubmitButton}
-              placeholder={"Type your message here."}
-              buttonText={"Send"}
-              // buttonVariant={buttonVariants.}
-            />
-            <div className="z-150  top-59 left-1  h-40 overflow-y-auto  ">
+            <section className="  space-y-2  pb-10 pt-2 md:pb-2 md:pt-4 lg:py-2"></section>
+            <div className=" z-150 top-59   left-1  h-40  rounded-md border border-slate-300">
+              <div className=" flex  w-full items-center justify-between ">
+                <h2 className="  pl-2 text-lg font-semibold">Sessions</h2>
+                <Button className="w-16" onClick={handleCreateNewSession}>
+                  <span>+</span>NEW
+                </Button>
+              </div>
               {sessionData && (
                 <SessionsSectionFeed
                   needRefresh={needRefresh}
@@ -280,6 +300,14 @@ const ChatPage: NextPage = () => {
                 />
               )}
             </div>
+            <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+              <InputWithButton
+                handleSubmitButton={handleSubmitButton}
+                placeholder={"Type your message here."}
+                buttonText={"Send"}
+                // buttonVariant={buttonVariants.}
+              />
+            </section>
             <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
               <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
                 {isLoading && (

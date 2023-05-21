@@ -65,9 +65,17 @@ InputWithButtonProps) {
     resetField("prompt");
   };
   return (
-    <div className=" p-21 flex w-full  items-center gap-2 space-x-2">
-      <form onSubmit={(e) => void handleSubmit(onSubmit)(e)}>
-        <div className="flex w-full max-w-sm items-center space-x-2">
+    <div
+      className="mt-4"
+      // className="   justify-space-between flex w-full   gap-2 space-x-1"
+    >
+      <form
+        onSubmit={(e) => void handleSubmit(onSubmit)(e)}
+        // className="flex w-full max-w-sm items-center space-x-2"
+      >
+        <div
+        // className="justify-space-between flex w-full max-w-sm   items-center space-y-2  "
+        >
           <Input
             type="text"
             placeholder="Type your Prompt here."
@@ -82,9 +90,11 @@ InputWithButtonProps) {
             // onChange={(e) => handleSubmit(e.target.value)}
           />
           {errors.prompt && <p>prompt is required.</p>}
-          <Button type="submit">Submit</Button>
+          <Button className="w-full" type="submit">
+            Submit
+          </Button>
         </div>
-      </form>
+      </form>{" "}
     </div>
   );
 }
