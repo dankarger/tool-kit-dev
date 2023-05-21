@@ -1,11 +1,9 @@
-"use client";
-
-import Link from "next/link";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
+import { onPromise } from "@/lib/utils";
 // import { Checkbox } from "@/components/ui/checkbox"
 // import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 // import { Switch } from "@/components/ui/switch"
@@ -33,15 +31,16 @@ const FormSchema = z.object({
 });
 
 export function TranslateSection() {
-  const [selectedLanguage, setSelectedLanguage] = React.useState<string>("");
-  const [textToTranslate, setTextToTranslate] = React.useState<string>("");
-  const [translatedText, setTranslatedText] = React.useState<string>("");
-
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
+  const [textToTranslate, setTextToTranslate] = useState<string>("");
+  const [translatedText, setTranslatedText] = useState<string>("");
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    setTextToTranslate(data.text);
+
     toast({
       title: "You submitted the following values:",
       description: (
@@ -54,7 +53,10 @@ export function TranslateSection() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form
+        onSubmit={() => form.handleSubmit(onSubmit)}
+        className="w-2/3 space-y-6"
+      >
         <FormField
           control={form.control}
           name="text"
@@ -77,7 +79,18 @@ export function TranslateSection() {
             </FormItem>
           )}
         />
-        <Button type="submit">Enter</Button>
+        <div>
+          <Button type="submit">Enter</Button>
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              setTextToTranslate("");
+              form.reset({ text: "" });
+            }}
+          >
+            Clear
+          </Button>
+        </div>
       </form>
     </Form>
   );

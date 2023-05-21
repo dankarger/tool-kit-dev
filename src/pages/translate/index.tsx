@@ -30,7 +30,6 @@ const SessionsSectionFeed = ({
   authorId: string;
   onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
 }): JSX.Element => {
-  useEffect(() => {}, [sessionData]);
   if (!sessionData) return <></>;
   return <SessionsSection sessions={sessionData} onClick={onClick} />;
 };
