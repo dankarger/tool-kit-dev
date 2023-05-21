@@ -17,23 +17,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
-
-const Sessionfeed = ({ id }: { id: string }) => {
-  const { data, isLoading, isError, refetch } =
-    api.chat.getSessionMessagesBySessionId.useQuery({
-      id: id,
-    });
-
-  if (!data) return null;
-  if (isLoading)
-    return (
-      <div>
-        <LoadingSpinner />
-      </div>
-    );
-  if (isError) return <div>Error</div>;
-  return <ResponseSection responses={data} />;
-};
+import { TranslateSection } from "@/components/translate-section";
 
 const SessionsSectionFeed = ({
   authorId,
@@ -45,25 +29,12 @@ const SessionsSectionFeed = ({
   needRefresh: boolean;
   authorId: string;
   onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
-}) => {
-  // const { data, isLoading, isError, refetch } =
-  //   api.session.getChatSessionsByAuthorId.useQuery({
-  //     authorId: authorId,
-  //   });
-  useEffect(() => {
-    // refetch();
-  }, [sessionData]);
-  // if (!data) return null;
-  // if (isLoading)
-  //   return (
-  //     <div>
-  //       <LoadingSpinner />
-  //     </div>
-  //   );
-  // if (isError) return <div>Error</div>;
-  if (!sessionData) return null;
+}): JSX.Element => {
+  useEffect(() => {}, [sessionData]);
+  if (!sessionData) return <></>;
   return <SessionsSection sessions={sessionData} onClick={onClick} />;
 };
+
 const TranslatePage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
   const [chatResponce, setChatResponse] = React.useState("");
@@ -146,38 +117,6 @@ const TranslatePage: NextPage = () => {
       name: sessionName,
     });
   };
-
-  useEffect(() => {
-    if (currentSession.id === "defaultId") {
-      // const currentTime = new Date();
-      // const currentHour = currentTime.getHours();
-      // const currentMinute = currentTime.getMinutes();
-
-      // const currentSeconds = currentTime.getSeconds();
-      // const time = `${currentHour}:${currentMinute}:${currentSeconds}`;
-      // createNewSession.mutate({
-      //   authorId: user.user?.id ?? "random3",
-      //   name: `@${user.user?.username}-${time}`,
-      // });
-      handleCreateNewSession();
-      // setCurrenSession({ id: data?.id ?? "default-session" });
-      // session.refetch();
-    }
-    setNeedRefresh(true);
-    void ctx.session.getChatSessionsByAuthorId.invalidate();
-    void session.refetch();
-    void sessionRefetch();
-  }, []);
-  // };
-  useEffect(() => {
-    if (isSessionActivated && currentSession.id === "defaultId") {
-      // handleCreateNewSession();
-      void session.refetch();
-      void sessionRefetch();
-    }
-    void session.refetch();
-    void sessionRefetch();
-  }, [isSessionActivated, currentSession.id]);
 
   useEffect(() => {
     console.log("currentSession", currentSession);
@@ -290,51 +229,26 @@ const TranslatePage: NextPage = () => {
               heading="Translate"
               text="Translate a text with GPTool."
             />
-
             <section className="  space-y-1  pb-4 md:pb-2 md:pt-2 lg:py-2"></section>
-            <div className=" z-150 top-59   left-1  h-40 ">
-              <div className=" flex  w-full items-center justify-between ">
-                <h2 className="  pl-2 text-lg font-semibold">
-                  Previous Sessions
-                </h2>
-                <Button className="w-16" onClick={handleCreateNewSession}>
-                  <span>+</span>NEW
-                </Button>
-              </div>
-              {sessionData && (
-                <SessionsSectionFeed
-                  needRefresh={needRefresh}
-                  authorId={user.user?.id ?? "anonimous"}
-                  sessionData={sessionData}
-                  onClick={handleSelectSession}
-                />
-              )}
-            </div>
+            1
             <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-              <InputWithButton
-                handleSubmitButton={handleSubmitButton}
-                placeholder={"Type your message here."}
-                buttonText={"Send"}
-                // buttonVariant={buttonVariants.}
-              />
+              <TranslateSection />
             </section>
             <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
               <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
+                3
                 {isLoading && (
                   <div className="flex w-full items-center justify-center">
                     <LoadingSpinner size={40} />
                   </div>
                 )}
-                {/* {data && (
+                {data && (
                   <ResponseDiv
                     response={data.response}
                     message={data.message}
                   />
-                )} */}
+                )}
               </div>
-              {currentSession.id !== "defaultId" && (
-                <Sessionfeed id={currentSession.id} />
-              )}
             </section>
           </main>
         </div>

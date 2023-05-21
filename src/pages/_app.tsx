@@ -17,6 +17,7 @@ import { SiteHeader } from "@/components/site-header";
 // import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { ThemeProvider } from "@/components/theme-provider";
 import SiteFooter from "@/components/site-footer";
+import { Toaster } from "@/components/ui/toaster";
 
 const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
   return (
@@ -35,6 +36,7 @@ const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
             </section>
           </div>
           {/* <TailwindIndicator /> */}
+          <Toaster />
         </ThemeProvider>
         <SiteFooter />
       </div>
