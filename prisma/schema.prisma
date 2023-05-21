@@ -35,6 +35,14 @@ model ChatSession {
     createdAt DateTime @default(now())
     messages ChatMessage[] 
     authorId String  
+    @@index([authorId])
+}
 
+model TranslationResult {
+    id        String   @id @default(cuid())  
+    createdAt DateTime @default(now())
+    text String  
+    translation  String  
+    authorId String
     @@index([authorId])
 }

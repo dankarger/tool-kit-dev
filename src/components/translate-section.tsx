@@ -39,7 +39,7 @@ const LANGUAGES = [
   "Turkish",
 ];
 
-const FormSchema = z.object({
+export const FormSchema = z.object({
   text: z
     .string()
     .min(2, {
@@ -51,7 +51,16 @@ const FormSchema = z.object({
   language: z.string(),
 });
 
-export function TranslateSection() {
+interface TranslateSectionProps {
+  handleTranslateButton: (text: string, language: string) => void;
+  // setSelectedLanguage: React.Dispatch<React.SetStateAction<string>>;
+  // selectedLanguage: string;
+  // setTextToTranslate: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export function TranslateSection({
+  handleTranslateButton,
+}: TranslateSectionProps) {
   const [selectedLanguage, setSelectedLanguage] = useState<string>("English");
   const [textToTranslate, setTextToTranslate] = useState<string>("");
   const [translatedText, setTranslatedText] = useState<string>("");
@@ -63,9 +72,9 @@ export function TranslateSection() {
   function onSubmit(data: z.infer<typeof FormSchema>) {
     setTextToTranslate(data.text);
     setSelectedLanguage(data.language);
-
+    handleTranslateButton(data.text, data.language);
     // api call
-
+    console.log("from onSubmit", data.text, data.language);
     toast({
       title: "You submitted the following values:",
       description: (
@@ -132,7 +141,9 @@ export function TranslateSection() {
           )}
         />
         <div>
-          <Button type="submit">Enter</Button>
+          <Button disabled={!form.formState.isValid} type="submit">
+            Translate
+          </Button>
           <Button
             onClick={(e) => {
               e.preventDefault();
