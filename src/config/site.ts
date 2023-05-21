@@ -1,6 +1,6 @@
 export type SiteConfig = typeof siteConfig;
 
-export const INTERNAL_VERSION = "1.3";
+export const INTERNAL_VERSION = "1.4";
 
 export const siteConfig = {
   name: "Next.js",

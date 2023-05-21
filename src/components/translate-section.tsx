@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { onPromise } from "@/lib/utils";
 // import { Checkbox } from "@/components/ui/checkbox"
 // import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 // import { Switch } from "@/components/ui/switch"
@@ -18,6 +17,27 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { a } from "react-spring";
+
+const LANGUAGES = [
+  "English",
+  "Spanish",
+  "French",
+  "German",
+  "Italian",
+  "Japanese",
+  "Korean",
+  "Portuguese",
+  "Russian",
+  "Turkish",
+];
 
 const FormSchema = z.object({
   text: z
@@ -28,18 +48,23 @@ const FormSchema = z.object({
     .max(160, {
       message: "The text is too long...",
     }),
+  language: z.string(),
 });
 
 export function TranslateSection() {
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("English");
   const [textToTranslate, setTextToTranslate] = useState<string>("");
   const [translatedText, setTranslatedText] = useState<string>("");
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     setTextToTranslate(data.text);
+    setSelectedLanguage(data.language);
+
+    // api call
 
     toast({
       title: "You submitted the following values:",
@@ -53,10 +78,37 @@ export function TranslateSection() {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={() => form.handleSubmit(onSubmit)}
-        className="w-2/3 space-y-6"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+        <FormField
+          control={form.control}
+          name="language"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Select Language</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={LANGUAGES[0]}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a target language " />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {LANGUAGES.map((language) => (
+                    <SelectItem value={language} key={language}>
+                      {language}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                You can manage email addresses in your{" "}
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="text"

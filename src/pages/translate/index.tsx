@@ -228,8 +228,8 @@ const TranslatePage: NextPage = () => {
               heading="Translate"
               text="Translate a text with GPTool."
             />
-            <section className="  space-y-1  pb-4 md:pb-2 md:pt-2 lg:py-2"></section>
-            1
+            {/* <section className="  space-y-1  pb-4 md:pb-2 md:pt-2 lg:py-2"></section>
+            1 */}
             <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
               <TranslateSection />
             </section>
