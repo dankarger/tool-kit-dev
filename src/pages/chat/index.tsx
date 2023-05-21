@@ -1,4 +1,4 @@
-import React, { useEffect, useId } from "react";
+import React, { use, useEffect, useId } from "react";
 import { type NextPage } from "next";
 import type { Session, Response, ChatMessage } from "@/types";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
@@ -130,15 +130,20 @@ const ChatPage: NextPage = () => {
   });
 
   const handleCreateNewSession = () => {
+    if (!user.user?.id) {
+      toast.error("Please login to create a new session");
+      return;
+    }
     const currentTime = new Date();
     const currentHour = currentTime.getHours();
     const currentMinute = currentTime.getMinutes();
-
     const currentSeconds = currentTime.getSeconds();
-    const time = `${currentHour}:${currentMinute}:${currentSeconds}`;
+    const time = `${currentHour} - ${currentMinute}-  ${currentSeconds}`;
+    const username = user.user?.username || "user";
+    const sessionName = `@ ${username} ${time}`;
     createNewSession.mutate({
-      authorId: user.user?.id ?? "random3",
-      name: `@${user.user?.username}-${time}`,
+      authorId: user.user.id,
+      name: sessionName,
     });
   };
 
