@@ -15,6 +15,7 @@ import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { SummarizeSection } from "@/components/summarize-section2";
+import { SessionsSection2 } from "@/components/session-section2";
 
 const SessionsSectionFeed = ({
   authorId,
@@ -45,6 +46,15 @@ const SummarizePage: NextPage = () => {
   // const { data, isLoading, isFetching } = api.translate.getAllTranslationsByAuthorId.useQ({
   //   authorId: user.user?.id,
   // })
+
+  const {
+    data: sessionData,
+    isLoading: sessionSectionLoading,
+    refetch: sessionRefetch,
+    isSuccess,
+  } = api.summarize.getAllSummarizeByAuthorId.useQuery({
+    authorId: user.user?.id ?? "",
+  });
 
   const { mutate, isLoading, data } =
     api.summarize.createSummarizeResult.useMutation({
@@ -118,8 +128,9 @@ const SummarizePage: NextPage = () => {
               heading="Summarize"
               text="Summarize a text with GPTool."
             />
-            <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+            <section className=" flex items-center justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
               <SummarizeSection handleSummarizeButton={handleSummarizeButton} />
+              {sessionData && <SessionsSection2 sessions={sessionData} />}
             </section>
             {isLoading && (
               <div className="flex h-fit w-full items-center justify-center">

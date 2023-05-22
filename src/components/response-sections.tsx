@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { ResponseDiv } from "./response-div";
 import { Fragment } from "react";
-import type { ResponseSectionProps } from "@/types";
+import type { ResponseSectionProps, ChatMessage } from "@/types";
 
 export const ResponseSection = ({ responses }: ResponseSectionProps) => {
   if (!responses) return null;

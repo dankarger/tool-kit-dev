@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { UserButton } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
-import { dark, light } from "@clerk/themes";
+import { dark } from "@clerk/themes";
 import { useTheme } from "next-themes";
 
 interface MainNavProps {
@@ -35,7 +35,7 @@ export function MainNav({ items, children }: MainNavProps) {
               userPreviewAvatarContainer__personalWorkspace: "bg-slate-900",
             },
           },
-          baseTheme: theme.theme === "dark" ? dark : light,
+          baseTheme: theme.theme === "dark" ? dark : "light",
         }}
       />
       <Link href="/" className="hidden items-center space-x-2 md:flex">

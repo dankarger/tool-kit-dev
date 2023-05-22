@@ -99,6 +99,12 @@ export interface ChatMessage {
   sessionId: string?;
 }
 
+export interface Response {
+  message: string;
+  response: string;
+  authorId: string;
+  sessionId: string;
+}
 // Pages :
 
 export interface HomePageConfig {
