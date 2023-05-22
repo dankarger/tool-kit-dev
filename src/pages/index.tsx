@@ -41,20 +41,40 @@ const Home: NextPage = () => {
       </div>
       <div className="flex gap-4">
         <Link
-          href={siteConfig.links.docs}
-          target="_blank"
-          rel="noreferrer"
+          href="/chat"
+          // target="_blank"
+          // rel="noreferrer"
           className={buttonVariants({ size: "lg" })}
         >
-          Documentation
+          Chat
         </Link>
         <Link
-          target="_blank"
-          rel="noreferrer"
-          href={siteConfig.links.github}
+          // rel="noreferrer"
+          href="/translate"
           className={buttonVariants({ variant: "outline", size: "lg" })}
         >
-          GitHub
+          Translate
+        </Link>
+        <Link
+          // rel="noreferrer"
+          href="/summarize"
+          className={buttonVariants({ variant: "secondary", size: "lg" })}
+        >
+          Summarize
+        </Link>
+        <Link
+          // rel="noreferrer"
+          href="/story"
+          className={buttonVariants({ variant: "outline", size: "lg" })}
+        >
+          Story
+        </Link>
+        <Link
+          // rel="noreferrer"
+          href="/games"
+          className={buttonVariants({ variant: "secondary", size: "lg" })}
+        >
+          Games
         </Link>
       </div>
       <section>

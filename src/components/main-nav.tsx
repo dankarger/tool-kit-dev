@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { UserButton } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
+import { dark, light } from "@clerk/themes";
+import { useTheme } from "next-themes";
 
 interface MainNavProps {
   items?: NavItem[];
@@ -14,12 +16,28 @@ interface MainNavProps {
 }
 
 export function MainNav({ items, children }: MainNavProps) {
+  const theme = useTheme();
+  console.log(dark);
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false);
   // const user = useUser();
   // const username = user.user?.username || "User";
   return (
     <div className="flex gap-6 md:gap-10">
-      <UserButton />
+      <UserButton
+        appearance={{
+          variables: {},
+          userProfile: {
+            elements: {
+              breadcrumbs: "bg-slate-500",
+              formButtonPrimary:
+                "bg-slate-500 hover:bg-slate-400 text-sm normal-case",
+
+              userPreviewAvatarContainer__personalWorkspace: "bg-slate-900",
+            },
+          },
+          baseTheme: theme.theme === "dark" ? dark : light,
+        }}
+      />
       <Link href="/" className="hidden items-center space-x-2 md:flex">
         {/* <Icons.logo className="h-6 w-6" /> */}
         <span className="hidden font-bold sm:inline-block">

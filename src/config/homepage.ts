@@ -3,7 +3,8 @@ import { HomePageConfig as HomePageConfigtype } from "@/types";
 export const HomePageConfig: HomePageConfigtype = {
   title: "Introducing GPToolKit: Unleash the Power of OpenAI",
   subtitle:
-    "Welcome to GPToolKit, your gateway to harnessing the remarkable capabilities of OpenAI. ",
+    // "Welcome to GPToolKit, your gateway to harnessing the remarkable capabilities of OpenAI. ",
+    "Unlock Limitless Creativity with GPT Tool Kit - Your Ultimate OpenAI-Powered Companion.",
   content: {
     paragraph1:
       "Our cutting-edge application empowers you to explore and leverage the full potential of OpenAI's state-of-the-art language model, enabling you to build intelligent and dynamic applications like never before.",

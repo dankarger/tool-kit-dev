@@ -6,6 +6,7 @@ import {
   SignedIn,
   SignedOut,
   RedirectToSignIn,
+  SignInButton,
 } from "@clerk/nextjs";
 import "@/styles/globals.css";
 import { Metadata } from "next";
@@ -18,6 +19,7 @@ import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
 import SiteFooter from "@/components/site-footer";
 import { Toaster } from "@/components/ui/toaster";
+import { dark, light } from "@clerk/themes";
 
 const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
   return (
@@ -42,7 +44,8 @@ const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
       </div>
       <SignedIn />
       <SignedOut>
-        <RedirectToSignIn />
+        {/* <RedirectToSignIn /> */}
+        <SignInButton />
       </SignedOut>
     </ClerkProvider>
   );
