@@ -74,18 +74,17 @@ export const TranslateRouter = createTRPCRouter({
       // const prompt = `we are having a chat ,this is our chat history so far: ${input.messages.flat()}`;
       if (!input.text) throw new TRPCError({ code: "NOT_FOUND" });
 
-      const response: AxiosResponse<CreateEditResponse> =
-        await openai.createEdit({
-          model: "text-davinci-edit-001",
-          input: input.text,
-          instruction: `translate to this text to ${input.language}`,
-        });
+      const response = await openai.createEdit({
+        model: "text-davinci-edit-001",
+        input: input.text,
+        instruction: `translate to this text to ${input.language}`,
+      });
       //
       //
-      console.log("response-----------", response.data);
-      if (!response) throw new TRPCError({ code: "NOT_FOUND" });
+      // console.log("response-----------", response.data);
+      if (!response.data) throw new TRPCError({ code: "NOT_FOUND" });
       const data = response.data;
-      if (!data) throw new TRPCError({ code: "NOT_FOUND" });
+      if (!data.choices[0]?.text) throw new TRPCError({ code: "NOT_FOUND" });
 
       // const data = `Mock for: ${input.latestMessage}`;
       const result: string = data.choices[0]?.text;
@@ -102,7 +101,7 @@ export const TranslateRouter = createTRPCRouter({
       // // const chat = `it will be the responce fropm openai for prompt: ${input.content}`;
       // const chatMessage = { response: data };
       console.log("transltae - data/,", translationresult);
-      return translationresult as TranslationResult;
+      return translationresult;
     }),
 });
 // const response = await openai.createEdit({

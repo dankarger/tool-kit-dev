@@ -1,4 +1,6 @@
-export const HomePageConfig: HomePageConfig = {
+import { HomePageConfig as HomePageConfigtype } from "@/types";
+
+export const HomePageConfig: HomePageConfigtype = {
   title: "Introducing GPToolKit: Unleash the Power of OpenAI",
   subtitle:
     "Welcome to GPToolKit, your gateway to harnessing the remarkable capabilities of OpenAI. ",
@@ -10,7 +12,7 @@ export const HomePageConfig: HomePageConfig = {
     paragraph3:
       "Endless Possibilities GPToolKit opens up a world of possibilities for natural language processing, content generation, chatbots, conversational interfaces, and more. Seamlessly integrate OpenAI's API into your projects and witness the transformative impact it can have on your applications. From improving customer experiences to automating repetitive tasks, GPToolKit empowers you to elevate your software to unprecedented heights.",
     paragraph4: "",
-    features: [
+    features1: [
       {
         title: "Easy to Use",
         description:

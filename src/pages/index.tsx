@@ -13,9 +13,10 @@ import {
 import { api } from "@/utils/api";
 import { buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
+import { HomePageConfig } from "@/config/homepage";
 // import { cn } from "@/lib/utils";
 import { INTERNAL_VERSION } from "@/config/site";
-import { HomePageConfig } from "@/config/homepage";
+import { Separator } from "@/components/ui/separator";
 
 const Home: NextPage = () => {
   console.log("%c---------------------------------", "color: yellow");
@@ -67,21 +68,25 @@ const Home: NextPage = () => {
       <section>
         <div>
           <ul>
-            {HomePageConfig.content.features.map(
+            {HomePageConfig.content.features1.map(
               (feature: { title: string; description: string }) => (
-                <>
-                  <li className="my-6 ml-6 list-disc [&>li]:mt-2">
-                    <span>{feature.title} </span> {feature.description}
-                  </li>
-                </>
+                <li
+                  key={feature.title}
+                  className="my-6 ml-6 list-disc [&>li]:mt-2"
+                >
+                  <span>{feature.title} </span> {feature.description}
+                </li>
               )
             )}
           </ul>
         </div>
+        <Separator />
         <div>
           <ul>
             {HomePageConfig.content.features2.map((feature: string) => (
-              <li>{feature}</li>
+              <li key={feature} className="my-6 ml-6 list-disc [&>li]:mt-2">
+                {feature}
+              </li>
             ))}
           </ul>
         </div>

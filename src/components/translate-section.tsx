@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
+
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 // import { Checkbox } from "@/components/ui/checkbox"
@@ -65,12 +66,26 @@ export function TranslateSection({
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      language: LANGUAGES[1],
+      text: "",
+    },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  type FormData = {
+    text: string;
+    language: string;
+    e: Event;
+  };
+
+  const onSubmit: SubmitHandler<FormData> = (
+    data: z.infer<typeof FormSchema>,
+    e?: React.BaseSyntheticEvent
+  ) => {
+    e?.preventDefault();
     setTextToTranslate(data.text);
     setSelectedLanguage(data.language);
-    handleTranslateButton(data.text, data.language);
+    void handleTranslateButton(data.text, data.language);
     // api call
     console.log("from onSubmit", data.text, data.language);
     toast({
@@ -81,11 +96,14 @@ export function TranslateSection({
         </pre>
       ),
     });
-  }
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form
+        onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
+        className="w-2/3 space-y-6"
+      >
         <FormField
           control={form.control}
           name="language"

@@ -38,6 +38,19 @@ export type SiteConfig = {
   };
 };
 
+export type HomePageConfig = {
+  title: string;
+  subtitle: string;
+  content: {
+    paragraph1: string;
+    paragraph2: string;
+    paragraph3: string;
+    paragraph4: string;
+    features1: { title: string; description: string }[];
+    features2: string[];
+  };
+};
+
 export type DashboardConfig = {
   mainNav: MainNavItem[];
   sidebarNav: SidebarNavItem[];
