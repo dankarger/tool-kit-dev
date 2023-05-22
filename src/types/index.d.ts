@@ -85,3 +85,11 @@ export interface ChatMessage {
   session: ChatSession[];
   sessionId: string?;
 }
+
+// Pages :
+
+export interface HomePageConfig {
+  title: string;
+  subtitle: string;
+  content: { paragraph1: string; paragraph2: string };
+}

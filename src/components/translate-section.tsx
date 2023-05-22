@@ -40,14 +40,12 @@ const LANGUAGES = [
 ];
 
 export const FormSchema = z.object({
-  text: z
-    .string()
-    .min(2, {
-      message: "Cant translate less than 2 characters.",
-    })
-    .max(160, {
-      message: "The text is too long...",
-    }),
+  text: z.string().min(2, {
+    message: "Cant translate less than 2 characters.",
+  }),
+  // .max(960, {
+  //   message: "The text is too long...",
+  // }),
   language: z.string(),
 });
 

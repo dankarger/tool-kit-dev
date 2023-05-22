@@ -41,8 +41,9 @@ model ChatSession {
 model TranslationResult {
     id        String   @id @default(cuid())  
     createdAt DateTime @default(now())
-    text String  
-    translation  String  
+    text String  @db.LongText
+    translation  String  @db.LongText
     authorId String
+    language String
     @@index([authorId])
 }

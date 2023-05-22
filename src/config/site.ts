@@ -20,6 +20,10 @@ export const siteConfig = {
       href: "/translate",
     },
     {
+      title: "Summarize",
+      href: "/summarize",
+    },
+    {
       title: "Story Mode",
       href: "/story",
     },

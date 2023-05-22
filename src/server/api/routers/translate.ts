@@ -74,11 +74,12 @@ export const TranslateRouter = createTRPCRouter({
       // const prompt = `we are having a chat ,this is our chat history so far: ${input.messages.flat()}`;
       if (!input.text) throw new TRPCError({ code: "NOT_FOUND" });
 
-      const response = await openai.createEdit({
-        model: "text-davinci-edit-001",
-        input: input.text,
-        instruction: `translate to ${input.language} `,
-      });
+      const response: AxiosResponse<CreateEditResponse> =
+        await openai.createEdit({
+          model: "text-davinci-edit-001",
+          input: input.text,
+          instruction: `translate to this text to ${input.language}`,
+        });
       //
       //
       console.log("response-----------", response.data);
@@ -87,18 +88,21 @@ export const TranslateRouter = createTRPCRouter({
       if (!data) throw new TRPCError({ code: "NOT_FOUND" });
 
       // const data = `Mock for: ${input.latestMessage}`;
-      // const translationresult = await ctx.prisma.chatMessage.create({
-      //   data: {
-      //     authorId,
-      //     message: input.latestMessage,
-      //     response: data,
-      //     sessionId: input.sessionId,
-      //   },
-      // });
+      const result: string = data.choices[0]?.text;
+      if (!result) throw new TRPCError({ code: "NOT_FOUND" });
+      const translationresult: TranslationResult =
+        await ctx.prisma.translationResult.create({
+          data: {
+            authorId,
+            text: input.text,
+            translation: result,
+            language: input.language,
+          },
+        });
       // // const chat = `it will be the responce fropm openai for prompt: ${input.content}`;
       // const chatMessage = { response: data };
-      console.log("transltae - data/,", data);
-      return data as CreateEditResponse;
+      console.log("transltae - data/,", translationresult);
+      return translationresult as TranslationResult;
     }),
 });
 // const response = await openai.createEdit({

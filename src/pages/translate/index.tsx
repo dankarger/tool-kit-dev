@@ -20,7 +20,7 @@ import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { TranslateSection } from "@/components/translate-section";
 import { FormSchema } from "@/components/translate-section";
-
+import { TranslationResultComponent } from "@/components/translation-result";
 const SessionsSectionFeed = ({
   authorId,
   onClick,
@@ -138,21 +138,26 @@ const TranslatePage: NextPage = () => {
                 // setSelectedLanguage={setSelectedLanguage}
               />
             </section>
-            <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
-              <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
-                3
-                {isLoading && (
-                  <div className="flex w-full items-center justify-center">
-                    <LoadingSpinner size={40} />
-                  </div>
-                )}
-                {/* {data && (
-                  <ResponseDiv
-                    response={data.response}
-                    message={data.message}
-                  />  */}
+            {isLoading && (
+              <div className="flex h-fit w-full items-center justify-center">
+                <LoadingSpinner size={90} />
               </div>
-            </section>
+            )}
+            {data && (
+              <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
+                <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
+                  {/* {data && <div> {data.translation}</div>} */}
+                  <>
+                    {/* <ResponseDiv
+                      response={`${data.language}:${data.translation}`}
+                      message={data.text}
+                      // language={data.language}
+                    /> */}
+                    <TranslationResultComponent data={data} />
+                  </>
+                </div>
+              </section>
+            )}
           </main>
         </div>
       </DashboardShell>
