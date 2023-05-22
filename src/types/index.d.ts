@@ -105,6 +105,14 @@ export interface Response {
   authorId: string;
   sessionId: string;
 }
+
+export interface Result {
+  createdAt: Date;
+  text: string;
+  result: string;
+  id: string;
+}
+
 // Pages :
 
 export interface HomePageConfig {

@@ -80,11 +80,12 @@ export function SummarizeSection({
             </FormItem>
           )}
         />
-        <div>
+        <div className="flex items-center justify-between space-x-2">
           <Button disabled={!form.formState.isValid} type="submit">
             Summarize
           </Button>
           <Button
+            variant={"destructive"}
             onClick={(e) => {
               e.preventDefault();
               form.reset({ text: "" });

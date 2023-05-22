@@ -128,7 +128,7 @@ const SummarizePage: NextPage = () => {
               heading="Summarize"
               text="Summarize a text with GPTool."
             />
-            <section className=" flex items-center justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+            <section className=" items-top flex justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
               <SummarizeSection handleSummarizeButton={handleSummarizeButton} />
               {sessionData && <SessionsSection2 sessions={sessionData} />}
             </section>
@@ -141,13 +141,6 @@ const SummarizePage: NextPage = () => {
               <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
                 <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
                   {data && <div> {data.result}</div>}
-                  <>
-                    {/* <ResponseDiv
-                      response={`${data.language}:${data.translation}`}
-                      message={data.text}
-                      // language={data.language}
-                    /> */}
-                  </>
                 </div>
               </section>
             )}
