@@ -6,6 +6,7 @@ import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { UserButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 interface MainNavProps {
   items?: NavItem[];
@@ -14,12 +15,16 @@ interface MainNavProps {
 
 export function MainNav({ items, children }: MainNavProps) {
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false);
+  // const user = useUser();
+  // const username = user.user?.username || "User";
   return (
     <div className="flex gap-6 md:gap-10">
+      <UserButton />
       <Link href="/" className="hidden items-center space-x-2 md:flex">
-        <Icons.logo className="h-6 w-6" />
+        {/* <Icons.logo className="h-6 w-6" /> */}
         <span className="hidden font-bold sm:inline-block">
           {siteConfig.name}
+          {/* {username} */}
         </span>
       </Link>
       {items?.length ? (
@@ -39,7 +44,7 @@ export function MainNav({ items, children }: MainNavProps) {
                 </Link>
               )
           )}
-          <UserButton />
+          {/* <UserButton /> */}
         </nav>
       ) : null}
       <button

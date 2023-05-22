@@ -18,8 +18,6 @@ import { INTERNAL_VERSION } from "@/config/site";
 import { HomePageConfig } from "@/config/homepage";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
   console.log("%c---------------------------------", "color: yellow");
   console.log("VERSION:", INTERNAL_VERSION);
   console.log("%c---------------------------------", "color: yellow");
@@ -31,17 +29,13 @@ const Home: NextPage = () => {
         <meta name="description" content="GPTool kit" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <PageLayout> */}
-      {/* <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10"> */}
       <div className="flex max-w-[980px] flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
           {HomePageConfig.title}
           <br className="hidden sm:inline" />
-          {/* built with Radix UI and Tailwind CSS. */}
         </h1>
         <p className="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
           {HomePageConfig.subtitle}
-          {hello.data && <>. {hello.data.greeting}</>}
         </p>
       </div>
       <div className="flex gap-4">

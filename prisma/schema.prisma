@@ -47,3 +47,12 @@ model TranslationResult {
     language String
     @@index([authorId])
 }
+
+model SummarizeResult {
+    id        String   @id @default(cuid())  
+    createdAt DateTime @default(now())
+    text String  @db.LongText
+    result  String  @db.LongText
+    authorId String
+    @@index([authorId])
+}

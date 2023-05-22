@@ -3,8 +3,10 @@ import { exampleRouter } from "@/server/api/routers/example";
 import { chatRouter } from "./routers/chat";
 import { sessionRouter } from "./routers/session";
 import { TranslateRouter } from "./routers/translate";
+import { summarizeRouter } from "./routers/summarize";
 /**
- * This is the primary router for your server.
+
+* This is the primary router for your server.
  *
  * All routers added in /api/routers should be manually added here.
  */
@@ -13,6 +15,7 @@ export const appRouter = createTRPCRouter({
   chat: chatRouter,
   session: sessionRouter,
   translate: TranslateRouter,
+  summarize: summarizeRouter,
 });
 
 // export type definition of API
