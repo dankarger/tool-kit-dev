@@ -1,12 +1,8 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
-
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-// import { Checkbox } from "@/components/ui/checkbox"
-// import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-// import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import {
@@ -25,7 +21,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { a } from "react-spring";
 
 const LANGUAGES = [
   "English",
@@ -75,7 +70,7 @@ export function TranslateSection({
   type FormData = {
     text: string;
     language: string;
-    e: Event;
+    // e: Event;
   };
 
   const onSubmit: SubmitHandler<FormData> = (

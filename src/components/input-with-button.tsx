@@ -1,10 +1,8 @@
 import { use, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import type { SubmitHandler } from "react-hook-form";
-
 import * as z from "zod";
 import e from "express";
 // import { zodResolver } from "@hookform/resolvers/zod";
