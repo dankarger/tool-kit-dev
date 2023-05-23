@@ -141,8 +141,8 @@ export const chatRouter = createTRPCRouter({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: input.message }],
         // prompt: "Say it s party time",
-        max_tokens: 90,
-        stop: "\n",
+        max_tokens: 100,
+        // stop: "\n",
         temperature: 0.5,
       });
 
