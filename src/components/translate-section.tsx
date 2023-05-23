@@ -151,14 +151,14 @@ export function TranslateSection({
             </FormItem>
           )}
         />
-        <div>
+        <div className="flex items-center justify-between space-x-2">
           <Button disabled={!form.formState.isValid} type="submit">
             Translate
           </Button>
           <Button
+            variant={"destructive"}
             onClick={(e) => {
               e.preventDefault();
-              setTextToTranslate("");
               form.reset({ text: "" });
             }}
           >

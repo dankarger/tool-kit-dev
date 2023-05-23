@@ -1,7 +1,6 @@
 import React, { use, useEffect, useId } from "react";
 import { type NextPage } from "next";
 import type { Session, Response, ChatMessage } from "@/types";
-import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import Head from "next/head";
 import { dashboardConfig } from "@/config/dashboard";
 import { api } from "@/utils/api";
@@ -11,38 +10,34 @@ import { DashboardNav } from "@/components/nav";
 import { SessionsSection } from "@/components/sessions-section";
 // import toast from "react-hot-toast";
 import { toast } from "@/components/ui/use-toast";
-import { TranslateSection } from "@/components/translate-section";
-import { FormSchema } from "@/components/translate-section";
-import { TranslationResultComponent } from "@/components/translation-result";
-import { InputAreaWithButton } from "@/components/input-area-with-button";
+import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
-const SessionsSectionFeed = ({
-  authorId,
-  onClick,
-  sessionData,
-}: {
-  sessionData: Session[];
-  needRefresh: boolean;
-  authorId: string;
-  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
-}): JSX.Element => {
-  if (!sessionData) return <></>;
-  return <SessionsSection sessions={sessionData} onClick={onClick} />;
-};
+import { Button } from "@/components/ui/button";
+import { SummarizeSection } from "@/components/summarize-section2";
+import { SessionsSection2 } from "@/components/session-section2";
+import { SummarizeResult } from "@/components/summarize-result";
 
-const TranslatePage: NextPage = () => {
+const StoryPage: NextPage = () => {
+  const user = useUser();
+  const ctx = api.useContext();
+
   // const { data, isLoading, isFetching } = api.translate.getAllTranslationsByAuthorId.useQ({
   //   authorId: user.user?.id,
   // })
 
-  const { mutate, isLoading, data } =
-    api.translate.createTranslation.useMutation({
-      // mutationFn:async({text,language}:)=>{
-      //   console.log("mutate");
+  const {
+    data: sessionData,
+    isLoading: sessionSectionLoading,
+    refetch: sessionRefetch,
+    isSuccess,
+  } = api.summarize.getAllSummarizeByAuthorId.useQuery({
+    authorId: user.user?.id ?? "",
+  });
 
-      // },
+  const { mutate, isLoading, data } =
+    api.summarize.createSummarizeResult.useMutation({
       onSuccess: () => {
-        // setPromptValue("");
         // void session.refetch();
         console.log("sucesss ");
       },
@@ -65,17 +60,19 @@ const TranslatePage: NextPage = () => {
             title: "fialed",
             description: (
               <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <code className="text-white">Failed </code>
+                <code className="text-white">
+                  Failed to generate story , please try again{" "}
+                </code>
               </pre>
             ),
           });
-          console.log("Failed to create translation, please try again");
+          console.log("Failed to summarize, please try again");
         }
       },
     });
 
-  const handleTranslateButton = (text: string, language: string) => {
-    if (!text || !language) {
+  const handleSummarizeButton = (text: string) => {
+    if (!text) {
       toast({
         title: "Please enter all fields",
         description: (
@@ -88,17 +85,15 @@ const TranslatePage: NextPage = () => {
     }
     console.log("translate button clicked");
     console.log("text", text);
-    console.log("language", language);
     void mutate({
       text: text,
-      language: language,
     });
   };
 
   return (
     <>
       <Head>
-        <title>Translate</title>
+        <title>Summarize</title>
         <meta name="description" content="GPTool kit" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -109,28 +104,30 @@ const TranslatePage: NextPage = () => {
           </aside>
           <main className="flex w-full flex-1 flex-col overflow-hidden">
             <DashboardHeader
-              heading="Translate"
-              text="Translate a text with GPTool."
+              heading="Generate Story"
+              text="Generate a Story with"
             />
-
-            <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-              <TranslateSection handleTranslateButton={handleTranslateButton} />
-              {/* <InputAreaWithButton
-                handleSubmitteButton={handleTranslateButton}
-                placeholder="Past or type here the text to translate..."
-              /> */}
-            </section>
-            {isLoading && (
-              <div className="flex h-fit w-full items-center justify-center">
-                <LoadingSpinner size={90} />
+            <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+              <div className="f-full flex justify-between">
+                <SummarizeSection
+                  handleSummarizeButton={handleSummarizeButton}
+                />
+                {sessionData && <SessionsSection2 sessions={sessionData} />}
               </div>
-            )}
+              {isLoading && (
+                <div className="flex h-fit w-full items-center justify-center">
+                  <LoadingSpinner size={90} />
+                </div>
+              )}
+            </section>
             {data && (
               <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
                 <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                  <>
-                    <TranslationResultComponent data={data} />
-                  </>
+                  {data && (
+                    <div>
+                      <SummarizeResult result={data.result} />
+                    </div>
+                  )}
                 </div>
               </section>
             )}
@@ -141,4 +138,4 @@ const TranslatePage: NextPage = () => {
   );
 };
 
-export default TranslatePage;
+export default StoryPage;

@@ -45,7 +45,7 @@ export const SessionsSection2 = ({
                   <TableHead className="text-right">Amount</TableHead>
                 </TableRow>
               </TableHeader> */}
-              <div className="w-full sm:w-[2-px] lg:w-[300px] [&_tr:last-child]:border-0">
+              <div className="flex w-full flex-col-reverse sm:w-[2-px] lg:w-[300px] [&_tr:last-child]:border-0">
                 {sessions.map((session: SummarizeResult) => (
                   <Fragment key={session.id}>
                     <ResultPopover result={session}>
