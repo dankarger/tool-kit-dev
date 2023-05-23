@@ -66,7 +66,7 @@ export function SummarizeSection({
               {/* <FormLabel>Past here text to summarize</FormLabel> */}
               <FormControl>
                 <Textarea
-                  placeholder="Past or typehere the text to summarize..."
+                  placeholder="Past or type here the text to summarize..."
                   rows={4}
                   autoFocus
                   className="w-full"

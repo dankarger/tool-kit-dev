@@ -7,38 +7,21 @@ import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
 import { DashboardHeader } from "@/components/header";
 import { DashboardNav } from "@/components/nav";
-import { SessionsSection } from "@/components/sessions-section";
 // import toast from "react-hot-toast";
 import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
-import { Button } from "@/components/ui/button";
 import { SummarizeSection } from "@/components/summarize-section2";
 import { SessionsSection2 } from "@/components/session-section2";
 import { SummarizeResult } from "@/components/summarize-result";
 
 const SummarizePage: NextPage = () => {
-  const [promptValue, setPromptValue] = React.useState("");
-  const [chatResponce, setChatResponse] = React.useState("");
-  const [textToTranslate, setTextToTranslate] = React.useState("");
-  const [selectedLanguage, setSelectedLanguage] = React.useState("English");
-  const [currentSession, setCurrenSession] = React.useState({
-    id: "defaultId",
-  });
-  const router = useRouter();
   const user = useUser();
-  const ctx = api.useContext();
-
-  // const { data, isLoading, isFetching } = api.translate.getAllTranslationsByAuthorId.useQ({
-  //   authorId: user.user?.id,
-  // })
 
   const {
     data: sessionData,
     isLoading: sessionSectionLoading,
     refetch: sessionRefetch,
-    isSuccess,
   } = api.summarize.getAllSummarizeByAuthorId.useQuery({
     authorId: user.user?.id ?? "",
   });

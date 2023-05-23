@@ -114,7 +114,7 @@ const TranslatePage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Translate</title>
+        <title>Story Generator</title>
         <meta name="description" content="GPTool kit" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -125,8 +125,8 @@ const TranslatePage: NextPage = () => {
           </aside>
           <main className="flex w-full flex-1 flex-col overflow-hidden">
             <DashboardHeader
-              heading="Translate"
-              text="Translate a text with GPTool."
+              heading="Story Generator"
+              text="Generate a story and illustration"
             />
             {/* <section className="  space-y-1  pb-4 md:pb-2 md:pt-2 lg:py-2"></section>
             1 */}
