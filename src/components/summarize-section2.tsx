@@ -56,20 +56,20 @@ export function SummarizeSection({
     <Form {...form}>
       <form
         onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
-        className="w-2/3 space-y-6"
+        className="w-full space-y-1"
       >
         <FormField
           control={form.control}
           name="text"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Past here text to summarize</FormLabel>
+              {/* <FormLabel>Past here text to summarize</FormLabel> */}
               <FormControl>
                 <Textarea
-                  placeholder="Summarize..."
+                  placeholder="Past or typehere the text to summarize..."
                   rows={4}
-                  className=""
                   autoFocus
+                  className="w-full"
                   {...field}
                 />
               </FormControl>

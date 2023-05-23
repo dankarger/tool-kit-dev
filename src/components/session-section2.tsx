@@ -27,7 +27,7 @@ export const SessionsSection2 = ({
   if (!sessions) return null;
   return (
     <Fragment>
-      <div className=" z-150 top-59 left-1  h-full  px-2 pb-4">
+      <div className=" z-150 top-59 left-1    h-full px-2 pb-4">
         <div className="w-50  h-full   ">
           <Separator />
           <ScrollArea className="h-[450px] rounded-md border p-4 sm:w-[200px] lg:w-[350px]">

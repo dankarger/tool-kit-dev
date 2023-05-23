@@ -16,20 +16,7 @@ import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { SummarizeSection } from "@/components/summarize-section2";
 import { SessionsSection2 } from "@/components/session-section2";
-
-const SessionsSectionFeed = ({
-  authorId,
-  onClick,
-  sessionData,
-}: {
-  sessionData: Session[];
-  needRefresh: boolean;
-  authorId: string;
-  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
-}): JSX.Element => {
-  if (!sessionData) return <></>;
-  return <SessionsSection sessions={sessionData} onClick={onClick} />;
-};
+import { SummarizeResult } from "@/components/summarize-result";
 
 const SummarizePage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
@@ -128,19 +115,27 @@ const SummarizePage: NextPage = () => {
               heading="Summarize"
               text="Summarize a text with GPTool."
             />
-            <section className=" items-top flex justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-              <SummarizeSection handleSummarizeButton={handleSummarizeButton} />
-              {sessionData && <SessionsSection2 sessions={sessionData} />}
-            </section>
-            {isLoading && (
-              <div className="flex h-fit w-full items-center justify-center">
-                <LoadingSpinner size={90} />
+            <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+              <div className="f-full flex justify-between">
+                <SummarizeSection
+                  handleSummarizeButton={handleSummarizeButton}
+                />
+                {sessionData && <SessionsSection2 sessions={sessionData} />}
               </div>
-            )}
+              {isLoading && (
+                <div className="flex h-fit w-full items-center justify-center">
+                  <LoadingSpinner size={90} />
+                </div>
+              )}
+            </section>
             {data && (
               <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
                 <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                  {data && <div> {data.result}</div>}
+                  {data && (
+                    <div>
+                      <SummarizeResult result={data.result} />
+                    </div>
+                  )}
                 </div>
               </section>
             )}
