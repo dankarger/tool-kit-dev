@@ -14,7 +14,7 @@ import { LoadingSpinner } from "@/components/ui/spinner";
 import { SummarizeSection } from "@/components/summarize-section2";
 import { SessionsSection2 } from "@/components/session-section2";
 import { SummarizeResult } from "@/components/summarize-result";
-
+import { ComboboxDropdownMenu } from "@/components/ui/ComboboxDropdownMenu";
 const SummarizePage: NextPage = () => {
   const user = useUser();
 
@@ -105,6 +105,7 @@ const SummarizePage: NextPage = () => {
                 />
                 {sessionData && <SessionsSection2 sessions={sessionData} />}
               </div>
+              <ComboboxDropdownMenu />
               {isLoading && (
                 <div className="flex h-fit w-full items-center justify-center">
                   <LoadingSpinner size={90} />
