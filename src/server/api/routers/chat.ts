@@ -1,12 +1,10 @@
 import { z } from "zod";
 import openai from "@/lib/openai";
-import { clerkClient } from "@clerk/nextjs";
 import {
   createTRPCRouter,
   publicProcedure,
   privateProcedure,
 } from "@/server/api/trpc";
-import { ChatMessage, ChatSession } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import {
   ChatCompletionRequestMessage,

@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { SummarizeSection } from "@/components/summarize-section2";
 import { SessionsSection2 } from "@/components/session-section2";
 import { SummarizeResult } from "@/components/summarize-result";
-import { UserNameForm } from "@/components/user-input-form";
+import { TextInputForm } from "@/components/text-input-form";
 
 const StoryPage: NextPage = () => {
   const user = useUser();
@@ -113,7 +113,7 @@ const StoryPage: NextPage = () => {
                 {/* <SummarizeSection
                   handleSummarizeButton={handleSummarizeButton}
                 /> */}
-                <UserNameForm handleSubmitButton={handleSummarizeButton} />
+                <TextInputForm handleSubmitButton={handleSummarizeButton} />
                 {sessionData && <SessionsSection2 sessions={sessionData} />}
               </div>
               {isLoading && (

@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { userTextInputSchema } from "@/lib/validations/user";
 import { buttonVariants } from "@/components/ui/button";
@@ -20,27 +21,31 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 
-interface UserNameFormProps extends React.HTMLAttributes<HTMLFormElement> {
+interface TextInputFormProps extends React.HTMLAttributes<HTMLFormElement> {
   // user: Pick<User, "id" | "name">;;
   handleSubmitButton: (text: string) => void;
   placeholder?: string;
+  inputType?: "text" | "area";
 }
 
 type FormData = z.infer<typeof userTextInputSchema>;
 
-export function UserNameForm({
+export function TextInputForm({
   // user,
   className,
   placeholder,
+  inputType,
   handleSubmitButton,
   ...props
-}: UserNameFormProps) {
+}: TextInputFormProps) {
   const router = useRouter();
   const {
     handleSubmit,
     register,
     formState: { errors },
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(userTextInputSchema),
     defaultValues: {
@@ -49,40 +54,24 @@ export function UserNameForm({
   });
   const [isSaving, setIsSaving] = React.useState<boolean>(false);
 
-  function onSubmit(data: FormData) {
-    setIsSaving(true);
+  function onSubmit(data: FormData, e?: React.BaseSyntheticEvent) {
+    e?.preventDefault();
     void handleSubmitButton(data.text);
-    // const response = await fetch(`/api/users/${user.id}`, {
-    //   method: "PATCH",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     name: data.name,
-    //   }),
-    // });
-
-    setIsSaving(false);
-
-    // if (!response?.ok) {
-    //   return toast({
-    //     title: "Something went wrong.",
-    //     description: "Your name was not updated. Please try again.",
-    //     variant: "destructive",
-    //   });
-    // }
-
+    console.log("from onSubmit", data.text);
     toast({
-      description: "Your name has been updated.",
+      title: "You submitted the following values:",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+        </pre>
+      ),
     });
-
-    router.refresh();
   }
 
   return (
     <form
       className={cn(className)}
-      onSubmit={void handleSubmit(onSubmit)}
+      onSubmit={(e) => void handleSubmit(onSubmit)(e)}
       {...props}
     >
       <Card>
@@ -98,28 +87,48 @@ export function UserNameForm({
             <Label className="sr-only" htmlFor="name">
               Text
             </Label>
-            <Input
-              id="text"
-              className="w-[400px]"
-              size={32}
-              {...register("text")}
-            />
+            {inputType === "area" ? (
+              <Textarea
+                id="text"
+                className="w-1/2"
+                //  size={32}
+                {...register("text")}
+              />
+            ) : (
+              <Input
+                id="text"
+                className="w-1/2"
+                size={32}
+                {...register("text")}
+              />
+            )}
             {errors?.text && (
               <p className="px-1 text-xs text-red-600">{errors.text.message}</p>
             )}
           </div>
         </CardContent>
         <CardFooter>
-          <button
-            type="submit"
-            className={cn(buttonVariants(), className)}
-            disabled={isSaving}
-          >
-            {isSaving && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            <span>Save</span>
-          </button>
+          <div className="flex w-1/2 items-center justify-between space-x-2">
+            <button
+              type="submit"
+              className={cn(buttonVariants(), className)}
+              disabled={isSaving}
+            >
+              {isSaving && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              <span>Submit</span>
+            </button>
+            <Button
+              variant={"destructive"}
+              onClick={(e) => {
+                e.preventDefault();
+                reset({ text: "" });
+              }}
+            >
+              Clear
+            </Button>
+          </div>
         </CardFooter>
       </Card>
     </form>

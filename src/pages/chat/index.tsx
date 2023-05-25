@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
+import { TextInputForm } from "@/components/text-input-form";
 
 const Sessionfeed = ({ id }: { id: string }) => {
   const { data, isLoading, isError, refetch } =
@@ -306,11 +307,16 @@ const ChatPage: NextPage = () => {
               )}
             </div>
             <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-              <InputWithButton
+              {/* <InputWithButton
                 handleSubmitButton={handleSubmitButton}
                 placeholder={"Type your message here."}
                 buttonText={"Send"}
                 // buttonVariant={buttonVariants.}
+              /> */}
+              <TextInputForm
+                inputType="text"
+                placeholder={"Type your message here."}
+                handleSubmitButton={handleSubmitButton}
               />
             </section>
             <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
