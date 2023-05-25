@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { SummarizeSection } from "@/components/summarize-section2";
 import { SessionsSection2 } from "@/components/session-section2";
 import { SummarizeResult } from "@/components/summarize-result";
+import { UserNameForm } from "@/components/user-input-form";
 
 const StoryPage: NextPage = () => {
   const user = useUser();
@@ -109,9 +110,10 @@ const StoryPage: NextPage = () => {
             />
             <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
               <div className="f-full flex justify-between">
-                <SummarizeSection
+                {/* <SummarizeSection
                   handleSummarizeButton={handleSummarizeButton}
-                />
+                /> */}
+                <UserNameForm handleSubmitButton={handleSummarizeButton} />
                 {sessionData && <SessionsSection2 sessions={sessionData} />}
               </div>
               {isLoading && (

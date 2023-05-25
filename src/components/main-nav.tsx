@@ -5,39 +5,21 @@ import { NavItem } from "@/types/index";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
-import { UserButton } from "@clerk/nextjs";
-import { useUser } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
-import { useTheme } from "next-themes";
 
+import { buttonVariants } from "@/components/ui/button";
 interface MainNavProps {
   items?: NavItem[];
   children?: React.ReactNode;
 }
 
 export function MainNav({ items, children }: MainNavProps) {
-  const theme = useTheme();
-  console.log(dark);
+  // if(!theme.theme=== undefined) theme.theme = 'light'
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false);
   // const user = useUser();
   // const username = user.user?.username || "User";
+  if (!items) return null;
   return (
-    <div className="flex gap-6 md:gap-10">
-      <UserButton
-        appearance={{
-          variables: {},
-          userProfile: {
-            elements: {
-              breadcrumbs: "bg-slate-500",
-              formButtonPrimary:
-                "bg-slate-500 hover:bg-slate-400 text-sm normal-case",
-
-              userPreviewAvatarContainer__personalWorkspace: "bg-slate-900",
-            },
-          },
-          baseTheme: theme.theme === "dark" ? dark : "light",
-        }}
-      />
+    <div className="flex gap-6 pl-11 md:gap-10">
       <Link href="/" className="hidden items-center space-x-2 md:flex">
         {/* <Icons.logo className="h-6 w-6" /> */}
         <span className="hidden font-bold sm:inline-block">
@@ -54,15 +36,40 @@ export function MainNav({ items, children }: MainNavProps) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    "flex items-center text-lg font-semibold text-muted-foreground sm:text-sm",
-                    item.disabled && "cursor-not-allowed opacity-80"
+                    "flex items-center text-lg font-semibold text-muted-foreground sm:text-sm"
+                    // item.disabled && "cursor-not-allowed opacity-80"
                   )}
                 >
                   {item.title}
                 </Link>
               )
           )}
-          {/* <UserButton /> */}
+          {/* <UserButton
+            appearance={{
+              variables: {},
+              userProfile: {
+                elements: {
+                  breadcrumbs: "bg-slate-500",
+                  formButtonPrimary:
+                    "bg-slate-500 hover:bg-slate-400 text-sm normal-case",
+
+                  userPreviewAvatarContainer__personalWorkspace: "bg-slate-900",
+                },
+              },
+              baseTheme: theme?.theme === "dark" ? dark : "light",
+            }}
+          /> */}
+          <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">
+            <div
+              className={buttonVariants({
+                size: "sm",
+                variant: "ghost",
+              })}
+            >
+              <Icons.gitHub className="h-5 w-5" />
+              <span className="sr-only">GitHub</span>
+            </div>
+          </Link>
         </nav>
       ) : null}
       <button

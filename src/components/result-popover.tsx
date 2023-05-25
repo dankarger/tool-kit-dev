@@ -13,20 +13,20 @@ import {
 } from "@/components/ui/card";
 import type { Result } from "@/types";
 
-const GlassDiv = ({ children }: ReactElement) => {
-  return (
-    <div className="to-[rgba(255,255,255,0) box-shadow-xl bg-gradient-to-r from-[rgba(255,255,255,-.1)]">
-      {children}
-    </div>
-  );
-};
+// const GlassDiv = ({ children }: ReactElement) => {
+//   return (
+//     <div className="to-[rgba(255,255,255,0) box-shadow-xl bg-gradient-to-r from-[rgba(255,255,255,-.1)]">
+//       {children}
+//     </div>
+//   );
+// };
 
 export const ResultPopover = ({
   result,
   children,
 }: {
   result: Result;
-  children: ReactElement;
+  children: React.ReactElement;
 }) => {
   return (
     <Popover>

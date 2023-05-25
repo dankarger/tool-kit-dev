@@ -16,14 +16,14 @@ import { TranslationResult, SummarizeResult } from "prisma/prisma-client";
 import { ResultPopover } from "@/components/result-popover";
 
 interface SessionsSectionProps {
-  sessions: SummarizeResult[] & TranslationResult[];
-  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
+  sessions: SummarizeResult[];
+  // onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
 }
 
 export const SessionsSection2 = ({
   sessions,
-  onClick,
-}: SessionsSectionProps) => {
+}: // onClick,
+SessionsSectionProps) => {
   if (!sessions) return null;
   return (
     <Fragment>

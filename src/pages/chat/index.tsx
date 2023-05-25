@@ -32,7 +32,7 @@ const Sessionfeed = ({ id }: { id: string }) => {
       </div>
     );
   if (isError) return <div>Error</div>;
-  return <ResponseSection responses={data} />;
+  return <ResponseSection messages={data} />;
 };
 
 const SessionsSectionFeed = ({
