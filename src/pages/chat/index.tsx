@@ -24,7 +24,6 @@ const Sessionfeed = ({ id }: { id: string }) => {
     api.chat.getSessionMessagesBySessionId.useQuery({
       id: id,
     });
-
   if (!data) return null;
   if (isLoading)
     return (
@@ -326,12 +325,12 @@ const ChatPage: NextPage = () => {
                     <LoadingSpinner size={40} />
                   </div>
                 )}
-                {/* {data && (
+                {data && (
                   <ResponseDiv
                     response={data.response}
                     message={data.message}
                   />
-                )} */}
+                )}
               </div>
               {currentSession.id !== "defaultId" && (
                 <Sessionfeed id={currentSession.id} />

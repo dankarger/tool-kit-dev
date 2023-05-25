@@ -28,6 +28,7 @@ interface TextInputFormProps extends React.HTMLAttributes<HTMLFormElement> {
   handleSubmitButton: (text: string) => void;
   placeholder?: string;
   inputType?: "text" | "area";
+  description?: string;
 }
 
 type FormData = z.infer<typeof userTextInputSchema>;
@@ -37,6 +38,7 @@ export function TextInputForm({
   className,
   placeholder,
   inputType,
+  description,
   handleSubmitButton,
   ...props
 }: TextInputFormProps) {
@@ -76,11 +78,8 @@ export function TextInputForm({
     >
       <Card>
         <CardHeader>
-          <CardTitle>Your Name</CardTitle>
-          <CardDescription>
-            Please enter your full name or a display name you are comfortable
-            with.
-          </CardDescription>
+          <CardTitle>{placeholder}</CardTitle>
+          <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-1">
