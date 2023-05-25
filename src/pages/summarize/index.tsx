@@ -8,6 +8,8 @@ import { DashboardShell } from "@/components/shell";
 import { DashboardHeader } from "@/components/header";
 import { DashboardNav } from "@/components/nav";
 // import toast from "react-hot-toast";
+
+import { TextInputForm } from "@/components/text-input-form";
 import { toast } from "@/components/ui/use-toast";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
@@ -99,10 +101,17 @@ const SummarizePage: NextPage = () => {
               text="Summarize a text with GPTool."
             />
             <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-              <div className="f-full flex justify-between">
-                <SummarizeSection
+              <div className="flex w-full ">
+                {/* <SummarizeSection
                   handleSummarizeButton={handleSummarizeButton}
-                />
+                /> */}
+                <div className="w-full">
+                  <TextInputForm
+                    inputType="area"
+                    handleSubmitButton={handleSummarizeButton}
+                    placeholder="Type or past text here to summarize...."
+                  />
+                </div>
                 {sessionData && <SessionsSection2 sessions={sessionData} />}
               </div>
               <ComboboxDropdownMenu />

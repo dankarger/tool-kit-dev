@@ -296,14 +296,6 @@ const ChatPage: NextPage = () => {
                   <span>+</span>NEW
                 </Button>
               </div>
-              {sessionData && (
-                <SessionsSectionFeed
-                  needRefresh={needRefresh}
-                  authorId={user.user?.id ?? "anonimous"}
-                  sessionData={sessionData}
-                  onClick={handleSelectSession}
-                />
-              )}
             </div>
             <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
               {/* <InputWithButton
@@ -312,11 +304,24 @@ const ChatPage: NextPage = () => {
                 buttonText={"Send"}
                 // buttonVariant={buttonVariants.}
               /> */}
-              <TextInputForm
-                inputType="text"
-                placeholder={"Type your message here."}
-                handleSubmitButton={handleSubmitButton}
-              />
+              <div className="flex w-full justify-between">
+                <div className="flex-1 ">
+                  <TextInputForm
+                    inputType="text"
+                    placeholder={"Type your message here."}
+                    handleSubmitButton={handleSubmitButton}
+                  ></TextInputForm>
+                </div>
+
+                {sessionData && (
+                  <SessionsSectionFeed
+                    needRefresh={needRefresh}
+                    authorId={user.user?.id ?? "anonimous"}
+                    sessionData={sessionData}
+                    onClick={handleSelectSession}
+                  />
+                )}
+              </div>
             </section>
             <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
               <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
