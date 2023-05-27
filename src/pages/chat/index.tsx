@@ -285,62 +285,46 @@ const ChatPage: NextPage = () => {
           <aside className="hidden w-[200px] flex-col md:flex">
             <DashboardNav items={dashboardConfig.chat} />
           </aside>
-          <main className="flex w-full flex-1 flex-col overflow-hidden">
+          <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">
             <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
-
-            <section className="  space-y-1  pb-4 md:pb-2 md:pt-2 lg:py-2"></section>
-            <div className=" z-150 top-59   left-1  h-40 ">
-              <div className=" flex  w-full items-center justify-between ">
-                <h2 className="  pl-2 text-lg font-semibold">Sessions</h2>
-                <Button className="w-16" onClick={handleCreateNewSession}>
-                  <span>+</span>NEW
-                </Button>
-              </div>
-            </div>
-            <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-              {/* <InputWithButton
-                handleSubmitButton={handleSubmitButton}
+            <section className="  space-y-1  p-4 md:pb-2 md:pt-2 lg:py-2"></section>
+            <div className="flex w-full justify-between ">
+              <TextInputForm
+                inputType="text"
                 placeholder={"Type your message here."}
-                buttonText={"Send"}
-                // buttonVariant={buttonVariants.}
-              /> */}
-              <div className="flex w-full justify-between">
-                <div className="flex-1 ">
-                  <TextInputForm
-                    inputType="text"
-                    placeholder={"Type your message here."}
-                    handleSubmitButton={handleSubmitButton}
-                  ></TextInputForm>
-                </div>
-
-                {sessionData && (
+                handleSubmitButton={handleSubmitButton}
+              ></TextInputForm>
+              {sessionData && (
+                <div className=" align-start  flex w-full flex-col justify-around ">
+                  <div className="space-between flex w-full">
+                    <h2 className="  pl-2 text-lg font-semibold">Sessions</h2>
+                    <Button className="w-16" onClick={handleCreateNewSession}>
+                      <span>+</span>NEW
+                    </Button>
+                  </div>
                   <SessionsSectionFeed
                     needRefresh={needRefresh}
                     authorId={user.user?.id ?? "anonimous"}
                     sessionData={sessionData}
                     onClick={handleSelectSession}
                   />
-                )}
-              </div>
-            </section>
-            <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
-              <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
-                {isLoading && (
-                  <div className="flex w-full items-center justify-center">
-                    <LoadingSpinner size={40} />
-                  </div>
-                )}
-                {data && (
-                  <ResponseDiv
-                    response={data.response}
-                    message={data.message}
-                  />
-                )}
-              </div>
-              {currentSession.id !== "defaultId" && (
-                <Sessionfeed id={currentSession.id} />
+                </div>
               )}
-            </section>
+            </div>
+            <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
+              {isLoading && (
+                <div className="flex w-full items-center justify-center">
+                  <LoadingSpinner size={40} />
+                </div>
+              )}
+              {data && (
+                <ResponseDiv response={data.response} message={data.message} />
+              )}
+            </div>
+            {currentSession.id !== "defaultId" && (
+              <Sessionfeed id={currentSession.id} />
+            )}
+            {/* </section> */}
           </main>
         </div>
       </DashboardShell>
