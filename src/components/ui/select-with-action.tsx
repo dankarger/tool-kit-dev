@@ -26,7 +26,9 @@ export function SelectElement({ options, onSelect }: SelectElementProps) {
         <SelectGroup>
           <SelectLabel>Fruits</SelectLabel>
           {options.map((option) => (
-            <SelectItem value={option.id}>{option.name}</SelectItem>
+            <SelectItem key={option.id} value={option.id}>
+              {option.name}
+            </SelectItem>
           ))}
         </SelectGroup>
       </SelectContent>
