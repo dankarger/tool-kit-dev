@@ -13,12 +13,12 @@ import {
 import { api } from "@/utils/api";
 import { buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
+import { HomePageConfig } from "@/config/homepage";
 // import { cn } from "@/lib/utils";
 import { INTERNAL_VERSION } from "@/config/site";
+import { Separator } from "@/components/ui/separator";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
   console.log("%c---------------------------------", "color: yellow");
   console.log("VERSION:", INTERNAL_VERSION);
   console.log("%c---------------------------------", "color: yellow");
@@ -30,37 +30,87 @@ const Home: NextPage = () => {
         <meta name="description" content="GPTool kit" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <PageLayout> */}
-      {/* <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10"> */}
       <div className="flex max-w-[980px] flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
-          GPTool kit, tools and more <br className="hidden sm:inline" />
-          built with Radix UI and Tailwind CSS.
+          {HomePageConfig.title}
+          <br className="hidden sm:inline" />
         </h1>
         <p className="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
-          Accessible and customizable components that you can copy and paste
-          {hello.data && <>. {hello.data.greeting}</>}
+          {HomePageConfig.subtitle}
         </p>
       </div>
       <div className="flex gap-4">
         <Link
-          href={siteConfig.links.docs}
-          target="_blank"
-          rel="noreferrer"
+          href="/chat"
+          // target="_blank"
+          // rel="noreferrer"
           className={buttonVariants({ size: "lg" })}
         >
-          Documentation
+          Chat
         </Link>
         <Link
-          target="_blank"
-          rel="noreferrer"
-          href={siteConfig.links.github}
+          // rel="noreferrer"
+          href="/translate"
           className={buttonVariants({ variant: "outline", size: "lg" })}
         >
-          GitHub
+          Translate
+        </Link>
+        <Link
+          // rel="noreferrer"
+          href="/summarize"
+          className={buttonVariants({ variant: "secondary", size: "lg" })}
+        >
+          Summarize
+        </Link>
+        <Link
+          // rel="noreferrer"
+          href="/story"
+          className={buttonVariants({ variant: "outline", size: "lg" })}
+        >
+          Story
+        </Link>
+        <Link
+          // rel="noreferrer"
+          href="/games"
+          className={buttonVariants({ variant: "secondary", size: "lg" })}
+        >
+          Games
         </Link>
       </div>
-
+      <section>
+        <p className="leading-7 [&:not(:first-child)]:mt-6">
+          {HomePageConfig.content.paragraph1}
+        </p>
+        <p className="leading-7 [&:not(:first-child)]:mt-6">
+          {HomePageConfig.content.paragraph2}
+        </p>
+      </section>
+      <section>
+        <div>
+          <ul>
+            {HomePageConfig.content.features1.map(
+              (feature: { title: string; description: string }) => (
+                <li
+                  key={feature.title}
+                  className="my-6 ml-6 list-disc [&>li]:mt-2"
+                >
+                  <span>{feature.title} </span> {feature.description}
+                </li>
+              )
+            )}
+          </ul>
+        </div>
+        <Separator />
+        <div>
+          <ul>
+            {HomePageConfig.content.features2.map((feature: string) => (
+              <li key={feature} className="my-6 ml-6 list-disc [&>li]:mt-2">
+                {feature}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
       <SignedOut>
         {/* Signed out users get sign in button */}
         <SignInButton />

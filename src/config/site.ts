@@ -1,9 +1,9 @@
 export type SiteConfig = typeof siteConfig;
 
-export const INTERNAL_VERSION = "1.3";
+export const INTERNAL_VERSION = "1.4";
 
 export const siteConfig = {
-  name: "Next.js",
+  name: "GPTool-Kit",
   description:
     "Beautifully designed components built with Radix UI and Tailwind CSS.",
   mainNav: [
@@ -18,6 +18,10 @@ export const siteConfig = {
     {
       title: "Translate",
       href: "/translate",
+    },
+    {
+      title: "Summarize",
+      href: "/summarize",
     },
     {
       title: "Story Mode",

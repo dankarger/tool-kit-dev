@@ -1,4 +1,4 @@
-import React, { useEffect, useId } from "react";
+import React, { use, useEffect, useId } from "react";
 import { type NextPage } from "next";
 import type { Session, Response, ChatMessage } from "@/types";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
@@ -16,13 +16,14 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
+import { TextInputForm } from "@/components/text-input-form";
 
 const Sessionfeed = ({ id }: { id: string }) => {
   const { data, isLoading, isError, refetch } =
     api.chat.getSessionMessagesBySessionId.useQuery({
       id: id,
     });
-
   if (!data) return null;
   if (isLoading)
     return (
@@ -31,38 +32,9 @@ const Sessionfeed = ({ id }: { id: string }) => {
       </div>
     );
   if (isError) return <div>Error</div>;
-  return <ResponseSection responses={data} />;
+  return <ResponseSection messages={data} />;
 };
 
-const SessionsSectionFeed = ({
-  authorId,
-  onClick,
-  needRefresh,
-  sessionData,
-}: {
-  sessionData: Session[];
-  needRefresh: boolean;
-  authorId: string;
-  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
-}) => {
-  // const { data, isLoading, isError, refetch } =
-  //   api.session.getChatSessionsByAuthorId.useQuery({
-  //     authorId: authorId,
-  //   });
-  useEffect(() => {
-    // refetch();
-  }, [sessionData]);
-  // if (!data) return null;
-  // if (isLoading)
-  //   return (
-  //     <div>
-  //       <LoadingSpinner />
-  //     </div>
-  //   );
-  // if (isError) return <div>Error</div>;
-  if (!sessionData) return null;
-  return <SessionsSection sessions={sessionData} onClick={onClick} />;
-};
 const ChatPage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
   const [chatResponce, setChatResponse] = React.useState("");
@@ -91,6 +63,7 @@ const ChatPage: NextPage = () => {
   });
 
   const createNewSession = api.session.createChatSession.useMutation({
+    // mutationFn:
     onSuccess: (data) => {
       console.log("dattttaaa", data);
       // if (data?.id) {
@@ -127,16 +100,37 @@ const ChatPage: NextPage = () => {
     },
   });
 
-  // const handleCreateNewSession = async () => {
+  const handleCreateNewSession = () => {
+    if (!user.user?.id) {
+      toast.error("Please login to create a new session");
+      return;
+    }
+    const currentTime = new Date();
+    const currentHour = currentTime.getHours();
+    const currentMinute = currentTime.getMinutes();
+    const currentSeconds = currentTime.getSeconds();
+    const time = `${currentHour} - ${currentMinute}-  ${currentSeconds}`;
+    const username = user.user?.username || "user";
+    const sessionName = `@ ${username} ${time}`;
+    createNewSession.mutate({
+      authorId: user.user.id,
+      name: sessionName,
+    });
+  };
+
   useEffect(() => {
     if (currentSession.id === "defaultId") {
-      const currentTime = new Date().getTime();
+      // const currentTime = new Date();
+      // const currentHour = currentTime.getHours();
+      // const currentMinute = currentTime.getMinutes();
 
-      createNewSession.mutate({
-        authorId: user.user?.id ?? "random3",
-        name: `@${user.user?.username ?? "randomName"}-${currentTime}`,
-      });
-
+      // const currentSeconds = currentTime.getSeconds();
+      // const time = `${currentHour}:${currentMinute}:${currentSeconds}`;
+      // createNewSession.mutate({
+      //   authorId: user.user?.id ?? "random3",
+      //   name: `@${user.user?.username}-${time}`,
+      // });
+      handleCreateNewSession();
       // setCurrenSession({ id: data?.id ?? "default-session" });
       // session.refetch();
     }
@@ -243,6 +237,23 @@ const ChatPage: NextPage = () => {
     setCurrenSession((prev) => obj);
     void session.refetch();
   };
+  const handleNewSessionButton = () => {
+    // setCurrenSession({ id: "defaultId" });
+    setIsSessionActivated(true);
+
+    void session.refetch();
+    void sessionRefetch();
+  };
+
+  const handleSelectSession2 = (sessionId: string) => {
+    console.log("sessionId", sessionId);
+    const obj = {
+      id: sessionId ?? "default-session",
+    };
+    setCurrenSession((prev) => obj);
+    void session.refetch();
+  };
+
   return (
     <>
       <Head>
@@ -255,44 +266,42 @@ const ChatPage: NextPage = () => {
           <aside className="hidden w-[200px] flex-col md:flex">
             <DashboardNav items={dashboardConfig.chat} />
           </aside>
-          <main className="flex w-full flex-1 flex-col overflow-hidden">
+          <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">
             <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
-
-            <section className="space-y-6 px-3 pb-10 pt-6 md:pb-12 md:pt-10 lg:py-12"></section>
-            <InputWithButton
-              handleSubmitButton={handleSubmitButton}
-              placeholder={"Type your message here."}
-              buttonText={"Send"}
-              // buttonVariant={buttonVariants.}
-            />
-            <div className="z-150  top-59 left-1  h-40 overflow-y-auto  ">
-              {sessionData && (
-                <SessionsSectionFeed
-                  needRefresh={needRefresh}
-                  authorId={user.user?.id ?? "anonimous"}
-                  sessionData={sessionData}
-                  onClick={handleSelectSession}
-                />
-              )}
-            </div>
-            <section className="container space-y-6 bg-slate-50 py-8 dark:bg-transparent md:py-12 lg:py-14">
-              <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
-                {isLoading && (
-                  <div className="flex w-full items-center justify-center">
-                    <LoadingSpinner size={40} />
+            <section className=" flex w-full flex-row justify-between gap-2">
+              <div className="flex  w-full  flex-row justify-between ">
+                <TextInputForm
+                  inputType="text"
+                  placeholder={"Type your message here."}
+                  handleSubmitButton={handleSubmitButton}
+                  className="flex-grow:1 flex-1"
+                ></TextInputForm>
+                {sessionData && (
+                  <div className=" flex w-1/3   flex-col items-end justify-center   ">
+                    <SessionsSection
+                      sessions={sessionData}
+                      onClick={handleSelectSession}
+                      onSelect={handleSelectSession2}
+                      onNewSession={handleCreateNewSession}
+                    />
                   </div>
                 )}
-                {/* {data && (
-                  <ResponseDiv
-                    response={data.response}
-                    message={data.message}
-                  />
-                )} */}
               </div>
-              {currentSession.id !== "defaultId" && (
-                <Sessionfeed id={currentSession.id} />
-              )}
             </section>
+            <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
+              {isLoading && (
+                <div className="flex w-full items-center justify-center">
+                  <LoadingSpinner size={40} />
+                </div>
+              )}
+              {/* {data && (
+                <ResponseDiv response={data.response} message={data.message} />
+              )} */}
+            </div>
+            {currentSession.id !== "defaultId" && (
+              <Sessionfeed id={currentSession.id} />
+            )}
+            {/* </section> */}
           </main>
         </div>
       </DashboardShell>
