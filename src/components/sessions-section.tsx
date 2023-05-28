@@ -2,15 +2,18 @@ import { Separator } from "@/components/ui/separator";
 import type { Session } from "@/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Fragment } from "react";
+import { SelectElement } from "@/components/ui/select-with-action";
 
 interface SessionsSectionProps {
   sessions: Session[];
   onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
+  onSelect: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
 }
 
 export const SessionsSection = ({
   sessions,
   onClick,
+  onSelect,
 }: SessionsSectionProps) => {
   if (!sessions) return null;
   return (
@@ -22,6 +25,8 @@ export const SessionsSection = ({
       <div className="w-50  h-full   ">
         <Separator />
         {/* <div className="flex flex-col-reverse"> */}
+        <SelectElement options={sessions} onSelect={onchange} />
+
         <ScrollArea className="h-[150px] w-[350px] rounded-md border p-4">
           <ul className="   flex flex-col-reverse">
             {sessions.map((session) => (

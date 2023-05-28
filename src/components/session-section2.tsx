@@ -2,6 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import type { Session } from "@/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Fragment, use } from "react";
+import { SelectElement } from "@/components/ui/select-with-action";
 import {
   Table,
   TableBody,

@@ -38,7 +38,6 @@ const Sessionfeed = ({ id }: { id: string }) => {
 const SessionsSectionFeed = ({
   authorId,
   onClick,
-  needRefresh,
   sessionData,
 }: {
   sessionData: Session[];

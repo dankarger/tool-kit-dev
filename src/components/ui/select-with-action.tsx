@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import type { Session, Response, ChatMessage } from "@/types";
 import {
   Select,
   SelectContent,
@@ -10,20 +10,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function SelectElement() {
+type SelectElementProps = {
+  options: Session[];
+  onSelect: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
+};
+
+export function SelectElement({ options, onSelect }: SelectElementProps) {
+  if (!options) return null;
   return (
     <Select>
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a fruit" />
+        <SelectValue placeholder="Previous Chats" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Fruits</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
-          <SelectItem value="grapes">Grapes</SelectItem>
-          <SelectItem value="pineapple">Pineapple</SelectItem>
+          {options.map((option) => (
+            <SelectItem value={option.id}>{option.name}</SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>
