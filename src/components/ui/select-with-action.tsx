@@ -12,7 +12,7 @@ import {
 
 type SelectElementProps = {
   options: Session[];
-  onSelect: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
+  onSelect?: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
 };
 
 export function SelectElement({ options, onSelect }: SelectElementProps) {

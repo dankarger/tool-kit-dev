@@ -61,7 +61,13 @@ const SessionsSectionFeed = ({
   //   );
   // if (isError) return <div>Error</div>;
   if (!sessionData) return null;
-  return <SessionsSection sessions={sessionData} onClick={onClick} />;
+  return (
+    <SessionsSection
+      sessions={sessionData}
+      onClick={onClick}
+      onSelect={onClick}
+    />
+  );
 };
 const ChatPage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");

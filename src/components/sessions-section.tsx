@@ -7,7 +7,7 @@ import { SelectElement } from "@/components/ui/select-with-action";
 interface SessionsSectionProps {
   sessions: Session[];
   onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
-  onSelect: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
+  onSelect?: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
 }
 
 export const SessionsSection = ({
@@ -25,7 +25,7 @@ export const SessionsSection = ({
       <div className="w-50  h-full   ">
         <Separator />
         {/* <div className="flex flex-col-reverse"> */}
-        <SelectElement options={sessions} onSelect={onchange} />
+        <SelectElement options={sessions} onSelect={onSelect} />
 
         <ScrollArea className="h-[150px] w-[350px] rounded-md border p-4">
           <ul className="   flex flex-col-reverse">

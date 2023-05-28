@@ -29,7 +29,7 @@ interface TextInputFormProps extends React.HTMLAttributes<HTMLFormElement> {
   placeholder?: string;
   inputType?: "text" | "area";
   description?: string;
-  children?: ReactNode;
+  children?: React.ReactNode;
 }
 
 type FormData = z.infer<typeof userTextInputSchema>;
