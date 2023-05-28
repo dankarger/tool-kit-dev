@@ -16,19 +16,6 @@ import { FormSchema } from "@/components/translate-section";
 import { TranslationResultComponent } from "@/components/translation-result";
 import { InputAreaWithButton } from "@/components/input-area-with-button";
 import { LoadingSpinner } from "@/components/ui/spinner";
-const SessionsSectionFeed = ({
-  authorId,
-  onClick,
-  sessionData,
-}: {
-  sessionData: Session[];
-  needRefresh: boolean;
-  authorId: string;
-  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
-}): JSX.Element => {
-  if (!sessionData) return <></>;
-  return <SessionsSection sessions={sessionData} onClick={onClick} />;
-};
 
 const TranslatePage: NextPage = () => {
   // const { data, isLoading, isFetching } = api.translate.getAllTranslationsByAuthorId.useQ({
