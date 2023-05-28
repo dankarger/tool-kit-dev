@@ -262,48 +262,48 @@ const ChatPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <DashboardShell>
-        <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
+        {/* <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
           <aside className="hidden w-[200px] flex-col md:flex">
             <DashboardNav items={dashboardConfig.chat} />
-          </aside>
-          <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">
-            <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
-            <section className=" flex w-full flex-row justify-between gap-2">
-              <div className="flex  w-full  flex-row justify-between ">
-                <TextInputForm
-                  inputType="text"
-                  placeholder={"Type your message here."}
-                  handleSubmitButton={handleSubmitButton}
-                  className="flex-grow:1 flex-1"
-                ></TextInputForm>
-                {sessionData && (
-                  <div className=" flex w-1/3   flex-col items-end justify-center   ">
-                    <SessionsSection
-                      sessions={sessionData}
-                      onClick={handleSelectSession}
-                      onSelect={handleSelectSession2}
-                      onNewSession={handleCreateNewSession}
-                    />
-                  </div>
-                )}
-              </div>
-            </section>
-            <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
-              {isLoading && (
-                <div className="flex w-full items-center justify-center">
-                  <LoadingSpinner size={40} />
+          </aside> */}
+        <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">
+          <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
+          <section className=" flex w-full flex-row justify-between gap-2">
+            <div className="flex  w-full  flex-row justify-between ">
+              <TextInputForm
+                inputType="text"
+                placeholder={"Type your message here."}
+                handleSubmitButton={handleSubmitButton}
+                className="flex-grow:1 flex-1"
+              ></TextInputForm>
+              {sessionData && (
+                <div className=" flex w-1/3   flex-col items-end justify-center   ">
+                  <SessionsSection
+                    sessions={sessionData}
+                    onClick={handleSelectSession}
+                    onSelect={handleSelectSession2}
+                    onNewSession={handleCreateNewSession}
+                  />
                 </div>
               )}
-              {/* {data && (
+            </div>
+          </section>
+          <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
+            {isLoading && (
+              <div className="flex w-full items-center justify-center">
+                <LoadingSpinner size={40} />
+              </div>
+            )}
+            {/* {data && (
                 <ResponseDiv response={data.response} message={data.message} />
               )} */}
-            </div>
-            {currentSession.id !== "defaultId" && (
-              <Sessionfeed id={currentSession.id} />
-            )}
-            {/* </section> */}
-          </main>
-        </div>
+          </div>
+          {currentSession.id !== "defaultId" && (
+            <Sessionfeed id={currentSession.id} />
+          )}
+          {/* </section> */}
+        </main>
+        {/* </div> */}
       </DashboardShell>
     </>
   );

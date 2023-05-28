@@ -54,10 +54,10 @@ export type HomePageConfig = {
 export type DashboardConfig = {
   mainNav: MainNavItem[];
   sidebarNav: SidebarNavItem[];
-  chat: SidebarNavItem[];
-  translate: SidebarNavItem[];
-  story: SidebarNavItem[];
-  tictactoe: SidebarNavItem[];
+  // chat: SidebarNavItem[];
+  // translate: SidebarNavItem[];
+  // story: SidebarNavItem[];
+  // tictactoe: SidebarNavItem[];
 };
 
 // export type SubscriptionPlan = {

@@ -90,39 +90,34 @@ const TranslatePage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <DashboardShell>
-        <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
-          <aside className="hidden w-[200px] flex-col md:flex">
-            <DashboardNav items={dashboardConfig.chat} />
-          </aside>
-          <main className="flex w-full flex-1 flex-col overflow-hidden">
-            <DashboardHeader
-              heading="Translate"
-              text="Translate a text with GPTool."
-            />
+        <main className="flex w-full flex-1 flex-col overflow-hidden">
+          <DashboardHeader
+            heading="Translate"
+            text="Translate a text with GPTool."
+          />
 
-            <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-              <TranslateSection handleTranslateButton={handleTranslateButton} />
-              {/* <InputAreaWithButton
+          <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+            <TranslateSection handleTranslateButton={handleTranslateButton} />
+            {/* <InputAreaWithButton
                 handleSubmitteButton={handleTranslateButton}
                 placeholder="Past or type here the text to translate..."
               /> */}
-            </section>
-            {isLoading && (
-              <div className="flex h-fit w-full items-center justify-center">
-                <LoadingSpinner size={90} />
+          </section>
+          {isLoading && (
+            <div className="flex h-fit w-full items-center justify-center">
+              <LoadingSpinner size={90} />
+            </div>
+          )}
+          {data && (
+            <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
+              <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
+                <>
+                  <TranslationResultComponent data={data} />
+                </>
               </div>
-            )}
-            {data && (
-              <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
-                <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                  <>
-                    <TranslationResultComponent data={data} />
-                  </>
-                </div>
-              </section>
-            )}
-          </main>
-        </div>
+            </section>
+          )}
+        </main>
       </DashboardShell>
     </>
   );
