@@ -91,49 +91,44 @@ const SummarizePage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <DashboardShell>
-        <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
-          <aside className="hidden w-[200px] flex-col md:flex">
-            <DashboardNav items={dashboardConfig.chat} />
-          </aside>
-          <main className="flex w-full flex-1 flex-col overflow-hidden">
-            <DashboardHeader
-              heading="Summarize"
-              text="Summarize a text with GPTool."
-            />
-            <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-              <div className="flex w-full ">
-                {/* <SummarizeSection
+        <main className="flex w-full flex-1 flex-col overflow-hidden">
+          <DashboardHeader
+            heading="Summarize"
+            text="Summarize a text with GPTool."
+          />
+          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+            <div className="flex w-full ">
+              {/* <SummarizeSection
                   handleSummarizeButton={handleSummarizeButton}
                 /> */}
-                <div className="w-full">
-                  <TextInputForm
-                    inputType="area"
-                    handleSubmitButton={handleSummarizeButton}
-                    placeholder="Type or past text here to summarize...."
-                  />
-                </div>
-                {sessionData && <SessionsSection2 sessions={sessionData} />}
+              <div className="w-full">
+                <TextInputForm
+                  inputType="area"
+                  handleSubmitButton={handleSummarizeButton}
+                  placeholder="Type or past text here to summarize...."
+                />
               </div>
-              <ComboboxDropdownMenu />
-              {isLoading && (
-                <div className="flex h-fit w-full items-center justify-center">
-                  <LoadingSpinner size={90} />
-                </div>
-              )}
-            </section>
-            {data && (
-              <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
-                <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                  {data && (
-                    <div>
-                      <SummarizeResult result={data.result} />
-                    </div>
-                  )}
-                </div>
-              </section>
+              {sessionData && <SessionsSection2 sessions={sessionData} />}
+            </div>
+            <ComboboxDropdownMenu />
+            {isLoading && (
+              <div className="flex h-fit w-full items-center justify-center">
+                <LoadingSpinner size={90} />
+              </div>
             )}
-          </main>
-        </div>
+          </section>
+          {data && (
+            <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
+              <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
+                {data && (
+                  <div>
+                    <SummarizeResult result={data.result} />
+                  </div>
+                )}
+              </div>
+            </section>
+          )}
+        </main>
       </DashboardShell>
     </>
   );
