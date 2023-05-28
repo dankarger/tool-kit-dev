@@ -29,7 +29,7 @@ interface TextInputFormProps extends React.HTMLAttributes<HTMLFormElement> {
   placeholder?: string;
   inputType?: "text" | "area";
   description?: string;
-  children?: React.ReactNode;
+  children?: RReactNode;
 }
 
 type FormData = z.infer<typeof userTextInputSchema>;
@@ -73,77 +73,79 @@ export function TextInputForm({
   }
 
   return (
-    // <div>
-    <form
-      className={cn(className)}
-      onSubmit={(e) => void handleSubmit(onSubmit)(e)}
-      {...props}
-    >
-      <Card>
-        {/* <div className="flex w-full justify-between">
+    <div>
+      <form
+        className={cn(className)}
+        onSubmit={(e) => void handleSubmit(onSubmit)(e)}
+        {...props}
+      >
+        <Card>
+          {/* <div className="flex w-full justify-between">
             <div> */}
-        <CardHeader>
-          {/* <CardTitle>{placeholder}</CardTitle>
+          <CardHeader>
+            {/* <CardTitle>{placeholder}</CardTitle>
           <CardDescription>{description}</CardDescription> */}
-        </CardHeader>
-        <CardContent>
-          <div className="grid w-full gap-1">
-            <Label className="sr-only" htmlFor="name">
-              Text
-            </Label>
-            {inputType === "area" ? (
-              <Textarea
-                id="text"
-                className="w-full"
-                placeholder={placeholder}
-                autoFocus
-                max={132}
-                min={230}
-                {...register("text")}
-              />
-            ) : (
-              <Input
-                id="text"
-                autoFocus
-                className="w-full"
-                placeholder={placeholder}
-                size={32}
-                {...register("text")}
-              />
-            )}
-            {errors?.text && (
-              <p className="px-1 text-xs text-red-600">{errors.text.message}</p>
-            )}
-          </div>
-        </CardContent>
-        <CardFooter>
-          <div className="flex w-full items-center justify-between space-x-2">
-            <button
-              type="submit"
-              className={cn(buttonVariants(), className)}
-              disabled={isSaving}
-            >
-              {isSaving && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          </CardHeader>
+          <CardContent>
+            <div className="grid w-full gap-1">
+              <Label className="sr-only" htmlFor="name">
+                Text
+              </Label>
+              {inputType === "area" ? (
+                <Textarea
+                  id="text"
+                  className="w-full"
+                  placeholder={placeholder}
+                  autoFocus
+                  max={332}
+                  min={130}
+                  {...register("text")}
+                />
+              ) : (
+                <Input
+                  id="text"
+                  autoFocus
+                  className="w-full"
+                  placeholder={placeholder}
+                  size={70}
+                  {...register("text")}
+                />
               )}
-              <span>Submit</span>
-            </button>
-            <Button
-              variant={"destructive"}
-              onClick={(e) => {
-                e.preventDefault();
-                reset({ text: "" });
-              }}
-            >
-              Clear
-            </Button>
-          </div>
-        </CardFooter>
-        {/* </div>
+              {errors?.text && (
+                <p className="px-1 text-xs text-red-600">
+                  {errors.text.message}
+                </p>
+              )}
+            </div>
+          </CardContent>
+          <CardFooter>
+            <div className="flex w-full items-center justify-between space-x-2">
+              <button
+                type="submit"
+                className={cn(buttonVariants(), className)}
+                disabled={isSaving}
+              >
+                {isSaving && (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                <span>Submit</span>
+              </button>
+              <Button
+                variant={"destructive"}
+                onClick={(e) => {
+                  e.preventDefault();
+                  reset({ text: "" });
+                }}
+              >
+                Clear
+              </Button>
+            </div>
+          </CardFooter>
+          {/* </div>
             <div>{children}</div>
           </div> */}
-      </Card>
-    </form>
-    // </div>
+        </Card>
+      </form>
+    </div>
   );
 }

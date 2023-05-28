@@ -35,40 +35,6 @@ const Sessionfeed = ({ id }: { id: string }) => {
   return <ResponseSection messages={data} />;
 };
 
-const SessionsSectionFeed = ({
-  authorId,
-  onClick,
-  sessionData,
-}: {
-  sessionData: Session[];
-  needRefresh: boolean;
-  authorId: string;
-  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
-}) => {
-  // const { data, isLoading, isError, refetch } =
-  //   api.session.getChatSessionsByAuthorId.useQuery({
-  //     authorId: authorId,
-  //   });
-  useEffect(() => {
-    // refetch();
-  }, [sessionData]);
-  // if (!data) return null;
-  // if (isLoading)
-  //   return (
-  //     <div>
-  //       <LoadingSpinner />
-  //     </div>
-  //   );
-  // if (isError) return <div>Error</div>;
-  if (!sessionData) return null;
-  return (
-    <SessionsSection
-      sessions={sessionData}
-      onClick={onClick}
-      onSelect={onClick}
-    />
-  );
-};
 const ChatPage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
   const [chatResponce, setChatResponse] = React.useState("");
@@ -278,6 +244,16 @@ const ChatPage: NextPage = () => {
     void session.refetch();
     void sessionRefetch();
   };
+
+  const handleSelectSession2 = (sessionId: string) => {
+    console.log("sessionId", sessionId);
+    const obj = {
+      id: sessionId ?? "default-session",
+    };
+    setCurrenSession((prev) => obj);
+    void session.refetch();
+  };
+
   return (
     <>
       <Head>
@@ -292,39 +268,35 @@ const ChatPage: NextPage = () => {
           </aside>
           <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">
             <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
-            <section className="  space-y-1  p-4 md:pb-2 md:pt-2 lg:py-2"></section>
-            <div className="flex w-full justify-between ">
-              <TextInputForm
-                inputType="text"
-                placeholder={"Type your message here."}
-                handleSubmitButton={handleSubmitButton}
-              ></TextInputForm>
-              {sessionData && (
-                <div className=" align-start  flex w-full flex-col justify-around ">
-                  <div className="space-between flex w-full">
-                    <h2 className="  pl-2 text-lg font-semibold">Sessions</h2>
-                    <Button className="w-16" onClick={handleCreateNewSession}>
-                      <span>+</span>NEW
-                    </Button>
+            <section className=" flex w-full flex-row justify-between gap-2">
+              <div className="flex  w-full  flex-row justify-between ">
+                <TextInputForm
+                  inputType="text"
+                  placeholder={"Type your message here."}
+                  handleSubmitButton={handleSubmitButton}
+                  className="flex-grow:1 flex-1"
+                ></TextInputForm>
+                {sessionData && (
+                  <div className=" flex w-1/3   flex-col items-end justify-center   ">
+                    <SessionsSection
+                      sessions={sessionData}
+                      onClick={handleSelectSession}
+                      onSelect={handleSelectSession2}
+                      onNewSession={handleCreateNewSession}
+                    />
                   </div>
-                  <SessionsSectionFeed
-                    needRefresh={needRefresh}
-                    authorId={user.user?.id ?? "anonimous"}
-                    sessionData={sessionData}
-                    onClick={handleSelectSession}
-                  />
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            </section>
             <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
               {isLoading && (
                 <div className="flex w-full items-center justify-center">
                   <LoadingSpinner size={40} />
                 </div>
               )}
-              {data && (
+              {/* {data && (
                 <ResponseDiv response={data.response} message={data.message} />
-              )}
+              )} */}
             </div>
             {currentSession.id !== "defaultId" && (
               <Sessionfeed id={currentSession.id} />
