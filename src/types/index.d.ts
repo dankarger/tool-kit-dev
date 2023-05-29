@@ -89,6 +89,17 @@ export interface Session {
   id: string;
   type?: string;
 }
+
+export interface StoryResult {
+  id: string;
+  createdAt: Date;
+  title: string;
+  text: string;
+  resultText: string;
+  resultPrompt: string;
+  resultImageUrl: string;
+  authorId: string;
+}
 export interface ChatMessage {
   id: string;
   createdAt: Date;

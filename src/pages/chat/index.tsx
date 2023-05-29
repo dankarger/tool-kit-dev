@@ -268,7 +268,7 @@ const ChatPage: NextPage = () => {
           </aside> */}
         <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">
           <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
-          <section className=" flex w-full flex-row justify-between gap-2">
+          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
             <div className="flex  w-full  flex-row justify-between ">
               <TextInputForm
                 inputType="text"

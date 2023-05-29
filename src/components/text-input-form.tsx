@@ -7,7 +7,6 @@ import * as z from "zod";
 
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { userTextInputSchema } from "@/lib/validations/user";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -31,8 +30,10 @@ interface TextInputFormProps extends React.HTMLAttributes<HTMLFormElement> {
   description?: string;
   children?: React.ReactNode;
 }
-
-type FormData = z.infer<typeof userTextInputSchema>;
+const TextInputSchema = z.object({
+  text: z.string().min(2).max(1330),
+});
+type FormData = z.infer<typeof TextInputSchema>;
 
 export function TextInputForm({
   // user,
@@ -51,7 +52,7 @@ export function TextInputForm({
     formState: { errors },
     reset,
   } = useForm<FormData>({
-    resolver: zodResolver(userTextInputSchema),
+    resolver: zodResolver(TextInputSchema),
     defaultValues: {
       text: "",
     },

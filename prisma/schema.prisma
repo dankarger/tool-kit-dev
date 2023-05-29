@@ -61,10 +61,10 @@ model StoryResult {
     id        String   @id @default(cuid())  
     createdAt DateTime @default(now())
     text String  @db.LongText
+    title String  @db.LongText
     resultText  String  @db.LongText
-    resultPrompt String 
+    resultPrompt String  @db.LongText
     resultImageUrl String
-    resultImage64 String?
     authorId String
     @@index([authorId])
 }
