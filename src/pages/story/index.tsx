@@ -18,6 +18,7 @@ import { SummarizeSection } from "@/components/summarize-section2";
 import { SessionsSection2 } from "@/components/session-section2";
 import { SummarizeResult } from "@/components/summarize-result";
 import { TextInputForm } from "@/components/text-input-form";
+import { StorySection } from "@/components/story-section";
 
 const StoryPage: NextPage = () => {
   const user = useUser();
@@ -72,7 +73,8 @@ const StoryPage: NextPage = () => {
       },
     });
 
-  const handleSummarizeButton = (text: string) => {
+  const handleStoryGenerateButton = (text: string) => {
+    console.log("story", text);
     if (!text) {
       toast({
         title: "Please enter all fields",
@@ -106,11 +108,7 @@ const StoryPage: NextPage = () => {
           />
           <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
             <div className="f-full flex justify-between">
-              {/* <SummarizeSection
-                  handleSummarizeButton={handleSummarizeButton}
-                /> */}
-              <TextInputForm handleSubmitButton={handleSummarizeButton} />
-              {sessionData && <SessionsSection2 sessions={sessionData} />}
+              <StorySection handleSubmitButton={handleStoryGenerateButton} />
             </div>
             {isLoading && (
               <div className="flex h-fit w-full items-center justify-center">
@@ -122,9 +120,7 @@ const StoryPage: NextPage = () => {
             <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
               <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
                 {data && (
-                  <div>
-                    <SummarizeResult result={data.result} />
-                  </div>
+                  <div>{/* <SummarizeResult result={data.result} /> */}</div>
                 )}
               </div>
             </section>
