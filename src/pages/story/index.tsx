@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useId } from "react";
+import React, { useState } from "react";
 import { type NextPage } from "next";
 import type { Session, Response, ChatMessage } from "@/types";
 import Head from "next/head";
@@ -10,28 +10,11 @@ import { DashboardNav } from "@/components/nav";
 import { SessionsSection } from "@/components/sessions-section";
 // import toast from "react-hot-toast";
 import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
-import { SummarizeSection } from "@/components/summarize-section2";
-import { SessionsSection2 } from "@/components/session-section2";
-import { SummarizeResult } from "@/components/summarize-result";
-import { TextInputForm } from "@/components/text-input-form";
 import { StorySection } from "@/components/story-section";
-
-// const getBase64FromUrl = async (url: string) => {
-//   const data = await fetch(url);
-//   const blob = await data.blob();
-//   return new Promise((resolve) => {
-//     const reader = new FileReader();
-//     reader.readAsDataURL(blob);
-//     reader.onloadend = () => {
-//       const base64data = reader.result;
-//       resolve(base64data);
-//     };
-//   });
-// };
+import { Skeleton } from "@/components/ui/skeleton";
 
 const StoryPage: NextPage = () => {
   const [userPromt, setUserPrompt] = useState("");
@@ -244,10 +227,12 @@ const StoryPage: NextPage = () => {
     mutate: createFullStoryResult,
     data,
     isLoading: isFullStoryLoading,
+    reset: fullStoryReset,
   } = api.story.createFullStoryResult.useMutation({
     onSuccess(data) {
       console.log("%c,prisma result---------------", data);
-      handleSelectStory(data.id);
+      // handleSelectStory(data.id);
+      sessionRefetch();
     },
     //TODO : ADD ERROR handeling
   });
@@ -281,6 +266,7 @@ const StoryPage: NextPage = () => {
     setCurrenSession(obj);
     // void session.refetch();
     selectedStoryRefetch();
+    fullStoryReset();
   };
 
   const handleCreateNewSession = () => {
@@ -305,6 +291,9 @@ const StoryPage: NextPage = () => {
           <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
             <div className="f-full flex justify-between">
               <StorySection handleSubmitButton={handleStoryGenerateButton} />
+              {sessionSectionLoading && (
+                <Skeleton className="h-[150px] w-[200px]" />
+              )}
               {sessionData && (
                 <SessionsSection
                   sessions={sessionData}
@@ -347,7 +336,7 @@ const StoryPage: NextPage = () => {
           )}
           {/* <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              {title}
+              {title}---
             </h1>
             <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
               <p className="leading-7 [&:not(:first-child)]:mt-6">

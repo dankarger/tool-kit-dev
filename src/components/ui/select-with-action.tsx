@@ -73,7 +73,7 @@ export function SelectElement({
           name="session"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Previous Chats</FormLabel>
+              <FormLabel>Previous Sessions</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={"none"}>
                 <FormControl>
                   <SelectTrigger>
@@ -87,7 +87,7 @@ export function SelectElement({
                       value={option.id}
                       data-valueid={option.id}
                     >
-                      {option.name || option.title}
+                      {option.name || `${option.title?.substring(0, 25)}...`}
                     </SelectItem>
                   ))}
                 </SelectContent>
