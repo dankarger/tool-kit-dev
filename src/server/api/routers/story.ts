@@ -1,11 +1,12 @@
-import { z } from "zod";
+import { unknown, z } from "zod";
 import openai from "@/lib/openai";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 import { StoryResult } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { Analytics, Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis";
-
+// import cloudinary from 'cloudinary'
+import { cloudinary } from "@/utils/cloudinary";
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(20, "1 m"),
@@ -96,7 +97,7 @@ export const storyRouter = createTRPCRouter({
       const response = await openai.createImage({
         prompt: input.prompt,
         n: 1,
-        size: "1024x1024",
+        size: "512x512",
       });
 
       // console.log('response2',response.data.choices)
@@ -104,6 +105,29 @@ export const storyRouter = createTRPCRouter({
       if (!response) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const image_url = response.data?.data[0]?.url;
       if (!image_url) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+
       return image_url;
+    }),
+  uploadImageToCloudinary: privateProcedure
+    .input(z.object({ image_url: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const authorId = ctx.userId;
+      const { success } = await ratelimit.limit(authorId);
+      if (!success) {
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+      }
+      const options = {
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+        folder: "Gptool-kit/",
+      };
+      const cloudinaryResponse = await cloudinary.uploader.upload(
+        input.image_url,
+        options
+      );
+
+      console.log("cloudinaryResponse", cloudinaryResponse);
+      return cloudinaryResponse.secure_url;
     }),
 });

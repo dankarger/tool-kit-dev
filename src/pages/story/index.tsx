@@ -20,6 +20,19 @@ import { SummarizeResult } from "@/components/summarize-result";
 import { TextInputForm } from "@/components/text-input-form";
 import { StorySection } from "@/components/story-section";
 
+// const getBase64FromUrl = async (url: string) => {
+//   const data = await fetch(url);
+//   const blob = await data.blob();
+//   return new Promise((resolve) => {
+//     const reader = new FileReader();
+//     reader.readAsDataURL(blob);
+//     reader.onloadend = () => {
+//       const base64data = reader.result;
+//       resolve(base64data);
+//     };
+//   });
+// };
+
 const StoryPage: NextPage = () => {
   const [textResult, setTextResult] = useState("");
   const [promptForImage, setPromptForImage] = useState("");
@@ -127,7 +140,8 @@ const StoryPage: NextPage = () => {
       onSuccess: (data) => {
         // void session.refetch();
         setImageUrlResult(data);
-        console.log("image result ", data);
+        uplaodImageToCloudinary({ image_url: data });
+        console.log("image url result ", data);
       },
       onError: (error) => {
         const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -156,6 +170,13 @@ const StoryPage: NextPage = () => {
           });
           console.log("Failed to generate, please try again");
         }
+      },
+    });
+
+  const { mutate: uplaodImageToCloudinary } =
+    api.story.uploadImageToCloudinary.useMutation({
+      onSuccess(data) {
+        console.log(";cloudinary result", data);
       },
     });
 
