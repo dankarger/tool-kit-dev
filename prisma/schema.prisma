@@ -56,3 +56,15 @@ model SummarizeResult {
     authorId String
     @@index([authorId])
 }
+
+model StoryResult {
+    id        String   @id @default(cuid())  
+    createdAt DateTime @default(now())
+    text String  @db.LongText
+    resultText  String  @db.LongText
+    resultPrompt String 
+    resultImageUrl String
+    resultImage64 String?
+    authorId String
+    @@index([authorId])
+}

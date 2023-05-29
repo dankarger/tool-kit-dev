@@ -1,4 +1,4 @@
-import React, { use, useEffect, useId } from "react";
+import React, { useState, useEffect, useId } from "react";
 import { type NextPage } from "next";
 import type { Session, Response, ChatMessage } from "@/types";
 import Head from "next/head";
@@ -21,6 +21,11 @@ import { TextInputForm } from "@/components/text-input-form";
 import { StorySection } from "@/components/story-section";
 
 const StoryPage: NextPage = () => {
+  const [textResult, setTextResult] = useState("");
+  const [promptForImage, setPromptForImage] = useState("");
+  const [imageBase64Result, setImageBase64Result] = useState("");
+  const [imageUrlResult, setImageUrlResult] = useState("");
+
   const user = useUser();
   const ctx = api.useContext();
 
@@ -37,11 +42,55 @@ const StoryPage: NextPage = () => {
     authorId: user.user?.id ?? "",
   });
 
-  const { mutate, isLoading, data } =
-    api.summarize.createSummarizeResult.useMutation({
-      onSuccess: () => {
+  const {
+    mutate: mutateText,
+    isLoading,
+    data: textData,
+  } = api.story.createStoryTextResult.useMutation({
+    onSuccess: (data) => {
+      // void session.refetch();
+      setTextResult(data);
+
+      console.log("sucesssdata ", data);
+      createPrompt({ story: data });
+    },
+    onError: (error) => {
+      const errorMessage = error.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast({
+          title: errorMessage[0],
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                {JSON.stringify(errorMessage, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("errorMessage", errorMessage[0]);
+      } else {
+        toast({
+          title: "failed",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                Failed to generate story , please try again{" "}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("Failed to generate, please try again");
+      }
+    },
+  });
+
+  const { mutate: createPrompt, data: promptData } =
+    api.story.createPromptForImage.useMutation({
+      onSuccess: (data) => {
         // void session.refetch();
-        console.log("sucesss ");
+        setPromptForImage(data);
+        console.log("prompt result ", data);
+        createImage({ prompt: data });
       },
       onError: (error) => {
         const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -59,7 +108,7 @@ const StoryPage: NextPage = () => {
           console.log("errorMessage", errorMessage[0]);
         } else {
           toast({
-            title: "fialed",
+            title: "failed",
             description: (
               <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
                 <code className="text-white">
@@ -68,7 +117,44 @@ const StoryPage: NextPage = () => {
               </pre>
             ),
           });
-          console.log("Failed to summarize, please try again");
+          console.log("Failed to generate, please try again");
+        }
+      },
+    });
+
+  const { mutate: createImage, data: imageData } =
+    api.story.createImage.useMutation({
+      onSuccess: (data) => {
+        // void session.refetch();
+        setImageUrlResult(data);
+        console.log("image result ", data);
+      },
+      onError: (error) => {
+        const errorMessage = error.data?.zodError?.fieldErrors.content;
+        if (errorMessage && errorMessage[0]) {
+          toast({
+            title: errorMessage[0],
+            description: (
+              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                <code className="text-white">
+                  {JSON.stringify(errorMessage, null, 2)}
+                </code>
+              </pre>
+            ),
+          });
+          console.log("errorMessage", errorMessage[0]);
+        } else {
+          toast({
+            title: "failed",
+            description: (
+              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                <code className="text-white">
+                  Failed to generate story , please try again{" "}
+                </code>
+              </pre>
+            ),
+          });
+          console.log("Failed to generate, please try again");
         }
       },
     });
@@ -88,7 +174,7 @@ const StoryPage: NextPage = () => {
     }
     console.log("translate button clicked");
     console.log("text", text);
-    void mutate({
+    void mutateText({
       text: text,
     });
   };
@@ -116,13 +202,12 @@ const StoryPage: NextPage = () => {
               </div>
             )}
           </section>
-          {data && (
+          {textData && (
             <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
               <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                {data && (
-                  <div>{/* <SummarizeResult result={data.result} /> */}</div>
-                )}
+                {textData && <div>{textData}</div>}
               </div>
+              {imageData && <img src={imageData} alt="image" />}
             </section>
           )}
         </main>

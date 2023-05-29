@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as z from "zod";
@@ -14,26 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-const LANGUAGES = [
-  "English",
-  "Spanish",
-  "French",
-  "German",
-  "Italian",
-  "Japanese",
-  "Korean",
-  "Portuguese",
-  "Russian",
-  "Turkish",
-];
 
 export const FormSchema = z.object({
   text: z
@@ -68,7 +47,6 @@ export function StorySection({ handleSubmitButton }: StorylateSectionProps) {
     e?.preventDefault();
 
     void handleSubmitButton(data.text);
-    // api call
     toast({
       title: "You submitted the following values:",
       description: (
