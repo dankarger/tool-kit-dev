@@ -132,10 +132,8 @@ export const storyRouter = createTRPCRouter({
         overwrite: true,
         folder: "Gptool-kit/",
       };
-      const cloudinaryResponse = await cloudinary.uploader.upload(
-        input.image_url,
-        options
-      );
+      const cloudinaryResponse: { secure_url: string } =
+        await cloudinary.uploader.upload(input.image_url, options);
 
       console.log("cloudinaryResponse", cloudinaryResponse);
 

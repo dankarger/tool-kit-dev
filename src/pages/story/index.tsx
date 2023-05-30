@@ -209,7 +209,7 @@ const StoryPage: NextPage = () => {
 
   const { mutate: uplaodImageToCloudinary } =
     api.story.uploadImageToCloudinary.useMutation({
-      onSuccess(data) {
+      onSuccess(data: string) {
         console.log(";cloudinary result", data);
         setImageCloudinaryUrl(data);
         createFullStoryResult({
@@ -232,7 +232,7 @@ const StoryPage: NextPage = () => {
     onSuccess(data) {
       console.log("%c,prisma result---------------", data);
       // handleSelectStory(data.id);
-      sessionRefetch();
+      void sessionRefetch();
     },
     //TODO : ADD ERROR handeling
   });
@@ -265,8 +265,8 @@ const StoryPage: NextPage = () => {
     };
     setCurrenSession(obj);
     // void session.refetch();
-    selectedStoryRefetch();
-    fullStoryReset();
+    void selectedStoryRefetch();
+    void fullStoryReset();
   };
 
   const handleCreateNewSession = () => {
