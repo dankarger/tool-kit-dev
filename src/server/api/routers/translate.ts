@@ -55,7 +55,17 @@ export const TranslateRouter = createTRPCRouter({
 
       return translationResults;
     }),
-
+  getTranlateResultById: privateProcedure
+    .input(z.object({ translateId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const result = await ctx.prisma.translationResult.findUnique({
+        where: {
+          id: input.translateId,
+        },
+      });
+      if (!result) throw new TRPCError({ code: "NOT_FOUND" });
+      return result;
+    }),
   createTranslation: privateProcedure
     .input(
       z.object({
@@ -89,6 +99,7 @@ export const TranslateRouter = createTRPCRouter({
       // const data = `Mock for: ${input.latestMessage}`;
       const result: string = data.choices[0]?.text;
       if (!result) throw new TRPCError({ code: "NOT_FOUND" });
+      const title = `(${input.language}) - ${input.text.substring(0, 15)}`;
       const translationresult: TranslationResult =
         await ctx.prisma.translationResult.create({
           data: {
@@ -96,6 +107,7 @@ export const TranslateRouter = createTRPCRouter({
             text: input.text,
             translation: result,
             language: input.language,
+            title: title,
           },
         });
       // // const chat = `it will be the responce fropm openai for prompt: ${input.content}`;

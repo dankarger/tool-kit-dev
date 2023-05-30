@@ -24,7 +24,7 @@ export const sessionRouter = createTRPCRouter({
       if (!authorId) throw new TRPCError({ code: "UNAUTHORIZED" });
 
       const newSession = await prisma.chatSession.create({
-        data: { authorId: authorId, name: input.name },
+        data: { authorId: authorId, name: input.name, title: input.title },
       });
       // console.log("newsession", newSession.id);
       const sessionId = await ctx.prisma.chatSession.findUnique({

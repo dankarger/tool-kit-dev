@@ -1,4 +1,4 @@
-import React, { use, useEffect, useId } from "react";
+import React from "react";
 import { type NextPage } from "next";
 import type { Session, Response, ChatMessage } from "@/types";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
@@ -17,12 +17,14 @@ import { FormSchema } from "@/components/translate-section";
 import { TranslationResultComponent } from "@/components/translation-result";
 import { InputAreaWithButton } from "@/components/input-area-with-button";
 import { LoadingSpinner } from "@/components/ui/spinner";
+import { Separator } from "@/components/ui/separator";
 
 const TranslatePage: NextPage = () => {
-  // const { data, isLoading, isFetching } = api.translate.getAllTranslationsByAuthorId.useQ({
-  //   authorId: user.user?.id,
-  // })
+  const [currentSession, setCurrenSession] = React.useState({
+    translateId: "default-id",
+  });
   const user = useUser();
+
   const {
     data: sessionData,
     isLoading: sessionSectionLoading,
@@ -31,6 +33,19 @@ const TranslatePage: NextPage = () => {
   } = api.translate.getAllTranslationsByAuthorId.useQuery({
     authorId: user.user?.id ?? "",
   });
+
+  const {
+    data: selectedTranslateResult,
+    isLoading: selectedTranslateLoading,
+    refetch: selectedTranslateRefetch,
+    isSuccess: selectedTranslateIsSucess,
+  } = api.translate.getTranlateResultById.useQuery({
+    translateId:
+      currentSession.translateId !== "default-id"
+        ? currentSession.translateId
+        : "",
+  });
+
   const { mutate, isLoading, data } =
     api.translate.createTranslation.useMutation({
       // mutationFn:async({text,language}:)=>{
@@ -88,21 +103,23 @@ const TranslatePage: NextPage = () => {
     void mutate({
       text: text,
       language: language,
+      // title: text.substring(0,15)
     });
   };
-  const handleSelectStory = (storyId: string) => {
-    console.log("storyId", storyId);
+  const handleSelectStory = (translateId: string) => {
+    console.log("storyId", translateId);
     const obj = {
-      storyId: storyId ?? "default-id",
+      translateId: translateId ?? "default-id",
     };
-    // setCurrenSession(obj);
-    // // void session.refetch();
-    // void selectedStoryRefetch();
+    setCurrenSession(obj);
+    void sessionRefetch();
+    void selectedTranslateRefetch();
     // void fullStoryReset();
   };
 
   const handleCreateNewSession = () => {
     // setCurrenSession({ storyId: "default-id" });
+    setCurrenSession({ translateId: "default-id" });
     // setImageUrlResult("");
     // setTextResult("");
     // setTitle("");
@@ -121,7 +138,7 @@ const TranslatePage: NextPage = () => {
             text="Translate a text with GPTool."
           />
 
-          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-2">
             {" "}
             <div className="flex  w-full  flex-row justify-between ">
               <TranslateSection handleTranslateButton={handleTranslateButton} />
@@ -147,12 +164,40 @@ const TranslatePage: NextPage = () => {
           )}
           {data && (
             <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
+              <Separator className="mt-2" />
               <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
                 <>
                   <TranslationResultComponent data={data} />
+
+                  {/* <div>
+                    <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                      {data.title}
+                    </h1>
+                    <p className="leading-7 [&:not(:first-child)]:mt-6">
+                      <span>Original :</span> {data.text}
+                    </p>
+                    <p className="leading-7 [&:not(:first-child)]:mt-6">
+                      <span>{data.language}:</span> {data.translation}
+                    </p>
+                  </div> */}
                 </>
               </div>
             </section>
+          )}
+          {selectedTranslateResult && (
+            <div>
+              <TranslationResultComponent data={selectedTranslateResult} />
+              {/* <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                {selectedTranslateResult.title}
+              </h1>
+              <p className="leading-7 [&:not(:first-child)]:mt-6">
+                <span>Original :</span> {selectedTranslateResult.text}
+              </p>
+              <p className="leading-7 [&:not(:first-child)]:mt-6">
+                <span>{selectedTranslateResult.language}:</span>{" "}
+                {selectedTranslateResult.translation}
+              </p> */}
+            </div>
           )}
         </main>
       </DashboardShell>
