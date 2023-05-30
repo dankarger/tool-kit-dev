@@ -1,6 +1,12 @@
 import React, { use, useEffect, useId } from "react";
 import { type NextPage } from "next";
-import type { Session, Response, ChatMessage } from "@/types";
+import type {
+  Session,
+  Response,
+  ChatMessage,
+  StoryResult,
+  TranslationResultType,
+} from "@/types";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import Head from "next/head";
 import { dashboardConfig } from "@/config/dashboard";
@@ -253,7 +259,16 @@ const ChatPage: NextPage = () => {
     setCurrenSession((prev) => obj);
     void session.refetch();
   };
-
+  const handleSelectSession3 = (
+    option
+  ): Session | StoryResult | TranslationResultType => {
+    console.log("optionId", option.id);
+    // const obj = {
+    //   id: sessionId ?? "default-session",
+    // };
+    setCurrenSession((prev) => option);
+    void session.refetch();
+  };
   return (
     <>
       <Head>

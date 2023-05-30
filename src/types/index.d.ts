@@ -100,6 +100,16 @@ export interface StoryResult {
   resultImageUrl: string;
   authorId: string;
 }
+
+export interface TranslationResultType {
+  id: string;
+  createdAt: Date;
+  text: string;
+  translation: string;
+  authorId: string;
+  language: string;
+}
+
 export interface ChatMessage {
   id: string;
   createdAt: Date;

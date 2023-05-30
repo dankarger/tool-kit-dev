@@ -4,11 +4,12 @@ import type { Session, Response, ChatMessage } from "@/types";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import Head from "next/head";
 import { dashboardConfig } from "@/config/dashboard";
+import { SessionsSection } from "@/components/sessions-section";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
 import { DashboardHeader } from "@/components/header";
 import { DashboardNav } from "@/components/nav";
-import { SessionsSection } from "@/components/sessions-section";
+import { useUser } from "@clerk/nextjs";
 // import toast from "react-hot-toast";
 import { toast } from "@/components/ui/use-toast";
 import { TranslateSection } from "@/components/translate-section";
@@ -21,7 +22,15 @@ const TranslatePage: NextPage = () => {
   // const { data, isLoading, isFetching } = api.translate.getAllTranslationsByAuthorId.useQ({
   //   authorId: user.user?.id,
   // })
-
+  const user = useUser();
+  const {
+    data: sessionData,
+    isLoading: sessionSectionLoading,
+    refetch: sessionRefetch,
+    isSuccess,
+  } = api.story.getAllStoriesByAuthorId.useQuery({
+    authorId: user.user?.id ?? "",
+  });
   const { mutate, isLoading, data } =
     api.translate.createTranslation.useMutation({
       // mutationFn:async({text,language}:)=>{
@@ -81,7 +90,23 @@ const TranslatePage: NextPage = () => {
       language: language,
     });
   };
+  const handleSelectStory = (storyId: string) => {
+    console.log("storyId", storyId);
+    const obj = {
+      storyId: storyId ?? "default-id",
+    };
+    // setCurrenSession(obj);
+    // // void session.refetch();
+    // void selectedStoryRefetch();
+    // void fullStoryReset();
+  };
 
+  const handleCreateNewSession = () => {
+    // setCurrenSession({ storyId: "default-id" });
+    // setImageUrlResult("");
+    // setTextResult("");
+    // setTitle("");
+  };
   return (
     <>
       <Head>
@@ -97,6 +122,13 @@ const TranslatePage: NextPage = () => {
           />
 
           <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+            {/* {sessionData && (
+              <SessionsSection
+                sessions={sessionData}
+                onSelect={handleSelectStory}
+                onNewSession={handleCreateNewSession}
+              />
+            )} */}
             <TranslateSection handleTranslateButton={handleTranslateButton} />
             {/* <InputAreaWithButton
                 handleSubmitteButton={handleTranslateButton}

@@ -15,6 +15,8 @@ import { Analytics, Ratelimit } from "@upstash/ratelimit"; // for deno: see abov
 import { Redis } from "@upstash/redis";
 // import type {ChatCompletionRequestMessage} from ''
 // import { CompletionOpts, Completion, Choice } from "openai-api";
+import type { Session, TranslationResultType, StoryResult } from "@/types";
+
 interface ChatCompletionResponse {
   data: {
     id: string;
@@ -71,6 +73,15 @@ const ratelimit = new Ratelimit({
   limiter: Ratelimit.slidingWindow(20, "1 m"),
   analytics: true,
 });
+
+export const filterOptionForClient = (
+  option: Session | TranslationResultType | StoryResult
+) => {
+  return {
+    id: option.id,
+    // label: option?.title | option?.name | option?.text
+  };
+};
 
 export const chatRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {

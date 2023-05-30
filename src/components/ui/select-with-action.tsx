@@ -22,7 +22,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import type { Session, StoryResult, Response, ChatMessage } from "@/types";
+import type {
+  Session,
+  StoryResult,
+  TranslationResultType,
+  Response,
+  ChatMessage,
+} from "@/types";
 
 const FormSchema = z.object({
   session: z.string({
@@ -30,7 +36,7 @@ const FormSchema = z.object({
   }),
 });
 type SelectElementProps = {
-  options: Session[] | StoryResult[];
+  options: Session[] | StoryResult[] | TranslationResultType[];
   onSelect: (value: string) => void;
   onNewSession: () => void;
 };
@@ -44,6 +50,7 @@ export function SelectElement({
     resolver: zodResolver(FormSchema),
   });
   const { isDirty, isValid } = form.formState;
+
   function onSubmit(
     data: z.infer<typeof FormSchema>,
     e?: React.BaseSyntheticEvent
@@ -62,18 +69,26 @@ export function SelectElement({
     });
   }
   if (!options) return null;
-  type ReturnLabelProp = Session | StoryResult;
+  type ReturnLabelProp = Session | StoryResult | TranslationResultType;
 
-  const checkType = (tbd: unknown): tbd is StoryResult => {
+  const checkStoryType = (tbd: unknown): tbd is StoryResult => {
     if ((tbd as StoryResult).title) {
       return true;
     }
     return false;
   };
+  const checkSessionType = (tbd: unknown): tbd is Session => {
+    if ((tbd as Session).name) {
+      return true;
+    }
+
+    return false;
+  };
 
   function returnLabelFromOption(option: ReturnLabelProp): string {
-    if (checkType(option)) return option.title;
-    return option.name;
+    if (checkSessionType(option)) return option.name;
+    if (checkStoryType(option)) return option.title;
+    return option.text.substring(0, 10);
   }
 
   return (
