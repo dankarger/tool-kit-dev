@@ -103,13 +103,14 @@ export function SelectElement({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Previous </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={"none"}>
+              <Select onValueChange={field.onChange} defaultValue="none">
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="New Session" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
+                  {/* {!options && <div>LoadingPage...</div>} */}
                   {options.map((option) => (
                     <SelectItem
                       key={option.id}

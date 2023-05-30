@@ -292,6 +292,16 @@ const ChatPage: NextPage = () => {
                 handleSubmitButton={handleSubmitButton}
                 className="flex-grow:1 flex-1"
               ></TextInputForm>
+              {sessionSectionLoading && (
+                <div className=" flex w-1/3   flex-col items-end justify-center   ">
+                  <SessionsSection
+                    sessions={[]}
+                    onClick={handleSelectSession}
+                    onSelect={handleSelectSession2}
+                    onNewSession={handleCreateNewSession}
+                  />
+                </div>
+              )}
               {sessionData && (
                 <div className=" flex w-1/3   flex-col items-end justify-center   ">
                   <SessionsSection

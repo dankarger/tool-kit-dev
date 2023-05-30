@@ -292,7 +292,13 @@ const StoryPage: NextPage = () => {
             <div className="f-full flex justify-between">
               <StorySection handleSubmitButton={handleStoryGenerateButton} />
               {sessionSectionLoading && (
-                <Skeleton className="h-[150px] w-[200px]" />
+                // <Skeleton className="h-[150px] w-[200px]" />
+                <SessionsSection
+                  sessions={[]}
+                  onSelect={handleSelectStory}
+                  onNewSession={handleCreateNewSession}
+                  // disabled={true}
+                />
               )}
               {sessionData && (
                 <SessionsSection
