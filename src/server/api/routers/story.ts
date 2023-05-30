@@ -5,8 +5,10 @@ import { StoryResult } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { Analytics, Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis";
+import type { CloudinaryResponse } from "@/types";
 // import cloudinary from 'cloudinary'
-import { cloudinary } from "@/utils/cloudinary";
+import cloudinary from "@/utils/cloudinary";
+
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(20, "1 m"),
@@ -132,8 +134,10 @@ export const storyRouter = createTRPCRouter({
         overwrite: true,
         folder: "Gptool-kit/",
       };
-      const cloudinaryResponse: { secure_url: string } =
-        await cloudinary.uploader.upload(input.image_url, options);
+      const cloudinaryResponse = await cloudinary.v2.uploader.upload(
+        input.image_url,
+        options
+      );
 
       console.log("cloudinaryResponse", cloudinaryResponse);
 

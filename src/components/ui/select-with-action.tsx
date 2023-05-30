@@ -62,6 +62,20 @@ export function SelectElement({
     });
   }
   if (!options) return null;
+  type ReturnLabelProp = Session | StoryResult;
+
+  const checkType = (tbd: unknown): tbd is StoryResult => {
+    if ((tbd as StoryResult).title) {
+      return true;
+    }
+    return false;
+  };
+
+  function returnLabelFromOption(option: ReturnLabelProp): string {
+    if (checkType(option)) return option.title;
+    return option.name;
+  }
+
   return (
     <Form {...form}>
       <form
@@ -87,7 +101,7 @@ export function SelectElement({
                       value={option.id}
                       data-valueid={option.id}
                     >
-                      {option.name ?? `${option.title.substring(0, 25)}...`}
+                      {returnLabelFromOption(option)}
                     </SelectItem>
                   ))}
                 </SelectContent>
