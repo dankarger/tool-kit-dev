@@ -12,7 +12,13 @@ import { prisma } from "@/server/db";
 
 export const sessionRouter = createTRPCRouter({
   createChatSession: privateProcedure
-    .input(z.object({ authorId: z.string(), name: z.string().optional() }))
+    .input(
+      z.object({
+        authorId: z.string(),
+        name: z.string().optional(),
+        title: z.string().optional(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const authorId = ctx.userId;
       if (!authorId) throw new TRPCError({ code: "UNAUTHORIZED" });

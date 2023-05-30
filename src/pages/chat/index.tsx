@@ -121,6 +121,7 @@ const ChatPage: NextPage = () => {
     createNewSession.mutate({
       authorId: user.user.id,
       name: sessionName,
+      title: sessionName,
     });
   };
 
@@ -259,16 +260,16 @@ const ChatPage: NextPage = () => {
     setCurrenSession((prev) => obj);
     void session.refetch();
   };
-  const handleSelectSession3 = (
-    option
-  ): Session | StoryResult | TranslationResultType => {
-    console.log("optionId", option.id);
-    // const obj = {
-    //   id: sessionId ?? "default-session",
-    // };
-    setCurrenSession((prev) => option);
-    void session.refetch();
-  };
+  // const handleSelectSession3 = (
+  //   option
+  // ): Session | StoryResult | TranslationResultType => {
+  //   console.log("optionId", option.id);
+  //   // const obj = {
+  //   //   id: sessionId ?? "default-session",
+  //   // };
+  //   setCurrenSession((prev) => option);
+  //   void session.refetch();
+  // };
   return (
     <>
       <Head>

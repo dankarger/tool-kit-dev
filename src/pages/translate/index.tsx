@@ -28,7 +28,7 @@ const TranslatePage: NextPage = () => {
     isLoading: sessionSectionLoading,
     refetch: sessionRefetch,
     isSuccess,
-  } = api.story.getAllStoriesByAuthorId.useQuery({
+  } = api.translate.getAllTranslationsByAuthorId.useQuery({
     authorId: user.user?.id ?? "",
   });
   const { mutate, isLoading, data } =
@@ -121,15 +121,20 @@ const TranslatePage: NextPage = () => {
             text="Translate a text with GPTool."
           />
 
-          <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-            {/* {sessionData && (
-              <SessionsSection
-                sessions={sessionData}
-                onSelect={handleSelectStory}
-                onNewSession={handleCreateNewSession}
-              />
-            )} */}
-            <TranslateSection handleTranslateButton={handleTranslateButton} />
+          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+            {" "}
+            <div className="flex  w-full  flex-row justify-between ">
+              <TranslateSection handleTranslateButton={handleTranslateButton} />
+              {sessionData && (
+                <div className=" flex w-1/3   flex-col items-end justify-center   ">
+                  <SessionsSection
+                    sessions={sessionData}
+                    onSelect={handleSelectStory}
+                    onNewSession={handleCreateNewSession}
+                  />
+                </div>
+              )}
+            </div>
             {/* <InputAreaWithButton
                 handleSubmitteButton={handleTranslateButton}
                 placeholder="Past or type here the text to translate..."
