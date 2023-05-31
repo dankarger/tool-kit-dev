@@ -21,7 +21,7 @@ import { Separator } from "@/components/ui/separator";
 
 const TranslatePage: NextPage = () => {
   const [currentSession, setCurrenSession] = React.useState({
-    translateId: "default-id",
+    id: "default-id",
   });
   const [isShowingPrevResults, setIsShowingPrevResults] = useState(false);
   const user = useUser();
@@ -42,10 +42,7 @@ const TranslatePage: NextPage = () => {
     isSuccess: selectedTranslateIsSucess,
   } = api.translate.getTranlateResultById.useQuery(
     {
-      translateId:
-        currentSession.translateId !== "default-id"
-          ? currentSession.translateId
-          : "",
+      id: currentSession.id !== "default-id" ? currentSession.id : "",
     },
     { trpc: { abortOnUnmount: true } }
   );
@@ -57,7 +54,7 @@ const TranslatePage: NextPage = () => {
 
       // },
       onSuccess: (data) => {
-        setCurrenSession({ translateId: data.id });
+        setCurrenSession({ id: data.id });
         // setPromptValue("");
         // void session.refetch();
         console.log("sucesss ");
@@ -115,7 +112,7 @@ const TranslatePage: NextPage = () => {
   const handleSelectStory = (translateId: string) => {
     console.log("storyId", translateId);
     const obj = {
-      translateId: translateId ?? "default-id",
+      id: translateId ?? "default-id",
     };
     setCurrenSession(obj);
     void sessionRefetch();
@@ -126,7 +123,7 @@ const TranslatePage: NextPage = () => {
 
   const handleCreateNewSession = () => {
     // setCurrenSession({ storyId: "default-id" });
-    setCurrenSession({ translateId: "default-id" });
+    setCurrenSession({ id: "default-id" });
     // setImageUrlResult("");
     // setTextResult("");
     // setTitle("");
@@ -176,7 +173,7 @@ const TranslatePage: NextPage = () => {
           )}
           {data &&
             !isShowingPrevResults &&
-            currentSession.translateId !== "default-id" && (
+            currentSession.id !== "default-id" && (
               <section className=" w-full  space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-6">
                 <Separator className="mt-2" />
                 <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
@@ -184,18 +181,20 @@ const TranslatePage: NextPage = () => {
                 </div>
               </section>
             )}
-          {selectedTranslateResult && isShowingPrevResults && (
-            <section className=" w-full  space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-6">
-              <DashboardHeader
-                heading="Result"
-                text="You can see past result with the  top right select menu"
-              />
-              {/* <Separator className="mt-2" /> */}
-              <div className="py-4">
-                <TranslationResultComponent data={selectedTranslateResult} />
-              </div>
-            </section>
-          )}
+          {selectedTranslateResult &&
+            isShowingPrevResults &&
+            selectedTranslateResult.id !== "default-id" && (
+              <section className=" w-full  space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-6">
+                <DashboardHeader
+                  heading="Result"
+                  text="You can see past result with the  top right select menu"
+                />
+                {/* <Separator className="mt-2" /> */}
+                <div className="py-4">
+                  <TranslationResultComponent data={selectedTranslateResult} />
+                </div>
+              </section>
+            )}
         </main>
       </DashboardShell>
     </>
