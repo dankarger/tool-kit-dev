@@ -97,7 +97,7 @@ export function TranslateSection({
     <Form {...form}>
       <form
         onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
-        className="w-2/3 space-y-6"
+        className="flex w-2/3 flex-row-reverse items-start justify-end gap-6  py-6 "
       >
         <FormField
           control={form.control}
@@ -122,48 +122,50 @@ export function TranslateSection({
                   ))}
                 </SelectContent>
               </Select>
-              <FormDescription>
+              {/* <FormDescription>
                 You can manage email addresses in your{" "}
-              </FormDescription>
+              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="text"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>text for translate:</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Past or type here the text for translate and press the Enter button"
-                  rows={4}
-                  className=""
-                  autoFocus
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                You can view older translations results
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex items-center justify-between space-x-2">
-          <Button disabled={!form.formState.isValid} type="submit">
-            Translate
-          </Button>
-          <Button
-            variant={"destructive"}
-            onClick={(e) => {
-              e.preventDefault();
-              form.reset({ text: "" });
-            }}
-          >
-            Clear
-          </Button>
+        <div>
+          <FormField
+            control={form.control}
+            name="text"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>text for translate:</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Past or type here the text for translate and press the Enter button"
+                    rows={4}
+                    className=""
+                    autoFocus
+                    {...field}
+                  />
+                </FormControl>
+                {/* <FormDescription>
+                  You can view older translations results
+                </FormDescription> */}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="items-top flex justify-between space-x-2 py-3">
+            <Button disabled={!form.formState.isValid} type="submit">
+              Translate
+            </Button>
+            <Button
+              variant={"destructive"}
+              onClick={(e) => {
+                e.preventDefault();
+                form.reset({ text: "" });
+              }}
+            >
+              Clear
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

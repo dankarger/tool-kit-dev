@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { type NextPage } from "next";
 import type { Session, Response, ChatMessage } from "@/types";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
@@ -23,6 +23,7 @@ const TranslatePage: NextPage = () => {
   const [currentSession, setCurrenSession] = React.useState({
     translateId: "default-id",
   });
+  const [isShowingPrevResults, setIsShowingPrevResults] = useState(false);
   const user = useUser();
 
   const {
@@ -31,7 +32,7 @@ const TranslatePage: NextPage = () => {
     refetch: sessionRefetch,
     isSuccess,
   } = api.translate.getAllTranslationsByAuthorId.useQuery({
-    authorId: user.user?.id ?? "",
+    authorId: user.user?.id || "random",
   });
 
   const {
@@ -100,6 +101,7 @@ const TranslatePage: NextPage = () => {
     console.log("translate button clicked");
     console.log("text", text);
     console.log("language", language);
+    setIsShowingPrevResults(false);
     void mutate({
       text: text,
       language: language,
@@ -114,6 +116,7 @@ const TranslatePage: NextPage = () => {
     setCurrenSession(obj);
     void sessionRefetch();
     void selectedTranslateRefetch();
+    setIsShowingPrevResults(true);
     // void fullStoryReset();
   };
 
@@ -123,6 +126,7 @@ const TranslatePage: NextPage = () => {
     // setImageUrlResult("");
     // setTextResult("");
     // setTitle("");
+    setIsShowingPrevResults(false);
   };
   return (
     <>
@@ -142,62 +146,49 @@ const TranslatePage: NextPage = () => {
             {" "}
             <div className="flex  w-full  flex-row justify-between ">
               <TranslateSection handleTranslateButton={handleTranslateButton} />
-              {sessionData && (
-                <div className=" flex w-1/3   flex-col items-end justify-center   ">
+              <Separator className="  mt-2" orientation="vertical" />
+              <div className=" flex w-1/3   flex-col items-end justify-center   ">
+                {sessionSectionLoading && (
+                  <SessionsSection
+                    sessions={[]}
+                    onSelect={handleSelectStory}
+                    onNewSession={handleCreateNewSession}
+                  />
+                )}
+                {sessionData && (
                   <SessionsSection
                     sessions={sessionData}
                     onSelect={handleSelectStory}
                     onNewSession={handleCreateNewSession}
                   />
-                </div>
-              )}
+                )}
+              </div>
             </div>
-            {/* <InputAreaWithButton
-                handleSubmitteButton={handleTranslateButton}
-                placeholder="Past or type here the text to translate..."
-              /> */}
           </section>
           {isLoading && (
             <div className="flex h-fit w-full items-center justify-center">
               <LoadingSpinner size={90} />
             </div>
           )}
-          {data && (
-            <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
+          {data && !isShowingPrevResults && (
+            <section className=" w-full  space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-6">
               <Separator className="mt-2" />
               <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                <>
-                  <TranslationResultComponent data={data} />
-
-                  {/* <div>
-                    <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                      {data.title}
-                    </h1>
-                    <p className="leading-7 [&:not(:first-child)]:mt-6">
-                      <span>Original :</span> {data.text}
-                    </p>
-                    <p className="leading-7 [&:not(:first-child)]:mt-6">
-                      <span>{data.language}:</span> {data.translation}
-                    </p>
-                  </div> */}
-                </>
+                <TranslationResultComponent data={data} />
               </div>
             </section>
           )}
-          {selectedTranslateResult && (
-            <div>
-              <TranslationResultComponent data={selectedTranslateResult} />
-              {/* <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                {selectedTranslateResult.title}
-              </h1>
-              <p className="leading-7 [&:not(:first-child)]:mt-6">
-                <span>Original :</span> {selectedTranslateResult.text}
-              </p>
-              <p className="leading-7 [&:not(:first-child)]:mt-6">
-                <span>{selectedTranslateResult.language}:</span>{" "}
-                {selectedTranslateResult.translation}
-              </p> */}
-            </div>
+          {selectedTranslateResult && isShowingPrevResults && (
+            <section className=" w-full  space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-6">
+              <DashboardHeader
+                heading="Result"
+                text="You can see past result with the  top right select menu"
+              />
+              {/* <Separator className="mt-2" /> */}
+              <div className="py-4">
+                <TranslationResultComponent data={selectedTranslateResult} />
+              </div>
+            </section>
           )}
         </main>
       </DashboardShell>
