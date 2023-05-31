@@ -97,7 +97,7 @@ export function TranslateSection({
     <Form {...form}>
       <form
         onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
-        className="bg-grey-950 flex w-2/3 flex-row-reverse items-start justify-end  gap-6  rounded-md border p-4 px-4 py-2"
+        className="bg-grey-950 first-letter:  flex w-2/3 flex-row-reverse items-start  justify-between  gap-6 rounded-md  border px-6 py-4"
       >
         <FormField
           control={form.control}
@@ -138,9 +138,9 @@ export function TranslateSection({
                 <FormLabel>text for translate:</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Past or type here the text for translate and press the Enter button"
+                    placeholder="Past or type here the text..."
                     rows={4}
-                    className=""
+                    className="flex w-full grow"
                     autoFocus
                     {...field}
                   />

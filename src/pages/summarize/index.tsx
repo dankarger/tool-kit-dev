@@ -1,6 +1,6 @@
-import React, { use, useEffect, useId } from "react";
+import React, { use, useEffect, useState } from "react";
 import { type NextPage } from "next";
-import type { Session, Response, ChatMessage } from "@/types";
+import type { SummarizeResultType } from "@/types";
 import Head from "next/head";
 import { dashboardConfig } from "@/config/dashboard";
 import { api } from "@/utils/api";
@@ -9,6 +9,7 @@ import { DashboardHeader } from "@/components/header";
 import { DashboardNav } from "@/components/nav";
 // import toast from "react-hot-toast";
 
+import { SessionsSection } from "@/components/sessions-section";
 import { TextInputForm } from "@/components/text-input-form";
 import { toast } from "@/components/ui/use-toast";
 import { useUser } from "@clerk/nextjs";
@@ -17,7 +18,12 @@ import { SummarizeSection } from "@/components/summarize-section2";
 import { SessionsSection2 } from "@/components/session-section2";
 import { SummarizeResult } from "@/components/summarize-result";
 import { ComboboxDropdownMenu } from "@/components/ui/ComboboxDropdownMenu";
+
 const SummarizePage: NextPage = () => {
+  const [currentSession, setCurrenSession] = React.useState({
+    id: "default-id",
+  });
+  const [isShowingPrevResults, setIsShowingPrevResults] = useState(false);
   const user = useUser();
 
   const {
@@ -28,6 +34,17 @@ const SummarizePage: NextPage = () => {
     authorId: user.user?.id ?? "",
   });
 
+  const {
+    data: selectedSummarizeResult,
+    isLoading: selectedSummarizeLoading,
+    refetch: selectedSummarizeRefetch,
+    isSuccess: selectedSummarizeIsSucess,
+  } = api.summarize.getSummarizeResultById.useQuery(
+    {
+      id: currentSession.id !== "default-id" ? currentSession.id : "",
+    },
+    { trpc: { abortOnUnmount: true } }
+  );
   const { mutate, isLoading, data } =
     api.summarize.createSummarizeResult.useMutation({
       onSuccess: () => {
@@ -78,11 +95,31 @@ const SummarizePage: NextPage = () => {
     }
     console.log("translate button clicked");
     console.log("text", text);
+    setIsShowingPrevResults(false);
     void mutate({
       text: text,
     });
   };
+  const handleSelectSummary = (id: string) => {
+    console.log("Summary", id);
+    const obj = {
+      id: id ?? "default-id",
+    };
+    setCurrenSession(obj);
+    void sessionRefetch();
+    // void selectedTranslateRefetch();
+    setIsShowingPrevResults(true);
+    // void fullStoryReset();
+  };
 
+  const handleCreateNewSession = () => {
+    // setCurrenSession({ storyId: "default-id" });
+    setCurrenSession({ id: "default-id" });
+    // setImageUrlResult("");
+    // setTextResult("");
+    // setTitle("");
+    setIsShowingPrevResults(false);
+  };
   return (
     <>
       <Head>
@@ -108,7 +145,22 @@ const SummarizePage: NextPage = () => {
                   placeholder="Type or past text here to summarize...."
                 />
               </div>
-              {sessionData && <SessionsSection2 sessions={sessionData} />}
+              {sessionSectionLoading && (
+                // <Skeleton className="h-[150px] w-[200px]" />
+                <SessionsSection
+                  sessions={[]}
+                  onSelect={handleSelectSummary}
+                  onNewSession={handleCreateNewSession}
+                  // disabled={true}
+                />
+              )}
+              {sessionData && (
+                <SessionsSection
+                  sessions={sessionData}
+                  onSelect={handleSelectSummary}
+                  onNewSession={handleCreateNewSession}
+                />
+              )}
             </div>
             <ComboboxDropdownMenu />
             {isLoading && (
@@ -117,14 +169,26 @@ const SummarizePage: NextPage = () => {
               </div>
             )}
           </section>
+
           {data && (
             <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
               <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                {data && (
-                  <div>
-                    <SummarizeResult result={data.result} />
-                  </div>
-                )}
+                {data &&
+                  !isShowingPrevResults &&
+                  currentSession.id !== "default-id" && (
+                    <div>
+                      <SummarizeResult result={data.result} />
+                    </div>
+                  )}
+                {selectedSummarizeResult &&
+                  isShowingPrevResults &&
+                  selectedSummarizeResult.id !== "default-id" && (
+                    <div>
+                      <SummarizeResult
+                        result={selectedSummarizeResult.result}
+                      />
+                    </div>
+                  )}
               </div>
             </section>
           )}

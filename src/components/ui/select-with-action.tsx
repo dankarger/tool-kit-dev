@@ -26,6 +26,7 @@ import type {
   Session,
   StoryResult,
   TranslationResultType,
+  SummarizeResultType,
   Response,
   ChatMessage,
 } from "@/types";
@@ -36,7 +37,11 @@ const FormSchema = z.object({
   }),
 });
 type SelectElementProps = {
-  options: Session[] | StoryResult[] | TranslationResultType[];
+  options:
+    | Session[]
+    | StoryResult[]
+    | TranslationResultType[]
+    | SummarizeResultType[];
   onSelect: (value: string) => void;
   onNewSession: () => void;
 };
@@ -69,7 +74,11 @@ export function SelectElement({
     });
   }
   if (!options) return null;
-  type ReturnLabelProp = Session | StoryResult | TranslationResultType;
+  type ReturnLabelProp =
+    | Session
+    | StoryResult
+    | TranslationResultType
+    | SummarizeResultType;
 
   const checkStoryType = (tbd: unknown): tbd is StoryResult => {
     if ((tbd as StoryResult).title) {

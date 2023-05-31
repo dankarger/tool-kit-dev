@@ -110,6 +110,15 @@ export interface TranslationResultType {
   language: string;
 }
 
+export interface SummarizeResultType {
+  id: string;
+  createdAt: Date;
+  text: string;
+  title: string;
+  result: string;
+  authorId: string;
+}
+
 export interface ChatMessage {
   id: string;
   createdAt: Date;
