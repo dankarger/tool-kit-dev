@@ -40,12 +40,15 @@ const TranslatePage: NextPage = () => {
     isLoading: selectedTranslateLoading,
     refetch: selectedTranslateRefetch,
     isSuccess: selectedTranslateIsSucess,
-  } = api.translate.getTranlateResultById.useQuery({
-    translateId:
-      currentSession.translateId !== "default-id"
-        ? currentSession.translateId
-        : "",
-  });
+  } = api.translate.getTranlateResultById.useQuery(
+    {
+      translateId:
+        currentSession.translateId !== "default-id"
+          ? currentSession.translateId
+          : "",
+    },
+    { trpc: { abortOnUnmount: true } }
+  );
 
   const { mutate, isLoading, data } =
     api.translate.createTranslation.useMutation({
@@ -53,7 +56,8 @@ const TranslatePage: NextPage = () => {
       //   console.log("mutate");
 
       // },
-      onSuccess: () => {
+      onSuccess: (data) => {
+        setCurrenSession({ translateId: data.id });
         // setPromptValue("");
         // void session.refetch();
         console.log("sucesss ");
@@ -146,7 +150,7 @@ const TranslatePage: NextPage = () => {
             {" "}
             <div className="flex  w-full  flex-row justify-between ">
               <TranslateSection handleTranslateButton={handleTranslateButton} />
-              <Separator className="  mt-2" orientation="vertical" />
+              {/* <Separator orientation="vertical" /> */}
               <div className=" flex w-1/3   flex-col items-end justify-center   ">
                 {sessionSectionLoading && (
                   <SessionsSection
@@ -170,14 +174,16 @@ const TranslatePage: NextPage = () => {
               <LoadingSpinner size={90} />
             </div>
           )}
-          {data && !isShowingPrevResults && (
-            <section className=" w-full  space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-6">
-              <Separator className="mt-2" />
-              <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                <TranslationResultComponent data={data} />
-              </div>
-            </section>
-          )}
+          {data &&
+            !isShowingPrevResults &&
+            currentSession.translateId !== "default-id" && (
+              <section className=" w-full  space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-6">
+                <Separator className="mt-2" />
+                <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
+                  <TranslationResultComponent data={data} />
+                </div>
+              </section>
+            )}
           {selectedTranslateResult && isShowingPrevResults && (
             <section className=" w-full  space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-6">
               <DashboardHeader

@@ -58,6 +58,9 @@ export const TranslateRouter = createTRPCRouter({
   getTranlateResultById: privateProcedure
     .input(z.object({ translateId: z.string() }))
     .query(async ({ ctx, input }) => {
+      console.log("d", input);
+      if (input.translateId === "default-id" || input.translateId.length === 0)
+        return {};
       const result = await ctx.prisma.translationResult.findUnique({
         where: {
           id: input.translateId,

@@ -97,7 +97,7 @@ export function TranslateSection({
     <Form {...form}>
       <form
         onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
-        className="flex w-2/3 flex-row-reverse items-start justify-end gap-6  py-6 "
+        className="bg-grey-950 flex w-2/3 flex-row-reverse items-start justify-end  gap-6  rounded-md border p-4 px-4 py-2"
       >
         <FormField
           control={form.control}
