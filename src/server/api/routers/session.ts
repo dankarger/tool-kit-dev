@@ -33,7 +33,7 @@ export const sessionRouter = createTRPCRouter({
       });
       if (!sessionId) throw new TRPCError({ code: "NOT_FOUND" });
       console.log("sessionIdn222222-3333--222222", sessionId);
-      return sessionId;
+      return sessionId.id;
     }),
   getChatSessionsByAuthorId: privateProcedure
     .input(z.object({ authorId: z.string() }))
