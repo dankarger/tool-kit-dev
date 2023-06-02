@@ -180,15 +180,13 @@ const SummarizePage: NextPage = () => {
                       <SummarizeResult result={data.result} />
                     </div>
                   )}
-                {selectedSummarizeResult &&
-                  isShowingPrevResults &&
-                  selectedSummarizeResult.id !== "default-id" && (
-                    <div>
-                      <SummarizeResult
-                        result={selectedSummarizeResult.result}
-                      />
-                    </div>
-                  )}
+                {selectedSummarizeResult && (
+                  // isShowingPrevResults &&
+                  // selectedSummarizeResult.id !== "default-id" && (
+                  <div>
+                    <SummarizeResult result={selectedSummarizeResult.result} />
+                  </div>
+                )}
               </div>
             </section>
           )}

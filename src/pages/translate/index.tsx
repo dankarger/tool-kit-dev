@@ -143,7 +143,7 @@ const TranslatePage: NextPage = () => {
             text="Translate a text with GPTool."
           />
 
-          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-2">
+          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-6">
             {" "}
             <div className="flex  w-full  flex-row justify-between ">
               <TranslateSection handleTranslateButton={handleTranslateButton} />
@@ -174,9 +174,13 @@ const TranslatePage: NextPage = () => {
           {data &&
             !isShowingPrevResults &&
             currentSession.id !== "default-id" && (
-              <section className=" w-full  space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-6">
+              <section className=" w-full  space-y-2 py-2 dark:bg-transparent md:py-8 lg:py-6">
                 <Separator className="mt-2" />
                 <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
+                  <DashboardHeader
+                    heading="Result"
+                    text="You can see past result with the  top right select menu"
+                  />
                   <TranslationResultComponent data={data} />
                 </div>
               </section>
@@ -184,7 +188,7 @@ const TranslatePage: NextPage = () => {
           {selectedTranslateResult &&
             isShowingPrevResults &&
             selectedTranslateResult.id !== "default-id" && (
-              <section className=" w-full  space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-6">
+              <section className=" space-y-2py-2  w-full dark:bg-transparent md:py-8 lg:py-6">
                 <DashboardHeader
                   heading="Result"
                   text="You can see past result with the  top right select menu"

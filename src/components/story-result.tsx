@@ -9,7 +9,12 @@ import {
 } from "@/components/ui/card";
 import { StoryResult } from "@/types";
 
-export const StoryResultDiv = ({ title, resultText, resultImageUrl }) => {
+type Props = { title: string; resultText: string; resultImageUrl: string };
+export const StoryResultDiv = ({
+  title,
+  resultText,
+  resultImageUrl,
+}: Props) => {
   // if (!title) return null;
 
   return (
