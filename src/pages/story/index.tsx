@@ -15,6 +15,8 @@ import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { StorySection } from "@/components/story-section";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@radix-ui/react-separator";
+import { StoryResultDiv } from "@/components/story-result";
 
 const StoryPage: NextPage = () => {
   const [userPromt, setUserPrompt] = useState("");
@@ -317,28 +319,35 @@ const StoryPage: NextPage = () => {
           <div>
             {selectedStory && (
               <div>
-                <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                  {selectedStory.title}
-                </h1>
-                <p className="leading-7 [&:not(:first-child)]:mt-6">
-                  {selectedStory.resultText}
-                </p>
-                <img src={selectedStory.resultImageUrl} alt="image" />
+                <Separator />
+                <StoryResultDiv
+                  title={selectedStory.title}
+                  resultText={selectedStory.resultText}
+                  resultImageUrl={selectedStory.resultImageUrl}
+                />
               </div>
             )}
           </div>
           {data && (
-            <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
-              <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                {data.title}
-              </h1>
-              <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                <p className="leading-7 [&:not(:first-child)]:mt-6">
-                  {data.resultText}
-                </p>
-                <img src={data.resultImageUrl} alt="image" />
-              </div>
-            </section>
+            <>
+              <Separator />
+              <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
+                <StoryResultDiv
+                  title={data.title}
+                  resultText={data.resultText}
+                  resultImageUrl={data.resultImageUrl}
+                />
+                <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                  {data.title}
+                </h1>
+                <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
+                  <p className="leading-7 [&:not(:first-child)]:mt-6">
+                    {data.resultText}
+                  </p>
+                  <img src={data.resultImageUrl} alt="image" />
+                </div>
+              </section>
+            </>
           )}
           {/* <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
