@@ -18,6 +18,14 @@ import { SummarizeSection } from "@/components/summarize-section2";
 import { SessionsSection2 } from "@/components/session-section2";
 import { SummarizeResult } from "@/components/summarize-result";
 import { ComboboxDropdownMenu } from "@/components/ui/ComboboxDropdownMenu";
+import { IdentificationLink } from "@clerk/nextjs/server";
+
+// const fetchResult = (id: string) => {
+//   const helloNoArgs = api.summarize.getSummarizeResultById.useQuery({
+//     id: id,
+//   });
+//   return helloNoArgs;
+// };
 
 const SummarizePage: NextPage = () => {
   const [currentSession, setCurrenSession] = React.useState({
@@ -33,7 +41,9 @@ const SummarizePage: NextPage = () => {
   } = api.summarize.getAllSummarizeByAuthorId.useQuery({
     authorId: user.user?.id ?? "",
   });
-
+  const tesing = api.summarize.getSummarizeResultById.useQuery({
+    id: currentSession.id,
+  });
   const {
     data: selectedSummarizeResult,
     isLoading: selectedSummarizeLoading,
@@ -42,9 +52,14 @@ const SummarizePage: NextPage = () => {
   } = api.summarize.getSummarizeResultById.useQuery(
     {
       id: currentSession.id !== "default-id" ? currentSession.id : "",
-    },
-    { trpc: { abortOnUnmount: true } }
+    }
+    // { trpc: { abortOnUnmount: true } }
   );
+
+  // const {data: selectedSummarizeData , isLoading} = api.summarize.getSummarizeResultById.useQuery({
+
+  // })
+
   const { mutate, isLoading, data } =
     api.summarize.createSummarizeResult.useMutation({
       onSuccess: () => {
@@ -100,6 +115,9 @@ const SummarizePage: NextPage = () => {
       text: text,
     });
   };
+
+  // useEffect(() => {}, [currentSession.id]);
+
   const handleSelectSummary = (id: string) => {
     console.log("Summary", id);
     const obj = {
@@ -107,17 +125,13 @@ const SummarizePage: NextPage = () => {
     };
     setCurrenSession(obj);
     void sessionRefetch();
-    // void selectedTranslateRefetch();
     setIsShowingPrevResults(true);
-    // void fullStoryReset();
+    void selectedSummarizeRefetch();
+    // tesing.refetch();
   };
 
   const handleCreateNewSession = () => {
-    // setCurrenSession({ storyId: "default-id" });
     setCurrenSession({ id: "default-id" });
-    // setImageUrlResult("");
-    // setTextResult("");
-    // setTitle("");
     setIsShowingPrevResults(false);
   };
   return (
@@ -178,6 +192,7 @@ const SummarizePage: NextPage = () => {
                   currentSession.id !== "default-id" && (
                     <div>
                       <SummarizeResult result={data.result} />
+                      DSDSDS
                     </div>
                   )}
                 {selectedSummarizeResult && (
