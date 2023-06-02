@@ -52,8 +52,8 @@ const SummarizePage: NextPage = () => {
   } = api.summarize.getSummarizeResultById.useQuery(
     {
       id: currentSession.id !== "default-id" ? currentSession.id : "",
-    }
-    // { trpc: { abortOnUnmount: true } }
+    },
+    { trpc: { abortOnUnmount: true } }
   );
 
   // const {data: selectedSummarizeData , isLoading} = api.summarize.getSummarizeResultById.useQuery({
@@ -118,18 +118,28 @@ const SummarizePage: NextPage = () => {
 
   // useEffect(() => {}, [currentSession.id]);
 
-  const handleSelectSummary = (id: string) => {
-    console.log("Summary", id);
+  // const handleSelectSummary = (id: string) => {
+  //   console.log("Summary", id);
+  //   const obj = {
+  //     id: id ?? "default-id",
+  //   };
+  //   setCurrenSession(obj);
+  //   void sessionRefetch();
+  //   setIsShowingPrevResults(true);
+  //   void selectedSummarizeRefetch();
+  //   // tesing.refetch();
+  // };
+  const handleSelectSummary = (translateId: string) => {
+    console.log("storyId", translateId);
     const obj = {
-      id: id ?? "default-id",
+      id: translateId ?? "default-id",
     };
     setCurrenSession(obj);
     void sessionRefetch();
-    setIsShowingPrevResults(true);
     void selectedSummarizeRefetch();
-    // tesing.refetch();
+    setIsShowingPrevResults(true);
+    // void fullStoryReset();
   };
-
   const handleCreateNewSession = () => {
     setCurrenSession({ id: "default-id" });
     setIsShowingPrevResults(false);
@@ -183,7 +193,13 @@ const SummarizePage: NextPage = () => {
               </div>
             )}
           </section>
-
+          {selectedSummarizeResult &&
+            isShowingPrevResults &&
+            selectedSummarizeResult.id !== "default-id" && (
+              <div>
+                <SummarizeResult result={selectedSummarizeResult.result} />
+              </div>
+            )}
           {data && (
             <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
               <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
@@ -192,16 +208,8 @@ const SummarizePage: NextPage = () => {
                   currentSession.id !== "default-id" && (
                     <div>
                       <SummarizeResult result={data.result} />
-                      DSDSDS
                     </div>
                   )}
-                {selectedSummarizeResult && (
-                  // isShowingPrevResults &&
-                  // selectedSummarizeResult.id !== "default-id" && (
-                  <div>
-                    <SummarizeResult result={selectedSummarizeResult.result} />
-                  </div>
-                )}
               </div>
             </section>
           )}
