@@ -328,7 +328,8 @@ const ChatPage: NextPage = () => {
         <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">
           <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
           <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-            <div className="flex  w-full  flex-row justify-between ">
+            {/* <div className="flex  w-full  flex-row justify-between "> */}
+            <div className="lg:dark:hover: flex h-full w-full  flex-col items-start justify-start rounded-md p-4 align-middle lg:flex-row  lg:flex-wrap lg:items-center  lg:justify-between  lg:gap-x-4  lg:gap-y-0 lg:rounded-md  lg:border lg:border-gray-200  lg:bg-white   lg:px-3 lg:py-8  lg:align-middle  lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-400">
               <TextInputForm
                 inputType="text"
                 placeholder={"Type your message here."}

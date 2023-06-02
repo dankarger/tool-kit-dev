@@ -145,7 +145,8 @@ const TranslatePage: NextPage = () => {
 
           <section className=" items-top flex-col justify-center space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-6">
             {" "}
-            <div className="flex  w-full  flex-row justify-between ">
+            {/* <div className="flex  w-full  flex-row justify-between "> */}
+            <div className="lg:dark:hover: flex h-full w-full flex-col  items-start justify-start rounded-md px-4   align-middle lg:flex-row  lg:flex-wrap lg:items-center  lg:justify-between    lg:gap-y-0 lg:rounded-md  lg:border lg:border-gray-200  lg:bg-white   lg:py-8  lg:align-middle  lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
               <TranslateSection handleTranslateButton={handleTranslateButton} />
               {/* <Separator orientation="vertical" /> */}
               <div className=" flex w-1/3   flex-col items-end justify-center   ">
@@ -176,6 +177,7 @@ const TranslatePage: NextPage = () => {
             currentSession.id !== "default-id" && (
               <section className=" w-full  space-y-2 py-2 dark:bg-transparent md:py-8 lg:py-6">
                 <Separator className="mt-2" />
+
                 <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
                   <DashboardHeader
                     heading="Result"

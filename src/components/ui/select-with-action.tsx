@@ -30,6 +30,7 @@ import type {
   Response,
   ChatMessage,
 } from "@/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const FormSchema = z.object({
   session: z.string({
@@ -120,15 +121,17 @@ export function SelectElement({
                 </FormControl>
                 <SelectContent>
                   {/* {!options && <div>LoadingPage...</div>} */}
-                  {options.map((option) => (
-                    <SelectItem
-                      key={option.id}
-                      value={option.id}
-                      data-valueid={option.id}
-                    >
-                      {returnLabelFromOption(option)}
-                    </SelectItem>
-                  ))}
+                  <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
+                    {options.map((option) => (
+                      <SelectItem
+                        key={option.id}
+                        value={option.id}
+                        data-valueid={option.id}
+                      >
+                        {returnLabelFromOption(option)}
+                      </SelectItem>
+                    ))}
+                  </ScrollArea>
                 </SelectContent>
               </Select>
               <FormDescription>

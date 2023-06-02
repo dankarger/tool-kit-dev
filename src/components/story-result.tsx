@@ -21,10 +21,10 @@ export const StoryResultDiv = ({
     <div>
       <Card>
         <CardHeader>
-          <CardTitle>
-            <h3 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              {title}
-            </h3>
+          <CardTitle className="scroll-m-20  font-extrabold tracking-tight lg:text-5xl">
+            {/* <h3 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl"> */}
+            {title}
+            {/* </h3> */}
           </CardTitle>
           {/* <CardDescription>{resultText} </CardDescription> */}
         </CardHeader>

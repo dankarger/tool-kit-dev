@@ -25,6 +25,7 @@ const StoryPage: NextPage = () => {
   const [imageCloudinaryUrl, setImageCloudinaryUrl] = useState("");
   const [title, setTitle] = useState("");
   const [imageUrlResult, setImageUrlResult] = useState("");
+  const [isShowingPrevResults, setIsShowingPrevResults] = useState(false);
   const [currentSession, setCurrenSession] = React.useState({
     storyId: "default-id",
   });
@@ -218,7 +219,7 @@ const StoryPage: NextPage = () => {
     },
   });
 
-  const { mutate: uplaodImageToCloudinary } =
+  const { mutate: uplaodImageToCloudinary, isLoading: cloudinaryIsLoading } =
     api.story.uploadImageToCloudinary.useMutation({
       onSuccess(data: string) {
         console.log(";cloudinary result", data);
@@ -261,7 +262,7 @@ const StoryPage: NextPage = () => {
       });
       return;
     }
-
+    setIsShowingPrevResults(false);
     setUserPrompt(text);
     handleCreateNewSession();
     void mutateText({
@@ -270,6 +271,7 @@ const StoryPage: NextPage = () => {
   };
 
   const handleSelectStory = (storyId: string) => {
+    setIsShowingPrevResults(true);
     console.log("storyId", storyId);
     const obj = {
       storyId: storyId ?? "default-id",
@@ -281,6 +283,7 @@ const StoryPage: NextPage = () => {
   };
 
   const handleCreateNewSession = () => {
+    setIsShowingPrevResults(false);
     setCurrenSession({ storyId: "default-id" });
     setImageUrlResult("");
     setTextResult("");
@@ -299,8 +302,9 @@ const StoryPage: NextPage = () => {
             heading="Generate Story"
             text="Generate a Story with"
           />
-          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-            <div className="f-full flex justify-between">
+          <section className=" items-top mb-6 flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+            {/* <div className="f-full container flex justify-between gap-12  rounded-md  border border-slate-400  shadow-md dark:bg-transparent md:py-8 lg:py-14"> */}
+            <div className="lg:dark:hover: flex h-full w-full  flex-col items-start justify-start rounded-md p-4 align-middle lg:flex-row  lg:flex-wrap lg:items-center  lg:justify-between  lg:gap-x-4  lg:gap-y-0 lg:rounded-md  lg:border lg:border-gray-200  lg:bg-white   lg:p-8  lg:align-middle  lg:shadow-lg  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
               <StorySection handleSubmitButton={handleStoryGenerateButton} />
               {sessionSectionLoading && (
                 // <Skeleton className="h-[150px] w-[200px]" />
@@ -323,6 +327,7 @@ const StoryPage: NextPage = () => {
               isFullStoryLoading ||
               ImageIsLoading ||
               titleisLoading ||
+              cloudinaryIsLoading ||
               promptIsLoading) && (
               <div className="flex h-fit w-full items-center justify-center">
                 <LoadingSpinner size={390} />
@@ -330,18 +335,21 @@ const StoryPage: NextPage = () => {
             )}
           </section>
           <div>
-            {selectedStory && (
-              <div>
-                <Separator />
-                <StoryResultDiv
-                  title={selectedStory.title}
-                  resultText={selectedStory.resultText}
-                  resultImageUrl={selectedStory.resultImageUrl}
-                />
-              </div>
-            )}
+            {selectedStory &&
+              isShowingPrevResults &&
+              selectedStory.id !== "default-id" && (
+                <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
+                  <Separator />
+                  <StoryResultDiv
+                    title={selectedStory.title}
+                    resultText={selectedStory.resultText}
+                    resultImageUrl={selectedStory.resultImageUrl}
+                  />
+                </section>
+              )}
           </div>
-          {data && (
+          {data && !isShowingPrevResults && (
+            // currentSession.storyId !== "default-id" &&
             <>
               <Separator />
               <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
@@ -350,29 +358,18 @@ const StoryPage: NextPage = () => {
                   resultText={data.resultText}
                   resultImageUrl={data.resultImageUrl}
                 />
-                <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                  {data.title}
-                </h1>
-                <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                  <p className="leading-7 [&:not(:first-child)]:mt-6">
-                    {data.resultText}
-                  </p>
-                  <img src={data.resultImageUrl} alt="image" />
-                </div>
+                {/* <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                    {data.title}
+                  </h1>
+                  <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
+                    <p className="leading-7 [&:not(:first-child)]:mt-6">
+                      {data.resultText}
+                    </p>
+                    <img src={data.resultImageUrl} alt="image" />
+                  </div> */}
               </section>
             </>
           )}
-          {/* <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              {title}---
-            </h1>
-            <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-              <p className="leading-7 [&:not(:first-child)]:mt-6">
-                {textResult}
-              </p>
-            </div>
-            {imageUrlResult && <img src={imageUrlResult} alt="image" />}
-          </section> */}
         </main>
       </DashboardShell>
     </>
