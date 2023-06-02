@@ -278,7 +278,7 @@ const ChatPage: NextPage = () => {
     } else {
       handleCreateNewChateMessage(chatHistory, value, currentSession.id);
       void session.refetch();
-      sessionRefetch();
+      void sessionRefetch();
       return;
     }
     // return message;
@@ -313,7 +313,7 @@ const ChatPage: NextPage = () => {
     setCurrenSession(obj);
     void session.refetch();
     setIsShowingPrevResults(true);
-    ctx.chat.getSessionMessagesBySessionId.invalidate();
+    // ctx.chat.getSessionMessagesBySessionId.invalidate();
     void sessionRefetch();
   };
   console.log("sid", currentSession.id);
