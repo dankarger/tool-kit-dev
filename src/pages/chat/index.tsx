@@ -60,9 +60,13 @@ const ChatPage: NextPage = () => {
   const ctx = api.useContext();
 
   const [isShowingPrevResults, setIsShowingPrevResults] = React.useState(false);
-  const session = api.chat.getSessionMessagesBySessionId.useQuery({
-    id: currentSession.id,
-  });
+
+  const session = api.chat.getSessionMessagesBySessionId.useQuery(
+    {
+      id: currentSession.id,
+    },
+    { trpc: { abortOnUnmount: true } } // maybe
+  );
 
   const {
     data: sessionData,
@@ -93,7 +97,7 @@ const ChatPage: NextPage = () => {
 
       // handleCreateNewChateMessage(chatHistory, promptValue);
       void session.refetch();
-
+      void sessionRefetch();
       return sessionId;
     },
     onError: (error) => {
@@ -260,19 +264,22 @@ const ChatPage: NextPage = () => {
     // if (currentSession.id === DEFAULT_ID) alert("fffffffff");
 
     chatHistory.push(prompt);
-    console.log("prompt", prompt);
+    console.log("chatHistory", chatHistory);
 
     // handleCreateNewSession();
     // setTimeout(() => {
+    setChatHistory(chatHistory);
+    setPromptValue(value);
     if (currentSession.id === DEFAULT_ID) {
-      setChatHistory(chatHistory);
-      setPromptValue(value);
       void handleCreateNewSession();
       console.log("wwf");
       return;
+    } else {
+      handleCreateNewChateMessage(chatHistory, value, currentSession.id);
+      void session.refetch();
+      sessionRefetch();
+      return;
     }
-    handleCreateNewChateMessage(chatHistory, value, currentSession.id);
-    void session.refetch();
     // return message;
     // }, 5000);
   };
@@ -284,26 +291,29 @@ const ChatPage: NextPage = () => {
     const obj = {
       id: selectedSessionId ?? DEFAULT_ID,
     };
-    setCurrenSession((prev) => obj);
+    setCurrenSession(obj);
     setIsShowingPrevResults(true);
-    void session.refetch();
-  };
-  const handleNewSessionButton = () => {
-    setCurrenSession({ id: DEFAULT_ID });
-    setIsSessionActivated(true);
-
     void session.refetch();
     void sessionRefetch();
   };
+  // const handleNewSessionButton = () => {
+  //   setCurrenSession({ id: DEFAULT_ID });
+  //   setIsSessionActivated(true);
+
+  //   void session.refetch();
+  //   void sessionRefetch();
+  // };
 
   const handleSelectSession2 = (sessionId: string) => {
     console.log("sessionId", sessionId);
     const obj = {
       id: sessionId ?? DEFAULT_ID,
     };
-    setCurrenSession((prev) => obj);
+    setCurrenSession(obj);
     void session.refetch();
     setIsShowingPrevResults(true);
+    ctx.chat.getSessionMessagesBySessionId.invalidate();
+    void sessionRefetch();
   };
   console.log("sid", currentSession.id);
   return (
@@ -352,19 +362,20 @@ const ChatPage: NextPage = () => {
                 <LoadingSpinner size={40} />
               </div>
             )}
-            {/* {data && (
-              <ResponseDiv response={data.response} message={data.message} />
-            )} */}
+            {session.data && <ResponseSection messages={session.data} />}
           </div>
-
-          {!isShowingPrevResults && currentSession.id !== DEFAULT_ID && (
+          {/* {isShowingPrevResults && currentSession.id !== DEFAULT_ID && (
+            // {sessionData && currentSession.id !== DEFAULT_ID && (
             <Sessionfeed id={currentSession.id} />
-          )}
-          {data && (
-            <div>
-              <Sessionfeed id={currentSession.id} />
-            </div>
-          )}
+          )} */}
+          {/* {data &&
+            // !isShowingPrevResults &&
+            currentSession.id !== DEFAULT_ID && (
+              // {data && (
+              <div>
+                <Sessionfeed id={currentSession.id} />
+              </div>
+            )} */}
         </main>
         {/* </div> */}
       </DashboardShell>
