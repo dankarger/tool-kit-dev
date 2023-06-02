@@ -2,6 +2,7 @@ import { z } from "zod";
 import openai from "@/lib/openai";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 import { SummarizeResult } from "@prisma/client";
+import { SummarizeResultType } from "@/types";
 import { TRPCError } from "@trpc/server";
 import {
   ChatCompletionRequestMessage,
@@ -28,7 +29,7 @@ export const summarizeRouter = createTRPCRouter({
         where: { authorId: input.authorId },
       });
       if (!summarizeResults) throw new TRPCError({ code: "NOT_FOUND" });
-      return summarizeResults;
+      return summarizeResults as SummarizeResultType[];
     }),
 
   getSummarizeResultById: privateProcedure

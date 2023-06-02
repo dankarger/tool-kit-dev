@@ -122,7 +122,7 @@ const ChatPage: NextPage = () => {
     },
   });
 
-  const handleCreateNewSession = async () => {
+  const handleCreateNewSession = () => {
     if (!user.user?.id) {
       toast.error("Please login to create a new session");
       return;
@@ -267,7 +267,7 @@ const ChatPage: NextPage = () => {
     if (currentSession.id === DEFAULT_ID) {
       setChatHistory(chatHistory);
       setPromptValue(value);
-      handleCreateNewSession();
+      void handleCreateNewSession();
       console.log("wwf");
       return;
     }
