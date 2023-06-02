@@ -96,118 +96,127 @@ const StoryPage: NextPage = () => {
     },
   });
 
-  const { mutate: createPrompt, data: promptData } =
-    api.story.createPromptForImage.useMutation({
-      onSuccess: (data) => {
-        // void session.refetch();
-        setPromptForImage(data);
-        console.log("prompt result ", data);
-        createImage({ prompt: data });
-      },
-      onError: (error) => {
-        const errorMessage = error.data?.zodError?.fieldErrors.content;
-        if (errorMessage && errorMessage[0]) {
-          toast({
-            title: errorMessage[0],
-            description: (
-              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <code className="text-white">
-                  {JSON.stringify(errorMessage, null, 2)}
-                </code>
-              </pre>
-            ),
-          });
-          console.log("errorMessage", errorMessage[0]);
-        } else {
-          toast({
-            title: "failed",
-            description: (
-              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <code className="text-white">
-                  Failed to generate story , please try again{" "}
-                </code>
-              </pre>
-            ),
-          });
-          console.log("Failed to generate, please try again");
-        }
-      },
-    });
+  const {
+    mutate: createPrompt,
+    data: promptData,
+    isLoading: promptIsLoading,
+  } = api.story.createPromptForImage.useMutation({
+    onSuccess: (data) => {
+      // void session.refetch();
+      setPromptForImage(data);
+      console.log("prompt result ", data);
+      createImage({ prompt: data });
+    },
+    onError: (error) => {
+      const errorMessage = error.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast({
+          title: errorMessage[0],
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                {JSON.stringify(errorMessage, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("errorMessage", errorMessage[0]);
+      } else {
+        toast({
+          title: "failed",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                Failed to generate story , please try again{" "}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("Failed to generate, please try again");
+      }
+    },
+  });
 
-  const { mutate: createImage, data: imageData } =
-    api.story.createImage.useMutation({
-      onSuccess: (data) => {
-        // void session.refetch();
-        setImageUrlResult(data);
-        uplaodImageToCloudinary({ image_url: data });
-        console.log("image url result ", data);
-      },
-      onError: (error) => {
-        const errorMessage = error.data?.zodError?.fieldErrors.content;
-        if (errorMessage && errorMessage[0]) {
-          toast({
-            title: errorMessage[0],
-            description: (
-              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <code className="text-white">
-                  {JSON.stringify(errorMessage, null, 2)}
-                </code>
-              </pre>
-            ),
-          });
-          console.log("errorMessage", errorMessage[0]);
-        } else {
-          toast({
-            title: "failed",
-            description: (
-              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <code className="text-white">
-                  Failed to generate story , please try again{" "}
-                </code>
-              </pre>
-            ),
-          });
-          console.log("Failed to generate, please try again");
-        }
-      },
-    });
+  const {
+    mutate: createImage,
+    data: imageData,
+    isLoading: ImageIsLoading,
+  } = api.story.createImage.useMutation({
+    onSuccess: (data) => {
+      // void session.refetch();
+      setImageUrlResult(data);
+      uplaodImageToCloudinary({ image_url: data });
+      console.log("image url result ", data);
+    },
+    onError: (error) => {
+      const errorMessage = error.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast({
+          title: errorMessage[0],
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                {JSON.stringify(errorMessage, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("errorMessage", errorMessage[0]);
+      } else {
+        toast({
+          title: "failed",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                Failed to generate story , please try again{" "}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("Failed to generate, please try again");
+      }
+    },
+  });
 
-  const { mutate: createTitle, data: dataTitle } =
-    api.story.createTitle.useMutation({
-      onSuccess: (data) => {
-        // void session.refetch();
-        setTitle(data);
-        console.log("image url result ", data);
-      },
-      onError: (error) => {
-        const errorMessage = error.data?.zodError?.fieldErrors.content;
-        if (errorMessage && errorMessage[0]) {
-          toast({
-            title: errorMessage[0],
-            description: (
-              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <code className="text-white">
-                  {JSON.stringify(errorMessage, null, 2)}
-                </code>
-              </pre>
-            ),
-          });
-          console.log("errorMessage", errorMessage[0]);
-        } else {
-          toast({
-            title: "failed",
-            description: (
-              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                <code className="text-white">
-                  Failed to generate story , please try again{" "}
-                </code>
-              </pre>
-            ),
-          });
-          console.log("Failed to generate, please try again");
-        }
-      },
-    });
+  const {
+    mutate: createTitle,
+    data: dataTitle,
+    isLoading: titleisLoading,
+  } = api.story.createTitle.useMutation({
+    onSuccess: (data) => {
+      // void session.refetch();
+      setTitle(data);
+      console.log("image url result ", data);
+    },
+    onError: (error) => {
+      const errorMessage = error.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast({
+          title: errorMessage[0],
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                {JSON.stringify(errorMessage, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("errorMessage", errorMessage[0]);
+      } else {
+        toast({
+          title: "failed",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                Failed to generate story , please try again{" "}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("Failed to generate, please try again");
+      }
+    },
+  });
 
   const { mutate: uplaodImageToCloudinary } =
     api.story.uploadImageToCloudinary.useMutation({
@@ -310,7 +319,11 @@ const StoryPage: NextPage = () => {
                 />
               )}
             </div>
-            {(isLoading || isFullStoryLoading) && (
+            {(isLoading ||
+              isFullStoryLoading ||
+              ImageIsLoading ||
+              titleisLoading ||
+              promptIsLoading) && (
               <div className="flex h-fit w-full items-center justify-center">
                 <LoadingSpinner size={390} />
               </div>

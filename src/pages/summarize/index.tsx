@@ -63,7 +63,6 @@ const SummarizePage: NextPage = () => {
   const { mutate, isLoading, data } =
     api.summarize.createSummarizeResult.useMutation({
       onSuccess: () => {
-        // void session.refetch();
         console.log("sucesss ");
       },
       onError: (error) => {
@@ -108,7 +107,7 @@ const SummarizePage: NextPage = () => {
       });
       return;
     }
-    console.log("translate button clicked");
+    console.log("summarize button clicked");
     console.log("text", text);
     setIsShowingPrevResults(false);
     void mutate({
@@ -129,10 +128,10 @@ const SummarizePage: NextPage = () => {
   //   void selectedSummarizeRefetch();
   //   // tesing.refetch();
   // };
-  const handleSelectSummary = (translateId: string) => {
-    console.log("storyId", translateId);
+  const handleSelectSummary = (id: string) => {
+    console.log("id", id);
     const obj = {
-      id: translateId ?? "default-id",
+      id: id ?? "default-id",
     };
     setCurrenSession(obj);
     void sessionRefetch();
@@ -203,13 +202,12 @@ const SummarizePage: NextPage = () => {
           {data && (
             <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
               <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                {data &&
-                  !isShowingPrevResults &&
-                  currentSession.id !== "default-id" && (
-                    <div>
-                      <SummarizeResult result={data.result} />
-                    </div>
-                  )}
+                {data && !isShowingPrevResults && (
+                  // currentSession.id !== "default-id" && (
+                  <div>
+                    <SummarizeResult result={data.result} />
+                  </div>
+                )}
               </div>
             </section>
           )}
