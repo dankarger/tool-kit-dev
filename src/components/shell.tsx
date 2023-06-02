@@ -1,5 +1,7 @@
 import * as React from "react";
-
+import { siteConfig } from "@/config/site";
+import { dashboardConfig } from "@/config/dashboard";
+import { DashboardNav } from "@/components/nav";
 import { cn } from "@/lib/utils";
 
 interface DashboardShellProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -36,7 +38,12 @@ export function DashboardShell({
 }: DashboardShellProps) {
   return (
     <div className={cn("grid items-start gap-8", className)} {...props}>
-      {children}
+      <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
+        <aside className="hidden w-[200px] flex-col md:flex">
+          <DashboardNav items={dashboardConfig.sidebarNav} />
+        </aside>
+        {children}
+      </div>
     </div>
   );
 }

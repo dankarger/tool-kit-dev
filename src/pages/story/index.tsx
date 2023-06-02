@@ -1,4 +1,4 @@
-import React, { use, useEffect, useId } from "react";
+import React, { useState } from "react";
 import { type NextPage } from "next";
 import type { Session, Response, ChatMessage } from "@/types";
 import Head from "next/head";
@@ -10,16 +10,24 @@ import { DashboardNav } from "@/components/nav";
 import { SessionsSection } from "@/components/sessions-section";
 // import toast from "react-hot-toast";
 import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
-import { SummarizeSection } from "@/components/summarize-section2";
-import { SessionsSection2 } from "@/components/session-section2";
-import { SummarizeResult } from "@/components/summarize-result";
-import { TextInputForm } from "@/components/text-input-form";
+import { StorySection } from "@/components/story-section";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@radix-ui/react-separator";
+import { StoryResultDiv } from "@/components/story-result";
 
 const StoryPage: NextPage = () => {
+  const [userPromt, setUserPrompt] = useState("");
+  const [textResult, setTextResult] = useState("");
+  const [promptForImage, setPromptForImage] = useState("");
+  const [imageCloudinaryUrl, setImageCloudinaryUrl] = useState("");
+  const [title, setTitle] = useState("");
+  const [imageUrlResult, setImageUrlResult] = useState("");
+  const [currentSession, setCurrenSession] = React.useState({
+    storyId: "default-id",
+  });
   const user = useUser();
   const ctx = api.useContext();
 
@@ -32,15 +40,69 @@ const StoryPage: NextPage = () => {
     isLoading: sessionSectionLoading,
     refetch: sessionRefetch,
     isSuccess,
-  } = api.summarize.getAllSummarizeByAuthorId.useQuery({
+  } = api.story.getAllStoriesByAuthorId.useQuery({
     authorId: user.user?.id ?? "",
   });
+  const {
+    data: selectedStory,
+    isLoading: selectedStoryLoading,
+    refetch: selectedStoryRefetch,
+    isSuccess: selectedStoryIsSucess,
+  } = api.story.getStoryByStoryId.useQuery({
+    storyId:
+      currentSession.storyId !== "default-id" ? currentSession.storyId : "",
+  });
+  const {
+    mutate: mutateText,
+    isLoading,
+    data: textData,
+  } = api.story.createStoryTextResult.useMutation({
+    onSuccess: (data) => {
+      // void session.refetch();
+      setTextResult(data);
 
-  const { mutate, isLoading, data } =
-    api.summarize.createSummarizeResult.useMutation({
-      onSuccess: () => {
+      console.log("sucesssdata ", data);
+      createPrompt({ story: data });
+      // create title
+      createTitle({ story: data });
+    },
+    onError: (error) => {
+      const errorMessage = error.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast({
+          title: errorMessage[0],
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                {JSON.stringify(errorMessage, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("errorMessage", errorMessage[0]);
+      } else {
+        toast({
+          title: "failed",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                Failed to generate story , please try again{" "}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("Failed to generate, please try again");
+      }
+    },
+  });
+
+  const { mutate: createPrompt, data: promptData } =
+    api.story.createPromptForImage.useMutation({
+      onSuccess: (data) => {
         // void session.refetch();
-        console.log("sucesss ");
+        setPromptForImage(data);
+        console.log("prompt result ", data);
+        createImage({ prompt: data });
       },
       onError: (error) => {
         const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -58,7 +120,7 @@ const StoryPage: NextPage = () => {
           console.log("errorMessage", errorMessage[0]);
         } else {
           toast({
-            title: "fialed",
+            title: "failed",
             description: (
               <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
                 <code className="text-white">
@@ -67,12 +129,118 @@ const StoryPage: NextPage = () => {
               </pre>
             ),
           });
-          console.log("Failed to summarize, please try again");
+          console.log("Failed to generate, please try again");
         }
       },
     });
 
-  const handleSummarizeButton = (text: string) => {
+  const { mutate: createImage, data: imageData } =
+    api.story.createImage.useMutation({
+      onSuccess: (data) => {
+        // void session.refetch();
+        setImageUrlResult(data);
+        uplaodImageToCloudinary({ image_url: data });
+        console.log("image url result ", data);
+      },
+      onError: (error) => {
+        const errorMessage = error.data?.zodError?.fieldErrors.content;
+        if (errorMessage && errorMessage[0]) {
+          toast({
+            title: errorMessage[0],
+            description: (
+              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                <code className="text-white">
+                  {JSON.stringify(errorMessage, null, 2)}
+                </code>
+              </pre>
+            ),
+          });
+          console.log("errorMessage", errorMessage[0]);
+        } else {
+          toast({
+            title: "failed",
+            description: (
+              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                <code className="text-white">
+                  Failed to generate story , please try again{" "}
+                </code>
+              </pre>
+            ),
+          });
+          console.log("Failed to generate, please try again");
+        }
+      },
+    });
+
+  const { mutate: createTitle, data: dataTitle } =
+    api.story.createTitle.useMutation({
+      onSuccess: (data) => {
+        // void session.refetch();
+        setTitle(data);
+        console.log("image url result ", data);
+      },
+      onError: (error) => {
+        const errorMessage = error.data?.zodError?.fieldErrors.content;
+        if (errorMessage && errorMessage[0]) {
+          toast({
+            title: errorMessage[0],
+            description: (
+              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                <code className="text-white">
+                  {JSON.stringify(errorMessage, null, 2)}
+                </code>
+              </pre>
+            ),
+          });
+          console.log("errorMessage", errorMessage[0]);
+        } else {
+          toast({
+            title: "failed",
+            description: (
+              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                <code className="text-white">
+                  Failed to generate story , please try again{" "}
+                </code>
+              </pre>
+            ),
+          });
+          console.log("Failed to generate, please try again");
+        }
+      },
+    });
+
+  const { mutate: uplaodImageToCloudinary } =
+    api.story.uploadImageToCloudinary.useMutation({
+      onSuccess(data: string) {
+        console.log(";cloudinary result", data);
+        setImageCloudinaryUrl(data);
+        createFullStoryResult({
+          title: title,
+          text: userPromt,
+          resultText: textResult,
+          resultPrompt: promptForImage,
+          resultImageUrl: data,
+        });
+      },
+      //TODO : ADD ERROR handeling
+    });
+
+  const {
+    mutate: createFullStoryResult,
+    data,
+    isLoading: isFullStoryLoading,
+    reset: fullStoryReset,
+  } = api.story.createFullStoryResult.useMutation({
+    onSuccess(data) {
+      console.log("%c,prisma result---------------", data);
+      // handleSelectStory(data.id);
+      void sessionRefetch();
+    },
+    //TODO : ADD ERROR handeling
+  });
+
+  const handleStoryGenerateButton = (text: string) => {
+    console.log("story", text);
     if (!text) {
       toast({
         title: "Please enter all fields",
@@ -84,13 +252,31 @@ const StoryPage: NextPage = () => {
       });
       return;
     }
-    console.log("translate button clicked");
-    console.log("text", text);
-    void mutate({
+
+    setUserPrompt(text);
+    handleCreateNewSession();
+    void mutateText({
       text: text,
     });
   };
 
+  const handleSelectStory = (storyId: string) => {
+    console.log("storyId", storyId);
+    const obj = {
+      storyId: storyId ?? "default-id",
+    };
+    setCurrenSession(obj);
+    // void session.refetch();
+    void selectedStoryRefetch();
+    void fullStoryReset();
+  };
+
+  const handleCreateNewSession = () => {
+    setCurrenSession({ storyId: "default-id" });
+    setImageUrlResult("");
+    setTextResult("");
+    setTitle("");
+  };
   return (
     <>
       <Head>
@@ -99,42 +285,82 @@ const StoryPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <DashboardShell>
-        <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
-          <aside className="hidden w-[200px] flex-col md:flex">
-            <DashboardNav items={dashboardConfig.chat} />
-          </aside>
-          <main className="flex w-full flex-1 flex-col overflow-hidden">
-            <DashboardHeader
-              heading="Generate Story"
-              text="Generate a Story with"
-            />
-            <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-              <div className="f-full flex justify-between">
-                {/* <SummarizeSection
-                  handleSummarizeButton={handleSummarizeButton}
-                /> */}
-                <TextInputForm handleSubmitButton={handleSummarizeButton} />
-                {sessionData && <SessionsSection2 sessions={sessionData} />}
-              </div>
-              {isLoading && (
-                <div className="flex h-fit w-full items-center justify-center">
-                  <LoadingSpinner size={90} />
-                </div>
+        <main className="flex w-full flex-1 flex-col overflow-hidden">
+          <DashboardHeader
+            heading="Generate Story"
+            text="Generate a Story with"
+          />
+          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+            <div className="f-full flex justify-between">
+              <StorySection handleSubmitButton={handleStoryGenerateButton} />
+              {sessionSectionLoading && (
+                // <Skeleton className="h-[150px] w-[200px]" />
+                <SessionsSection
+                  sessions={[]}
+                  onSelect={handleSelectStory}
+                  onNewSession={handleCreateNewSession}
+                  // disabled={true}
+                />
               )}
-            </section>
-            {data && (
-              <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
+              {sessionData && (
+                <SessionsSection
+                  sessions={sessionData}
+                  onSelect={handleSelectStory}
+                  onNewSession={handleCreateNewSession}
+                />
+              )}
+            </div>
+            {(isLoading || isFullStoryLoading) && (
+              <div className="flex h-fit w-full items-center justify-center">
+                <LoadingSpinner size={390} />
+              </div>
+            )}
+          </section>
+          <div>
+            {selectedStory && (
+              <div>
+                <Separator />
+                <StoryResultDiv
+                  title={selectedStory.title}
+                  resultText={selectedStory.resultText}
+                  resultImageUrl={selectedStory.resultImageUrl}
+                />
+              </div>
+            )}
+          </div>
+          {data && (
+            <>
+              <Separator />
+              <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
+                <StoryResultDiv
+                  title={data.title}
+                  resultText={data.resultText}
+                  resultImageUrl={data.resultImageUrl}
+                />
+                <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                  {data.title}
+                </h1>
                 <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                  {data && (
-                    <div>
-                      <SummarizeResult result={data.result} />
-                    </div>
-                  )}
+                  <p className="leading-7 [&:not(:first-child)]:mt-6">
+                    {data.resultText}
+                  </p>
+                  <img src={data.resultImageUrl} alt="image" />
                 </div>
               </section>
-            )}
-          </main>
-        </div>
+            </>
+          )}
+          {/* <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
+            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+              {title}---
+            </h1>
+            <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
+              <p className="leading-7 [&:not(:first-child)]:mt-6">
+                {textResult}
+              </p>
+            </div>
+            {imageUrlResult && <img src={imageUrlResult} alt="image" />}
+          </section> */}
+        </main>
       </DashboardShell>
     </>
   );

@@ -2,6 +2,7 @@ import { z } from "zod";
 import openai from "@/lib/openai";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 import { SummarizeResult } from "@prisma/client";
+import { SummarizeResultType } from "@/types";
 import { TRPCError } from "@trpc/server";
 import {
   ChatCompletionRequestMessage,
@@ -28,7 +29,29 @@ export const summarizeRouter = createTRPCRouter({
         where: { authorId: input.authorId },
       });
       if (!summarizeResults) throw new TRPCError({ code: "NOT_FOUND" });
-      return summarizeResults;
+      return summarizeResults as SummarizeResultType[];
+    }),
+
+  getSummarizeResultById: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      console.log("d", input);
+      if (input.id === "default-id" || input.id.length === 0)
+        return {
+          id: "default-id",
+          createdAt: new Date(),
+          text: "",
+          title: "",
+          result: "",
+          authorId: "",
+        } as SummarizeResult;
+      const result = await ctx.prisma.summarizeResult.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+      if (!result) throw new TRPCError({ code: "NOT_FOUND" });
+      return result;
     }),
 
   createSummarizeResult: privateProcedure
@@ -82,6 +105,7 @@ export const summarizeRouter = createTRPCRouter({
             authorId,
             text: input.text,
             result: result,
+            title: input.text.substring(0, 15),
           },
         });
 

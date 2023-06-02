@@ -12,22 +12,28 @@ import { prisma } from "@/server/db";
 
 export const sessionRouter = createTRPCRouter({
   createChatSession: privateProcedure
-    .input(z.object({ authorId: z.string(), name: z.string().optional() }))
+    .input(
+      z.object({
+        authorId: z.string(),
+        name: z.string().optional(),
+        title: z.string().optional(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       const authorId = ctx.userId;
       if (!authorId) throw new TRPCError({ code: "UNAUTHORIZED" });
 
       const newSession = await prisma.chatSession.create({
-        data: { authorId: authorId, name: input.name },
+        data: { authorId: authorId, name: input.name, title: input.title },
       });
-      // console.log("newsession", newSession.id);
-      const sessionId = await ctx.prisma.chatSession.findUnique({
-        where: { id: newSession.id },
-        // select: { id: true }
-      });
-      if (!sessionId) throw new TRPCError({ code: "NOT_FOUND" });
-      console.log("sessionIdn222222-3333--222222", sessionId);
-      return sessionId;
+      console.log("newsession", newSession.id);
+      // const sessionId = await ctx.prisma.chatSession.findUnique({
+      //   where: { id: newSession.id },
+      //   // select: { id: true }
+      // });
+      if (!newSession) throw new TRPCError({ code: "NOT_FOUND" });
+      console.log("sessionIdn222222-3333--222222", newSession);
+      return newSession.id;
     }),
   getChatSessionsByAuthorId: privateProcedure
     .input(z.object({ authorId: z.string() }))

@@ -54,10 +54,10 @@ export type HomePageConfig = {
 export type DashboardConfig = {
   mainNav: MainNavItem[];
   sidebarNav: SidebarNavItem[];
-  chat: SidebarNavItem[];
-  translate: SidebarNavItem[];
-  story: SidebarNavItem[];
-  tictactoe: SidebarNavItem[];
+  // chat: SidebarNavItem[];
+  // translate: SidebarNavItem[];
+  // story: SidebarNavItem[];
+  // tictactoe: SidebarNavItem[];
 };
 
 // export type SubscriptionPlan = {
@@ -89,6 +89,36 @@ export interface Session {
   id: string;
   type?: string;
 }
+
+export interface StoryResult {
+  id: string;
+  createdAt: Date;
+  title: string;
+  text: string;
+  resultText: string;
+  resultPrompt: string;
+  resultImageUrl: string;
+  authorId: string;
+}
+
+export interface TranslationResultType {
+  id: string;
+  createdAt: Date;
+  text: string;
+  translation: string;
+  authorId: string;
+  language: string;
+}
+
+export interface SummarizeResultType {
+  id: string;
+  createdAt: Date;
+  text: string;
+  title: string;
+  result: string;
+  authorId: string;
+}
+
 export interface ChatMessage {
   id: string;
   createdAt: Date;
@@ -119,4 +149,21 @@ export interface HomePageConfig {
   title: string;
   subtitle: string;
   content: { paragraph1: string; paragraph2: string };
+}
+
+// Cloudinary
+
+export interface CloudinaryResponse {
+  public_id: string;
+  version: number;
+  signature: string;
+  width: number;
+  height: number;
+  format: string;
+  resource_type: string;
+  created_at: string;
+  bytes: number;
+  type: string;
+  url: string;
+  secure_url: string;
 }

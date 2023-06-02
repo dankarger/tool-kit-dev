@@ -1,57 +1,8 @@
-// import * as React from "react";
-// import type { Session, Response, ChatMessage } from "@/types";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectGroup,
-//   SelectItem,
-//   SelectLabel,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-
-// type SelectElementProps = {
-//   options: Session[];
-//   onSelect?: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
-// };
-
-// export function SelectElement({ options, onSelect }: SelectElementProps) {
-//   if (!options) return null;
-
-// const handleChange=(e:Event)=> {
-//   console.log('d',e.target)
-// }
-
-//   return (
-//     <Select onValueChange={handleChange}>
-//       <SelectTrigger className="w-[180px]">
-//         <SelectValue placeholder="Previous Chats" />
-//       </SelectTrigger>
-//       <SelectContent>
-//         <SelectGroup>
-//           <SelectLabel>Fruits</SelectLabel>
-//           {options.map((option) => (
-//             <SelectItem
-//               key={option.id}
-//               value={option.id}
-//               data-valueid={option.id}
-
-//             >
-//               {option.name}
-//             </SelectItem>
-//           ))}
-//         </SelectGroup>
-//       </SelectContent>
-//     </Select>
-//   );
-// }
-
-/////
-
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { Icons } from "@/components/icons";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -71,7 +22,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import type { Session, Response, ChatMessage } from "@/types";
+import type {
+  Session,
+  StoryResult,
+  TranslationResultType,
+  SummarizeResultType,
+  Response,
+  ChatMessage,
+} from "@/types";
 
 const FormSchema = z.object({
   session: z.string({
@@ -79,7 +37,11 @@ const FormSchema = z.object({
   }),
 });
 type SelectElementProps = {
-  options: Session[];
+  options:
+    | Session[]
+    | StoryResult[]
+    | TranslationResultType[]
+    | SummarizeResultType[];
   onSelect: (value: string) => void;
   onNewSession: () => void;
 };
@@ -93,6 +55,7 @@ export function SelectElement({
     resolver: zodResolver(FormSchema),
   });
   const { isDirty, isValid } = form.formState;
+
   function onSubmit(
     data: z.infer<typeof FormSchema>,
     e?: React.BaseSyntheticEvent
@@ -111,6 +74,32 @@ export function SelectElement({
     });
   }
   if (!options) return null;
+  type ReturnLabelProp =
+    | Session
+    | StoryResult
+    | TranslationResultType
+    | SummarizeResultType;
+
+  const checkStoryType = (tbd: unknown): tbd is StoryResult => {
+    if ((tbd as StoryResult).title) {
+      return true;
+    }
+    return false;
+  };
+  const checkSessionType = (tbd: unknown): tbd is Session => {
+    if ((tbd as Session).name) {
+      return true;
+    }
+
+    return false;
+  };
+
+  function returnLabelFromOption(option: ReturnLabelProp): string {
+    if (checkSessionType(option)) return option.name;
+    if (checkStoryType(option)) return option.title;
+    return option.text.substring(0, 10);
+  }
+
   return (
     <Form {...form}>
       <form
@@ -122,21 +111,22 @@ export function SelectElement({
           name="session"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Previous Chats</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={"none"}>
+              <FormLabel>Previous </FormLabel>
+              <Select onValueChange={field.onChange} defaultValue="none">
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="New Session" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
+                  {/* {!options && <div>LoadingPage...</div>} */}
                   {options.map((option) => (
                     <SelectItem
                       key={option.id}
                       value={option.id}
                       data-valueid={option.id}
                     >
-                      {option.name}
+                      {returnLabelFromOption(option)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -151,7 +141,7 @@ export function SelectElement({
         />
         <div className="flex justify-between align-middle ">
           <Button disabled={!isDirty || !isValid} type="submit">
-            Load chat
+            Load
           </Button>
           <Button
             className="w-16 bg-slate-400"
@@ -161,7 +151,10 @@ export function SelectElement({
             }}
             type="button"
           >
-            <span>+</span>NEW
+            <span>
+              <Icons.add className="mr-2 h-4 w-4" />
+            </span>
+            NEW
           </Button>
         </div>
       </form>

@@ -1,11 +1,22 @@
-import type { Session } from "@/types";
+import type {
+  Session,
+  StoryResult,
+  TranslationResultType,
+  SummarizeResultType,
+} from "@/types";
 import { Fragment } from "react";
 import { SelectElement } from "@/components/ui/select-with-action";
 
 interface SessionsSectionProps {
-  sessions: Session[];
-  onClick: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
+  sessions:
+    | StoryResult[]
+    | TranslationResultType[]
+    | SummarizeResultType[]
+    | Session[];
+  onClick?: (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
   onSelect: (sessionId: string) => void;
+
+  // onSelect: (sessionId: string) => void;
   onNewSession: () => void;
 }
 

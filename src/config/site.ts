@@ -1,5 +1,5 @@
 export type SiteConfig = typeof siteConfig;
-
+import { DashboardConfig } from "@/types";
 export const INTERNAL_VERSION = "1.4";
 
 export const siteConfig = {
@@ -12,70 +12,112 @@ export const siteConfig = {
       href: "/",
     },
     {
-      title: "Chat",
+      title: "Tools",
       href: "/chat",
     },
-    {
-      title: "Translate",
-      href: "/translate",
-    },
-    {
-      title: "Summarize",
-      href: "/summarize",
-    },
+    // {
+    //   title: "Translate",
+    //   href: "/translate",
+    // },
+    // {
+    //   title: "Summarize",
+    //   href: "/summarize",
+    // },
     {
       title: "Story Mode",
       href: "/story",
     },
     {
-      title: "Tic Tac Toe",
-      href: "/tic-tac-toe",
+      title: "Games",
+      href: "/games",
     },
+    // {
+    //   title: "Tic Tac Toe",
+    //   href: "/tic-tac-toe",
+    // },
+  ],
+  sidebarNav: [
+    {
+      title: "Chat",
+      href: "/chat",
+      icon: "post",
+    },
+    {
+      title: "Translate",
+      href: "/translate",
+      icon: "billing",
+    },
+    {
+      title: "Summarize",
+      href: "/summarize",
+      icon: "settings",
+    },
+    // {
+    //   title: "Summarize",
+    //   href: "/summarize",
+    //   icon: "settings",
+    // },
+    // {
+    //   title: "Summarize",
+    //   href: "/summarize",
+    //   icon: "settings",
+    // },
+    // {
+    //   title: "Summarize",
+    //   href: "/summarize",
+    //   icon: "settings",
+    // },
   ],
   links: {
     twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
+    github: "https://github.com/",
     docs: "https://ui.shadcn.com",
   },
 };
 
-export const sidebarNavConfig = {
-  chat: {
-    sidebarNav: [
-      {
-        title: "Chat",
-        href: "/chat",
-        icon: "post",
-      },
-      {
-        title: "History",
-        href: "/chat/history",
-        icon: "billing",
-      },
-      {
-        title: "Settings",
-        href: "/chat/settings",
-        icon: "settings",
-      },
-    ],
-  },
-  translate: {
-    sidebarNav: [
-      {
-        title: "Translate",
-        href: "/translate",
-        icon: "post",
-      },
-      {
-        title: "History",
-        href: "/translate/history",
-        icon: "billing",
-      },
-      {
-        title: "Settings",
-        href: "/translate/settings",
-        icon: "settings",
-      },
-    ],
-  },
+export const dashboardConfig: DashboardConfig = {
+  mainNav: [
+    {
+      title: "Documentation",
+      href: "/docs",
+    },
+    {
+      title: "Support",
+      href: "/support",
+      disabled: true,
+    },
+  ],
+
+  sidebarNav: [
+    {
+      title: "Chat",
+      href: "/chat",
+      icon: "post",
+    },
+    {
+      title: "Translate",
+      href: "/translate",
+      icon: "billing",
+    },
+    {
+      title: "Summarize",
+      href: "/summarize",
+      icon: "settings",
+    },
+    // {
+    //   title: "Summarize",
+    //   href: "/summarize",
+    //   icon: "settings",
+    // },
+    // {
+    //   title: "Summarize",
+    //   href: "/summarize",
+    //   icon: "settings",
+    // },
+    // {
+    //   title: "Summarize",
+    //   href: "/summarize",
+    //   icon: "settings",
+    // },
+  ],
 };

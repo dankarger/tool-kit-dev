@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 
 export const SummarizeResult = ({ result }: { result: string }) => {
-  if (!result) return null;
+  // if (!result) return null;
   const bulletPoints: string[] = result.split("*");
   return (
     <div>
@@ -26,9 +26,7 @@ export const SummarizeResult = ({ result }: { result: string }) => {
             ))}
           </ul>
         </CardContent>
-        <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter>
+        <CardFooter>{/* <p>Card Footer</p> */}</CardFooter>
       </Card>
     </div>
   );

@@ -1,14 +1,15 @@
-import React, { use, useEffect, useId } from "react";
+import React, { useState } from "react";
 import { type NextPage } from "next";
 import type { Session, Response, ChatMessage } from "@/types";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import Head from "next/head";
 import { dashboardConfig } from "@/config/dashboard";
+import { SessionsSection } from "@/components/sessions-section";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
 import { DashboardHeader } from "@/components/header";
 import { DashboardNav } from "@/components/nav";
-import { SessionsSection } from "@/components/sessions-section";
+import { useUser } from "@clerk/nextjs";
 // import toast from "react-hot-toast";
 import { toast } from "@/components/ui/use-toast";
 import { TranslateSection } from "@/components/translate-section";
@@ -16,11 +17,35 @@ import { FormSchema } from "@/components/translate-section";
 import { TranslationResultComponent } from "@/components/translation-result";
 import { InputAreaWithButton } from "@/components/input-area-with-button";
 import { LoadingSpinner } from "@/components/ui/spinner";
+import { Separator } from "@/components/ui/separator";
 
 const TranslatePage: NextPage = () => {
-  // const { data, isLoading, isFetching } = api.translate.getAllTranslationsByAuthorId.useQ({
-  //   authorId: user.user?.id,
-  // })
+  const [currentSession, setCurrenSession] = React.useState({
+    id: "default-id",
+  });
+  const [isShowingPrevResults, setIsShowingPrevResults] = useState(false);
+  const user = useUser();
+
+  const {
+    data: sessionData,
+    isLoading: sessionSectionLoading,
+    refetch: sessionRefetch,
+    isSuccess,
+  } = api.translate.getAllTranslationsByAuthorId.useQuery({
+    authorId: user.user?.id || "random",
+  });
+
+  const {
+    data: selectedTranslateResult,
+    isLoading: selectedTranslateLoading,
+    refetch: selectedTranslateRefetch,
+    isSuccess: selectedTranslateIsSucess,
+  } = api.translate.getTranlateResultById.useQuery(
+    {
+      id: currentSession.id !== "default-id" ? currentSession.id : "",
+    },
+    { trpc: { abortOnUnmount: true } }
+  );
 
   const { mutate, isLoading, data } =
     api.translate.createTranslation.useMutation({
@@ -28,7 +53,8 @@ const TranslatePage: NextPage = () => {
       //   console.log("mutate");
 
       // },
-      onSuccess: () => {
+      onSuccess: (data) => {
+        setCurrenSession({ id: data.id });
         // setPromptValue("");
         // void session.refetch();
         console.log("sucesss ");
@@ -76,12 +102,33 @@ const TranslatePage: NextPage = () => {
     console.log("translate button clicked");
     console.log("text", text);
     console.log("language", language);
+    setIsShowingPrevResults(false);
     void mutate({
       text: text,
       language: language,
+      // title: text.substring(0,15)
     });
   };
+  const handleSelectStory = (translateId: string) => {
+    console.log("storyId", translateId);
+    const obj = {
+      id: translateId ?? "default-id",
+    };
+    setCurrenSession(obj);
+    void sessionRefetch();
+    void selectedTranslateRefetch();
+    setIsShowingPrevResults(true);
+    // void fullStoryReset();
+  };
 
+  const handleCreateNewSession = () => {
+    // setCurrenSession({ storyId: "default-id" });
+    setCurrenSession({ id: "default-id" });
+    // setImageUrlResult("");
+    // setTextResult("");
+    // setTitle("");
+    setIsShowingPrevResults(false);
+  };
   return (
     <>
       <Head>
@@ -90,39 +137,69 @@ const TranslatePage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <DashboardShell>
-        <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
-          <aside className="hidden w-[200px] flex-col md:flex">
-            <DashboardNav items={dashboardConfig.chat} />
-          </aside>
-          <main className="flex w-full flex-1 flex-col overflow-hidden">
-            <DashboardHeader
-              heading="Translate"
-              text="Translate a text with GPTool."
-            />
+        <main className="flex w-full flex-1 flex-col overflow-hidden">
+          <DashboardHeader
+            heading="Translate"
+            text="Translate a text with GPTool."
+          />
 
-            <section className="space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-6">
+            {" "}
+            <div className="flex  w-full  flex-row justify-between ">
               <TranslateSection handleTranslateButton={handleTranslateButton} />
-              {/* <InputAreaWithButton
-                handleSubmitteButton={handleTranslateButton}
-                placeholder="Past or type here the text to translate..."
-              /> */}
-            </section>
-            {isLoading && (
-              <div className="flex h-fit w-full items-center justify-center">
-                <LoadingSpinner size={90} />
+              {/* <Separator orientation="vertical" /> */}
+              <div className=" flex w-1/3   flex-col items-end justify-center   ">
+                {sessionSectionLoading && (
+                  <SessionsSection
+                    sessions={[]}
+                    onSelect={handleSelectStory}
+                    onNewSession={handleCreateNewSession}
+                  />
+                )}
+                {sessionData && (
+                  <SessionsSection
+                    sessions={sessionData}
+                    onSelect={handleSelectStory}
+                    onNewSession={handleCreateNewSession}
+                  />
+                )}
               </div>
-            )}
-            {data && (
-              <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
+            </div>
+          </section>
+          {isLoading && (
+            <div className="flex h-fit w-full items-center justify-center">
+              <LoadingSpinner size={90} />
+            </div>
+          )}
+          {data &&
+            !isShowingPrevResults &&
+            currentSession.id !== "default-id" && (
+              <section className=" w-full  space-y-2 py-2 dark:bg-transparent md:py-8 lg:py-6">
+                <Separator className="mt-2" />
                 <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                  <>
-                    <TranslationResultComponent data={data} />
-                  </>
+                  <DashboardHeader
+                    heading="Result"
+                    text="You can see past result with the  top right select menu"
+                  />
+                  <TranslationResultComponent data={data} />
                 </div>
               </section>
             )}
-          </main>
-        </div>
+          {selectedTranslateResult &&
+            isShowingPrevResults &&
+            selectedTranslateResult.id !== "default-id" && (
+              <section className=" space-y-2py-2  w-full dark:bg-transparent md:py-8 lg:py-6">
+                <DashboardHeader
+                  heading="Result"
+                  text="You can see past result with the  top right select menu"
+                />
+                {/* <Separator className="mt-2" /> */}
+                <div className="py-4">
+                  <TranslationResultComponent data={selectedTranslateResult} />
+                </div>
+              </section>
+            )}
+        </main>
       </DashboardShell>
     </>
   );

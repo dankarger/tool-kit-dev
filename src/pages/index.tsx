@@ -30,7 +30,7 @@ const Home: NextPage = () => {
         <meta name="description" content="GPTool kit" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex max-w-[980px] flex-col items-start gap-2">
+      <div className="flex max-w-[980px] flex-col items-start gap-4">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">
           {HomePageConfig.title}
           <br className="hidden sm:inline" />

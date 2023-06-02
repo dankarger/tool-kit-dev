@@ -1,6 +1,12 @@
 import React, { use, useEffect, useId } from "react";
 import { type NextPage } from "next";
-import type { Session, Response, ChatMessage } from "@/types";
+import type {
+  Session,
+  Response,
+  ChatMessage,
+  StoryResult,
+  TranslationResultType,
+} from "@/types";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import Head from "next/head";
 import { dashboardConfig } from "@/config/dashboard";
@@ -18,6 +24,8 @@ import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { TextInputForm } from "@/components/text-input-form";
+
+const DEFAULT_ID = "defaultId";
 
 const Sessionfeed = ({ id }: { id: string }) => {
   const { data, isLoading, isError, refetch } =
@@ -38,20 +46,27 @@ const Sessionfeed = ({ id }: { id: string }) => {
 const ChatPage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
   const [chatResponce, setChatResponse] = React.useState("");
-  const [chatHistory, setChatHistory] = React.useState([]);
+  const [chatHistory, setChatHistory] = React.useState([
+    { role: "", content: "" },
+  ]);
   const [isSessionActivated, setIsSessionActivated] = React.useState(false);
   const [needRefresh, setNeedRefresh] = React.useState(false);
   const [currentSession, setCurrenSession] = React.useState({
-    id: "defaultId",
+    id: DEFAULT_ID,
   });
   const router = useRouter();
   const user = useUser();
   const randomName = useId();
   const ctx = api.useContext();
 
-  const session = api.chat.getSessionMessagesBySessionId.useQuery({
-    id: currentSession.id,
-  });
+  const [isShowingPrevResults, setIsShowingPrevResults] = React.useState(false);
+
+  const session = api.chat.getSessionMessagesBySessionId.useQuery(
+    {
+      id: currentSession.id,
+    },
+    { trpc: { abortOnUnmount: true } } // maybe
+  );
 
   const {
     data: sessionData,
@@ -63,16 +78,28 @@ const ChatPage: NextPage = () => {
   });
 
   const createNewSession = api.session.createChatSession.useMutation({
-    // mutationFn:
     onSuccess: (data) => {
       console.log("dattttaaa", data);
-      // if (data?.id) {
-      const currenId = { id: data.id };
-      setCurrenSession((prev) => currenId);
+      if (currentSession.id === DEFAULT_ID) {
+        handleCreateNewChateMessage(chatHistory, promptValue, data);
+      }
+      const currenId = { id: data };
+      setCurrenSession(currenId);
       void session.refetch();
       void sessionRefetch();
-      setNeedRefresh(true);
-      // }
+      return data;
+    },
+    onSettled: (sessionId, arg2NotUsed, data) => {
+      setCurrenSession({ id: sessionId ?? DEFAULT_ID });
+      console.log(
+        "Yes, I have access to props after I receive the response: " +
+          JSON.stringify(sessionId)
+      );
+
+      // handleCreateNewChateMessage(chatHistory, promptValue);
+      void session.refetch();
+      void sessionRefetch();
+      return sessionId;
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -84,7 +111,7 @@ const ChatPage: NextPage = () => {
     },
   });
   const { mutate, isLoading, data } = api.chat.create.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
       setPromptValue("");
       void session.refetch();
     },
@@ -106,65 +133,79 @@ const ChatPage: NextPage = () => {
       return;
     }
     const currentTime = new Date();
-    const currentHour = currentTime.getHours();
-    const currentMinute = currentTime.getMinutes();
-    const currentSeconds = currentTime.getSeconds();
-    const time = `${currentHour} - ${currentMinute}-  ${currentSeconds}`;
+    const currentDate = currentTime.toISOString();
+    const time = ` ${currentDate}`;
     const username = user.user?.username || "user";
-    const sessionName = `@ ${username} ${time}`;
+    const sessionName = `${username}]: ${time}`;
     createNewSession.mutate({
       authorId: user.user.id,
       name: sessionName,
+      title: sessionName,
     });
+    setIsShowingPrevResults(false);
   };
 
-  useEffect(() => {
-    if (currentSession.id === "defaultId") {
-      // const currentTime = new Date();
-      // const currentHour = currentTime.getHours();
-      // const currentMinute = currentTime.getMinutes();
+  // useEffect(() => {
+  //   if (currentSession.id === DEFAULT_ID) {
+  //     handleCreateNewSession();
+  //   }
+  //   // setNeedRefresh(true);
+  //   void ctx.session.getChatSessionsByAuthorId.invalidate();
+  //   void session.refetch();
+  //   void sessionRefetch();
+  // }, []);
 
-      // const currentSeconds = currentTime.getSeconds();
-      // const time = `${currentHour}:${currentMinute}:${currentSeconds}`;
-      // createNewSession.mutate({
-      //   authorId: user.user?.id ?? "random3",
-      //   name: `@${user.user?.username}-${time}`,
-      // });
-      handleCreateNewSession();
-      // setCurrenSession({ id: data?.id ?? "default-session" });
-      // session.refetch();
-    }
-    setNeedRefresh(true);
-    void ctx.session.getChatSessionsByAuthorId.invalidate();
-    void session.refetch();
-    void sessionRefetch();
-  }, []);
+  // useEffect(() => {
+  //   if (currentSession.id === DEFAULT_ID) {
+  //     handleCreateNewSession();
+  //     void session.refetch();
+  //     void sessionRefetch();
+  //   }
+  //   void session.refetch();
+  //   void sessionRefetch();
+  // }, [isSessionActivated, currentSession.id]);
+
+  // useEffect(() => {
+  //   console.log("currentSession", currentSession);
+  // }, [isSessionActivated]);
+
+  // const handleUserStartTyping = () => {
+  //   console.log("fdfdfdfdfdf");
+  //   if (currentSession.id === DEFAULT_ID) {
+  //     console.log("currentSession");
+  //     handleCreateNewSession();
+  //     return;
+  //   }
+  //   return;
   // };
-  useEffect(() => {
-    if (isSessionActivated && currentSession.id === "defaultId") {
-      // handleCreateNewSession();
-      void session.refetch();
-      void sessionRefetch();
-    }
-    void session.refetch();
-    void sessionRefetch();
-  }, [isSessionActivated, currentSession.id]);
 
-  useEffect(() => {
-    console.log("currentSession", currentSession);
-  }, [isSessionActivated]);
+  // // useEffect(() => {
+  //   window.addEventListener("keypress", handleUserStartTyping);
+
+  //   return () => {
+  //     window.removeEventListener("keypress", handleUserStartTyping);
+  //   };
+  // }, []);
 
   const handleCreateNewChateMessage = (
     chatHistory: { role: string; content: string }[],
-    value: string
+    value: string,
+    currentSessionVariable: string
   ) => {
-    void sessionRefetch();
-    console.log("sessionData", sessionData);
+    // console.log("sessionData", sessionData);
+    // setTimeout(() => {
+    // if (currentSession.id === DEFAULT_ID) {
+    //   alert("d");
+    //   return;
+    // }
     mutate({
       latestMessage: value,
       messages: chatHistory,
-      sessionId: currentSession.id,
+      sessionId: currentSessionVariable,
     });
+    // }, 1000);
+    setIsShowingPrevResults(false);
+    void sessionRefetch();
   };
 
   const arrangeChatHistory = (
@@ -193,16 +234,19 @@ const ChatPage: NextPage = () => {
   };
 
   const handleSubmitButton = (value: string) => {
-    let chatHistory: string | { role: string; content: string }[] = [];
+    const prompt = { role: "user", content: value };
+
+    let chatHistory: { role: string; content: string }[] = [];
+    setIsShowingPrevResults(false);
     setPromptValue(value);
     if (!user.user?.id) {
       return toast.error("Please login to continue");
     }
     setIsSessionActivated(true);
-    console.log(
-      "sessionData2323232",
-      sessionData?.filter((session) => session.id === currentSession.id)
-    );
+    // console.log(
+    //   "sessionData2323232",
+    //   sessionData?.filter((session) => session.id === currentSession.id)
+    // );
     const currentSessionMesages =
       sessionData?.filter((session) => session.id === currentSession.id) || [];
     if (currentSessionMesages[0] !== undefined) {
@@ -211,20 +255,34 @@ const ChatPage: NextPage = () => {
         currentSessionMesages[0]?.messages.length > 0
       ) {
         chatHistory = arrangeChatHistory(currentSessionMesages[0].messages);
-        console.log(
-          "currentSessionMesages-----222---",
-          currentSessionMesages[0]?.messages
-        );
+        // console.log(
+        //   "currentSessionMesages-----222---",
+        //   currentSessionMesages[0]?.messages
+        // );
       }
     }
 
-    const prompt = { role: "user", content: value };
+    // if (currentSession.id === DEFAULT_ID) alert("fffffffff");
 
     chatHistory.push(prompt);
-    console.log("prompt", prompt);
-    const message = handleCreateNewChateMessage(chatHistory, value);
-    void session.refetch();
-    return message;
+    console.log("chatHistory", chatHistory);
+
+    // handleCreateNewSession();
+    // setTimeout(() => {
+    setChatHistory(chatHistory);
+    setPromptValue(value);
+    if (currentSession.id === DEFAULT_ID) {
+      void handleCreateNewSession();
+      console.log("wwf");
+      return;
+    } else {
+      handleCreateNewChateMessage(chatHistory, value, currentSession.id);
+      void session.refetch();
+      void sessionRefetch();
+      return;
+    }
+    // return message;
+    // }, 5000);
   };
   const handleSelectSession = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
@@ -232,28 +290,33 @@ const ChatPage: NextPage = () => {
     const selectedSessionId = e.currentTarget.dataset?.valueid;
     console.log("hi", selectedSessionId);
     const obj = {
-      id: selectedSessionId ?? "default-session",
+      id: selectedSessionId ?? DEFAULT_ID,
     };
-    setCurrenSession((prev) => obj);
-    void session.refetch();
-  };
-  const handleNewSessionButton = () => {
-    // setCurrenSession({ id: "defaultId" });
-    setIsSessionActivated(true);
-
+    setCurrenSession(obj);
+    setIsShowingPrevResults(true);
     void session.refetch();
     void sessionRefetch();
   };
+  // const handleNewSessionButton = () => {
+  //   setCurrenSession({ id: DEFAULT_ID });
+  //   setIsSessionActivated(true);
+
+  //   void session.refetch();
+  //   void sessionRefetch();
+  // };
 
   const handleSelectSession2 = (sessionId: string) => {
     console.log("sessionId", sessionId);
     const obj = {
-      id: sessionId ?? "default-session",
+      id: sessionId ?? DEFAULT_ID,
     };
-    setCurrenSession((prev) => obj);
+    setCurrenSession(obj);
     void session.refetch();
+    setIsShowingPrevResults(true);
+    // ctx.chat.getSessionMessagesBySessionId.invalidate();
+    void sessionRefetch();
   };
-
+  console.log("sid", currentSession.id);
   return (
     <>
       <Head>
@@ -262,48 +325,60 @@ const ChatPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <DashboardShell>
-        <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
-          <aside className="hidden w-[200px] flex-col md:flex">
-            <DashboardNav items={dashboardConfig.chat} />
-          </aside>
-          <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">
-            <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
-            <section className=" flex w-full flex-row justify-between gap-2">
-              <div className="flex  w-full  flex-row justify-between ">
-                <TextInputForm
-                  inputType="text"
-                  placeholder={"Type your message here."}
-                  handleSubmitButton={handleSubmitButton}
-                  className="flex-grow:1 flex-1"
-                ></TextInputForm>
-                {sessionData && (
-                  <div className=" flex w-1/3   flex-col items-end justify-center   ">
-                    <SessionsSection
-                      sessions={sessionData}
-                      onClick={handleSelectSession}
-                      onSelect={handleSelectSession2}
-                      onNewSession={handleCreateNewSession}
-                    />
-                  </div>
-                )}
-              </div>
-            </section>
-            <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
-              {isLoading && (
-                <div className="flex w-full items-center justify-center">
-                  <LoadingSpinner size={40} />
+        <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">
+          <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
+          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
+            <div className="flex  w-full  flex-row justify-between ">
+              <TextInputForm
+                inputType="text"
+                placeholder={"Type your message here."}
+                handleSubmitButton={handleSubmitButton}
+                className="flex-grow:1 flex-1"
+              ></TextInputForm>
+              {sessionSectionLoading && (
+                <div className=" flex w-1/3   flex-col items-end justify-center   ">
+                  <SessionsSection
+                    sessions={[]}
+                    onClick={handleSelectSession}
+                    onSelect={handleSelectSession2}
+                    onNewSession={handleCreateNewSession}
+                  />
                 </div>
               )}
-              {/* {data && (
-                <ResponseDiv response={data.response} message={data.message} />
-              )} */}
+              {sessionData && (
+                <div className=" flex w-1/3   flex-col items-end justify-center   ">
+                  <SessionsSection
+                    sessions={sessionData}
+                    onClick={handleSelectSession}
+                    onSelect={handleSelectSession2}
+                    onNewSession={handleCreateNewSession}
+                  />
+                </div>
+              )}
             </div>
-            {currentSession.id !== "defaultId" && (
-              <Sessionfeed id={currentSession.id} />
+          </section>
+          <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
+            {isLoading && (
+              <div className="flex w-full items-center justify-center">
+                <LoadingSpinner size={40} />
+              </div>
             )}
-            {/* </section> */}
-          </main>
-        </div>
+            {session.data && <ResponseSection messages={session.data} />}
+          </div>
+          {/* {isShowingPrevResults && currentSession.id !== DEFAULT_ID && (
+            // {sessionData && currentSession.id !== DEFAULT_ID && (
+            <Sessionfeed id={currentSession.id} />
+          )} */}
+          {/* {data &&
+            // !isShowingPrevResults &&
+            currentSession.id !== DEFAULT_ID && (
+              // {data && (
+              <div>
+                <Sessionfeed id={currentSession.id} />
+              </div>
+            )} */}
+        </main>
+        {/* </div> */}
       </DashboardShell>
     </>
   );
