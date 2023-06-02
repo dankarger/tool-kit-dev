@@ -80,12 +80,13 @@ const ChatPage: NextPage = () => {
   const createNewSession = api.session.createChatSession.useMutation({
     onSuccess: (data) => {
       console.log("dattttaaa", data);
+      if (currentSession.id === DEFAULT_ID) {
+        handleCreateNewChateMessage(chatHistory, promptValue, data);
+      }
       const currenId = { id: data };
-      setCurrenSession((prev) => currenId);
+      setCurrenSession(currenId);
       void session.refetch();
       void sessionRefetch();
-      handleCreateNewChateMessage(chatHistory, promptValue, data);
-      void session.refetch();
       return data;
     },
     onSettled: (sessionId, arg2NotUsed, data) => {
