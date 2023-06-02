@@ -26,14 +26,14 @@ export const sessionRouter = createTRPCRouter({
       const newSession = await prisma.chatSession.create({
         data: { authorId: authorId, name: input.name, title: input.title },
       });
-      // console.log("newsession", newSession.id);
-      const sessionId = await ctx.prisma.chatSession.findUnique({
-        where: { id: newSession.id },
-        // select: { id: true }
-      });
-      if (!sessionId) throw new TRPCError({ code: "NOT_FOUND" });
-      console.log("sessionIdn222222-3333--222222", sessionId);
-      return sessionId.id;
+      console.log("newsession", newSession.id);
+      // const sessionId = await ctx.prisma.chatSession.findUnique({
+      //   where: { id: newSession.id },
+      //   // select: { id: true }
+      // });
+      if (!newSession) throw new TRPCError({ code: "NOT_FOUND" });
+      console.log("sessionIdn222222-3333--222222", newSession);
+      return newSession.id;
     }),
   getChatSessionsByAuthorId: privateProcedure
     .input(z.object({ authorId: z.string() }))

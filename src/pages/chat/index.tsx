@@ -46,7 +46,9 @@ const Sessionfeed = ({ id }: { id: string }) => {
 const ChatPage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
   const [chatResponce, setChatResponse] = React.useState("");
-  const [chatHistory, setChatHistory] = React.useState([]);
+  const [chatHistory, setChatHistory] = React.useState([
+    { role: "", content: "" },
+  ]);
   const [isSessionActivated, setIsSessionActivated] = React.useState(false);
   const [needRefresh, setNeedRefresh] = React.useState(false);
   const [currentSession, setCurrenSession] = React.useState({
@@ -72,25 +74,26 @@ const ChatPage: NextPage = () => {
   });
 
   const createNewSession = api.session.createChatSession.useMutation({
-    // mutationFn:
     onSuccess: (data) => {
       console.log("dattttaaa", data);
-      // if (data?.id) {
       const currenId = { id: data };
       setCurrenSession((prev) => currenId);
       void session.refetch();
       void sessionRefetch();
-      // setNeedRefresh(true);
-      // }
+      handleCreateNewChateMessage(chatHistory, promptValue, data);
+      void session.refetch();
       return data;
     },
     onSettled: (sessionId, arg2NotUsed, data) => {
-      // const currenId = { id: data };
       setCurrenSession({ id: sessionId ?? DEFAULT_ID });
       console.log(
         "Yes, I have access to props after I receive the response: " +
           JSON.stringify(sessionId)
       );
+
+      // handleCreateNewChateMessage(chatHistory, promptValue);
+      void session.refetch();
+
       return sessionId;
     },
     onError: (error) => {
@@ -105,7 +108,6 @@ const ChatPage: NextPage = () => {
   const { mutate, isLoading, data } = api.chat.create.useMutation({
     onSuccess: (data) => {
       setPromptValue("");
-      // setCurrenSession({ id: data.id });
       void session.refetch();
     },
     onError: (error) => {
@@ -127,9 +129,6 @@ const ChatPage: NextPage = () => {
     }
     const currentTime = new Date();
     const currentDate = currentTime.toISOString();
-    const currentHour = currentTime.getHours();
-    const currentMinute = currentTime.getMinutes();
-    const currentSeconds = currentTime.getSeconds();
     const time = ` ${currentDate}`;
     const username = user.user?.username || "user";
     const sessionName = `${username}]: ${time}`;
@@ -143,7 +142,7 @@ const ChatPage: NextPage = () => {
 
   // useEffect(() => {
   //   if (currentSession.id === DEFAULT_ID) {
-
+  //     handleCreateNewSession();
   //   }
   //   // setNeedRefresh(true);
   //   void ctx.session.getChatSessionsByAuthorId.invalidate();
@@ -152,8 +151,8 @@ const ChatPage: NextPage = () => {
   // }, []);
 
   // useEffect(() => {
-  //   if (isSessionActivated && currentSession.id ===DEFAULT_ID) {
-  //     // handleCreateNewSession();
+  //   if (currentSession.id === DEFAULT_ID) {
+  //     handleCreateNewSession();
   //     void session.refetch();
   //     void sessionRefetch();
   //   }
@@ -165,17 +164,17 @@ const ChatPage: NextPage = () => {
   //   console.log("currentSession", currentSession);
   // }, [isSessionActivated]);
 
-  const handleUserStartTyping = () => {
-    console.log("fdfdfdfdfdf");
-    if (currentSession.id === DEFAULT_ID) {
-      console.log("currentSession");
-      handleCreateNewSession();
-      return;
-    }
-    return;
-  };
+  // const handleUserStartTyping = () => {
+  //   console.log("fdfdfdfdfdf");
+  //   if (currentSession.id === DEFAULT_ID) {
+  //     console.log("currentSession");
+  //     handleCreateNewSession();
+  //     return;
+  //   }
+  //   return;
+  // };
 
-  // useEffect(() => {
+  // // useEffect(() => {
   //   window.addEventListener("keypress", handleUserStartTyping);
 
   //   return () => {
@@ -185,18 +184,19 @@ const ChatPage: NextPage = () => {
 
   const handleCreateNewChateMessage = (
     chatHistory: { role: string; content: string }[],
-    value: string
+    value: string,
+    currentSessionVariable: string
   ) => {
     // console.log("sessionData", sessionData);
     // setTimeout(() => {
-    if (currentSession.id === DEFAULT_ID) {
-      alert("d");
-      return;
-    }
+    // if (currentSession.id === DEFAULT_ID) {
+    //   alert("d");
+    //   return;
+    // }
     mutate({
       latestMessage: value,
       messages: chatHistory,
-      sessionId: currentSession.id,
+      sessionId: currentSessionVariable,
     });
     // }, 1000);
     setIsShowingPrevResults(false);
@@ -229,9 +229,6 @@ const ChatPage: NextPage = () => {
   };
 
   const handleSubmitButton = (value: string) => {
-    if (currentSession.id === DEFAULT_ID) {
-      handleCreateNewSession();
-    }
     const prompt = { role: "user", content: value };
 
     let chatHistory: { role: string; content: string }[] = [];
@@ -265,9 +262,16 @@ const ChatPage: NextPage = () => {
     chatHistory.push(prompt);
     console.log("prompt", prompt);
 
-    handleCreateNewSession();
+    // handleCreateNewSession();
     // setTimeout(() => {
-    handleCreateNewChateMessage(chatHistory, value);
+    if (currentSession.id === DEFAULT_ID) {
+      setChatHistory(chatHistory);
+      setPromptValue(value);
+      handleCreateNewSession();
+      console.log("wwf");
+      return;
+    }
+    handleCreateNewChateMessage(chatHistory, value, currentSession.id);
     void session.refetch();
     // return message;
     // }, 5000);
@@ -348,14 +352,14 @@ const ChatPage: NextPage = () => {
                 <LoadingSpinner size={40} />
               </div>
             )}
-            {data && (
+            {/* {data && (
               <ResponseDiv response={data.response} message={data.message} />
-            )}
+            )} */}
           </div>
 
-          {/* {!isShowingPrevResults && currentSession.id !== "default-id" && (
+          {!isShowingPrevResults && currentSession.id !== DEFAULT_ID && (
             <Sessionfeed id={currentSession.id} />
-          )} */}
+          )}
           {data && (
             <div>
               <Sessionfeed id={currentSession.id} />
