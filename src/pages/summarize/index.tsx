@@ -19,6 +19,7 @@ import { SessionsSection2 } from "@/components/session-section2";
 import { SummarizeResult } from "@/components/summarize-result";
 import { ComboboxDropdownMenu } from "@/components/ui/ComboboxDropdownMenu";
 import { IdentificationLink } from "@clerk/nextjs/server";
+import { SessionsCombobox } from "@/components/sessions-combobox";
 
 // const fetchResult = (id: string) => {
 //   const helloNoArgs = api.summarize.getSummarizeResultById.useQuery({
@@ -41,8 +42,20 @@ const SummarizePage: NextPage = () => {
   } = api.summarize.getAllSummarizeByAuthorId.useQuery({
     authorId: user.user?.id ?? "",
   });
-  const tesing = api.summarize.getSummarizeResultById.useQuery({
-    id: currentSession.id,
+  const deleteResult = api.summarize.deleteResult.useMutation({
+    async onSuccess() {
+      toast({
+        title: "Deleted 1 Result",
+        // description: (
+        //   <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+        //     <code className="text-white">
+        //       Failed to summarize , please try again{" "}
+        //     </code>
+        //   </pre>
+        // ),
+      });
+      await sessionRefetch();
+    },
   });
   const {
     data: selectedSummarizeResult,
@@ -143,6 +156,13 @@ const SummarizePage: NextPage = () => {
     setCurrenSession({ id: "default-id" });
     setIsShowingPrevResults(false);
   };
+  const handleDeleteResult = (id: string) => {
+    void deleteResult.mutate({
+      id: id,
+    });
+    sessionRefetch();
+  };
+
   return (
     <>
       <Head>
@@ -174,6 +194,7 @@ const SummarizePage: NextPage = () => {
                   sessions={[]}
                   onSelect={handleSelectSummary}
                   onNewSession={handleCreateNewSession}
+                  handleDeleteResult={handleDeleteResult}
                   // disabled={true}
                 />
               )}
@@ -182,10 +203,12 @@ const SummarizePage: NextPage = () => {
                   sessions={sessionData}
                   onSelect={handleSelectSummary}
                   onNewSession={handleCreateNewSession}
+                  handleDeleteResult={handleDeleteResult}
                 />
               )}
             </div>
             <ComboboxDropdownMenu />
+            <SessionsCombobox title="test" label="test" />
             {isLoading && (
               <div className="flex h-fit w-full items-center justify-center">
                 <LoadingSpinner size={90} />
