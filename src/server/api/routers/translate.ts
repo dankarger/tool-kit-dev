@@ -127,6 +127,19 @@ export const TranslateRouter = createTRPCRouter({
       console.log("transltae - data/,", translationresult);
       return translationresult;
     }),
+
+  deleteResult: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      if (!input.id) return { id: "default-id" };
+      const translateDelteResult = await ctx.prisma.translationResult.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      // if (!SummarizeResult) throw new TRPCError({ code: "NOT_FOUND" });
+      // return SummarizeDelteResult;
+    }),
 });
 // const response = await openai.createEdit({
 //   model: "text-davinci-edit-001",

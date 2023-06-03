@@ -34,7 +34,21 @@ const TranslatePage: NextPage = () => {
   } = api.translate.getAllTranslationsByAuthorId.useQuery({
     authorId: user.user?.id || "random",
   });
-
+  const deleteResult = api.translate.deleteResult.useMutation({
+    async onSuccess() {
+      toast({
+        title: "Deleted 1 Result",
+        // description: (
+        //   <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+        //     <code className="text-white">
+        //       Failed to summarize , please try again{" "}
+        //     </code>
+        //   </pre>
+        // ),
+      });
+      await sessionRefetch();
+    },
+  });
   const {
     data: selectedTranslateResult,
     isLoading: selectedTranslateLoading,
@@ -129,6 +143,12 @@ const TranslatePage: NextPage = () => {
     // setTitle("");
     setIsShowingPrevResults(false);
   };
+  const handleDeleteResult = (id: string) => {
+    void deleteResult.mutate({
+      id: id,
+    });
+    sessionRefetch();
+  };
   return (
     <>
       <Head>
@@ -155,6 +175,7 @@ const TranslatePage: NextPage = () => {
                     sessions={[]}
                     onSelect={handleSelectStory}
                     onNewSession={handleCreateNewSession}
+                    handleDeleteResult={handleDeleteResult}
                   />
                 )}
                 {sessionData && (
@@ -162,6 +183,7 @@ const TranslatePage: NextPage = () => {
                     sessions={sessionData}
                     onSelect={handleSelectStory}
                     onNewSession={handleCreateNewSession}
+                    handleDeleteResult={handleDeleteResult}
                   />
                 )}
               </div>
