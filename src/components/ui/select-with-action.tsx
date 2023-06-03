@@ -137,8 +137,8 @@ export function SelectElement({
                       <SessionsCombobox
                         value={option.id}
                         valueid={option.id}
-                        label={option.title}
-                        title={option.title}
+                        label={returnLabelFromOption(option)}
+                        title={returnLabelFromOption(option)}
                         key={option.id}
                         onSelect={onSelect}
                         handleDeleteResult={handleDeleteResult}

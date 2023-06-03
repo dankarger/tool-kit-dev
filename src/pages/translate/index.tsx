@@ -147,7 +147,7 @@ const TranslatePage: NextPage = () => {
     void deleteResult.mutate({
       id: id,
     });
-    sessionRefetch();
+    void sessionRefetch();
   };
   return (
     <>

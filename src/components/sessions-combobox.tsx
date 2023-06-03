@@ -38,6 +38,8 @@ const labels = [
 type SessionsComboboxProps = {
   label: string;
   title: string;
+  value: string;
+  valueid: string;
   onSelect: (value: string) => void;
   handleDeleteResult: (value: string) => void;
 };
