@@ -76,6 +76,14 @@ const ChatPage: NextPage = () => {
   } = api.session.getChatSessionsByAuthorId.useQuery({
     authorId: user.user?.id ?? "random3",
   });
+  const deleteResult = api.chat.deleteResult.useMutation({
+    async onSuccess() {
+      toast({
+        title: "Deleted 1 Result",
+      });
+      await sessionRefetch();
+    },
+  });
 
   const createNewSession = api.session.createChatSession.useMutation({
     onSuccess: (data) => {
@@ -316,7 +324,14 @@ const ChatPage: NextPage = () => {
     // ctx.chat.getSessionMessagesBySessionId.invalidate();
     void sessionRefetch();
   };
-  console.log("sid", currentSession.id);
+
+  const handleDeleteResult = (id: string) => {
+    void deleteResult.mutate({
+      id: id,
+    });
+    void sessionRefetch();
+  };
+
   return (
     <>
       <Head>
@@ -343,6 +358,7 @@ const ChatPage: NextPage = () => {
                     onClick={handleSelectSession}
                     onSelect={handleSelectSession2}
                     onNewSession={handleCreateNewSession}
+                    handleDeleteResult={handleDeleteResult}
                   />
                 </div>
               )}
@@ -353,6 +369,7 @@ const ChatPage: NextPage = () => {
                     onClick={handleSelectSession}
                     onSelect={handleSelectSession2}
                     onNewSession={handleCreateNewSession}
+                    handleDeleteResult={handleDeleteResult}
                   />
                 </div>
               )}

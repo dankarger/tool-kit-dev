@@ -134,7 +134,7 @@ export function SessionsCombobox({
                 value={value}
                 data-valuid={valueid}
                 onClick={(e) => {
-                  handleDeleteResult(e.currentTarget.dataset.valuid);
+                  handleDeleteResult(value);
                 }}
               >
                 {" "}

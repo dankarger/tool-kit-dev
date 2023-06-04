@@ -207,8 +207,7 @@ const SummarizePage: NextPage = () => {
                 />
               )}
             </div>
-            <ComboboxDropdownMenu />
-            <SessionsCombobox title="test" label="test" />
+            {/* {/* <ComboboxDropdownMenu /> */}
             {isLoading && (
               <div className="flex h-fit w-full items-center justify-center">
                 <LoadingSpinner size={90} />

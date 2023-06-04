@@ -212,4 +212,16 @@ export const chatRouter = createTRPCRouter({
       console.log("chatMessage/,", chatMessage);
       return chatMessage;
     }),
+  deleteResult: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      if (!input.id) return;
+      const translateDelteResult = await ctx.prisma.chatSession.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      // if (!SummarizeResult) throw new TRPCError({ code: "NOT_FOUND" });
+      // return SummarizeDelteResult;
+    }),
 });
