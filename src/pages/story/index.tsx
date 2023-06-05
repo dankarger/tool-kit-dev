@@ -289,6 +289,12 @@ const StoryPage: NextPage = () => {
     setTextResult("");
     setTitle("");
   };
+  const handleDeleteResult = (id: string) => {
+    // void deleteResult.mutate({
+    //   id: id,
+    // });
+    void sessionRefetch();
+  };
   return (
     <>
       <Head>
@@ -312,6 +318,7 @@ const StoryPage: NextPage = () => {
                   sessions={[]}
                   onSelect={handleSelectStory}
                   onNewSession={handleCreateNewSession}
+                  handleDeleteResult={handleDeleteResult}
                   // disabled={true}
                 />
               )}
@@ -320,6 +327,7 @@ const StoryPage: NextPage = () => {
                   sessions={sessionData}
                   onSelect={handleSelectStory}
                   onNewSession={handleCreateNewSession}
+                  handleDeleteResult={handleDeleteResult}
                 />
               )}
             </div>

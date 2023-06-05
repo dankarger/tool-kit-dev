@@ -27,6 +27,32 @@ import { DeleteDialogue } from "@/components/delete-dialogue";
 import { toast } from "@/components/ui/use-toast";
 const DEFAULT_ID = "defaultId";
 
+const handleToastError = (errorMessage: string[]) => {
+  if (errorMessage && errorMessage[0]) {
+    toast({
+      title: errorMessage[0],
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">
+            {JSON.stringify(errorMessage, null, 2)}
+          </code>
+        </pre>
+      ),
+    });
+    console.log("errorMessage", errorMessage[0]);
+  } else {
+    toast({
+      title: "fialed",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">Failed </code>
+        </pre>
+      ),
+    });
+    console.log("Failed to create translation, please try again");
+  }
+};
+
 const Sessionfeed = ({ id }: { id: string }) => {
   const { data, isLoading, isError, refetch } =
     api.chat.getSessionMessagesBySessionId.useQuery({
@@ -110,13 +136,14 @@ const ChatPage: NextPage = () => {
       void sessionRefetch();
       return sessionId;
     },
+    // errorHandler
     onError: (error) => {
-      // const errorMessage = error.data?.zodError?.fieldErrors.content;
-      // if (errorMessage && errorMessage[0]) {
-      //   toast.error(errorMessage[0]);
-      // } else {
-      toast.error("Failed to create session, please try again");
-      // }
+      const errorMessage = error.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        handleToastError(errorMessage);
+      } else {
+        handleToastError(["Failed to create translation, please try again"]);
+      }
     },
   });
   const { mutate, isLoading, data } = api.chat.create.useMutation({
@@ -124,21 +151,23 @@ const ChatPage: NextPage = () => {
       setPromptValue("");
       void session.refetch();
     },
+    // errorHandler
+
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
       if (errorMessage && errorMessage[0]) {
-        toast.error(errorMessage[0]);
-        console.log("errorMessage", errorMessage[0]);
+        handleToastError(errorMessage);
       } else {
-        toast.error("Failed to create chat, please try again");
-        console.log("Failed to create post, please try again");
+        handleToastError(["Failed to create translation, please try again"]);
       }
     },
   });
 
   const handleCreateNewSession = () => {
     if (!user.user?.id) {
-      toast.error("Please login to create a new session");
+      // errorHandler
+
+      handleToastError(["You need to be logged in to create a new session"]);
       return;
     }
     const currentTime = new Date();
@@ -249,7 +278,7 @@ const ChatPage: NextPage = () => {
     setIsShowingPrevResults(false);
     setPromptValue(value);
     if (!user.user?.id) {
-      return toast.error("Please login to continue");
+      return handleToastError(["Please login to continue"]);
     }
     setIsSessionActivated(true);
     // console.log(
