@@ -18,15 +18,13 @@ import { InputWithButton } from "@/components/input-with-button";
 import { ResponseDiv } from "@/components/response-div";
 import { ResponseSection } from "@/components/response-sections";
 import { SessionsSection } from "@/components/sessions-section";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { TextInputForm } from "@/components/text-input-form";
 import { DeleteDialogue } from "@/components/delete-dialogue";
-import { set } from "zod";
-
+import { toast } from "@/components/ui/use-toast";
 const DEFAULT_ID = "defaultId";
 
 const Sessionfeed = ({ id }: { id: string }) => {
@@ -113,12 +111,12 @@ const ChatPage: NextPage = () => {
       return sessionId;
     },
     onError: (error) => {
-      const errorMessage = error.data?.zodError?.fieldErrors.content;
-      if (errorMessage && errorMessage[0]) {
-        toast.error(errorMessage[0]);
-      } else {
-        toast.error("Failed to create session, please try again");
-      }
+      // const errorMessage = error.data?.zodError?.fieldErrors.content;
+      // if (errorMessage && errorMessage[0]) {
+      //   toast.error(errorMessage[0]);
+      // } else {
+      toast.error("Failed to create session, please try again");
+      // }
     },
   });
   const { mutate, isLoading, data } = api.chat.create.useMutation({
@@ -382,10 +380,10 @@ const ChatPage: NextPage = () => {
                 </div>
               )}
             </div>
-            <DeleteDialogue
+            {/* <DeleteDialogue
               onDelete={handleDeleteResult}
               isOpen={isDeleteDialogueOpen}
-            />
+            /> */}
           </section>
           <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
             {isLoading && (
