@@ -24,6 +24,8 @@ import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { TextInputForm } from "@/components/text-input-form";
+import { DeleteDialogue } from "@/components/delete-dialogue";
+import { set } from "zod";
 
 const DEFAULT_ID = "defaultId";
 
@@ -55,6 +57,7 @@ const ChatPage: NextPage = () => {
     id: DEFAULT_ID,
   });
   const router = useRouter();
+  const [isDeleteDialogueOpen, setIsDeleteDialogueOpen] = React.useState(false);
   const user = useUser();
   const randomName = useId();
   const ctx = api.useContext();
@@ -330,6 +333,11 @@ const ChatPage: NextPage = () => {
       id: id,
     });
     void sessionRefetch();
+    setIsDeleteDialogueOpen(false);
+  };
+
+  const handleDialogueOpen = (id: string) => {
+    setIsDeleteDialogueOpen(true);
   };
 
   return (
@@ -358,7 +366,7 @@ const ChatPage: NextPage = () => {
                     onClick={handleSelectSession}
                     onSelect={handleSelectSession2}
                     onNewSession={handleCreateNewSession}
-                    handleDeleteResult={handleDeleteResult}
+                    handleDeleteResult={handleDialogueOpen}
                   />
                 </div>
               )}
@@ -369,11 +377,15 @@ const ChatPage: NextPage = () => {
                     onClick={handleSelectSession}
                     onSelect={handleSelectSession2}
                     onNewSession={handleCreateNewSession}
-                    handleDeleteResult={handleDeleteResult}
+                    handleDeleteResult={handleDialogueOpen}
                   />
                 </div>
               )}
             </div>
+            <DeleteDialogue
+              onDelete={handleDeleteResult}
+              isOpen={isDeleteDialogueOpen}
+            />
           </section>
           <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
             {isLoading && (
