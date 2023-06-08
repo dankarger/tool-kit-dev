@@ -102,6 +102,7 @@ const ChatPage: NextPage = () => {
   } = api.session.getChatSessionsByAuthorId.useQuery({
     authorId: user.user?.id ?? "random3",
   });
+
   const deleteResult = api.chat.deleteResult.useMutation({
     async onSuccess() {
       toast({
