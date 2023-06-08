@@ -27,7 +27,11 @@ export const dashboardConfig: DashboardConfig = {
     {
       title: "Summarize",
       href: "/summarize",
-      icon: "settings",
+      // icon: "settings",
+    },
+    {
+      title: "Story Mode",
+      href: "/story",
     },
     // {
     //   title: "Summarize",

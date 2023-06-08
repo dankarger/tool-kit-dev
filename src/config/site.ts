@@ -23,10 +23,10 @@ export const siteConfig = {
     //   title: "Summarize",
     //   href: "/summarize",
     // },
-    {
-      title: "Story Mode",
-      href: "/story",
-    },
+    // {
+    //   title: "Story Mode",
+    //   href: "/story",
+    // },
     {
       title: "Games",
       href: "/games",
