@@ -128,19 +128,6 @@ const SummarizePage: NextPage = () => {
     });
   };
 
-  // useEffect(() => {}, [currentSession.id]);
-
-  // const handleSelectSummary = (id: string) => {
-  //   console.log("Summary", id);
-  //   const obj = {
-  //     id: id ?? "default-id",
-  //   };
-  //   setCurrenSession(obj);
-  //   void sessionRefetch();
-  //   setIsShowingPrevResults(true);
-  //   void selectedSummarizeRefetch();
-  //   // tesing.refetch();
-  // };
   const handleSelectSummary = (id: string) => {
     console.log("id", id);
     const obj = {
@@ -157,9 +144,11 @@ const SummarizePage: NextPage = () => {
     setIsShowingPrevResults(false);
   };
   const handleDeleteResult = (id: string) => {
-    void deleteResult.mutate({
-      id: id,
-    });
+    if (id && id.length > 0) {
+      void deleteResult.mutate({
+        id: id,
+      });
+    }
     void sessionRefetch();
   };
 

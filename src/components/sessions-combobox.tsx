@@ -2,8 +2,6 @@ import * as React from "react";
 import { Calendar, MoreHorizontal, Tags, Trash, User } from "lucide-react";
 import { DeleteDialogue } from "./delete-dialogue";
 import { Button } from "@/components/ui/button";
-// import { ConfirmDialog } from "@/components/ui/confirm-dialogue";
-import { DeleteDialog2 } from "@/components/ui/delete-dialog2";
 
 import {
   Command,
@@ -72,13 +70,16 @@ export function SessionsCombobox({
   const [open, setOpen] = React.useState(false);
   const [isDialogueOpen, setDialogueOpen] = React.useState(false);
 
-  const handleConfirmDeleteButton = (value: string) => {
-    setDialogueOpen(true);
-    const res = alert(value);
-    console.log(res);
+  const handleConfirmDeleteButton = async (value: string) => {
+    // setDialogueOpen(true);
+    // const res = alert(value);
+    const res = window.confirm("are you sure you want to delete this session");
+    if (res) {
+      handleDeleteResult(value);
+      console.log(`deleting - ${value}`);
+    }
   };
 
-  // React.useEffect(() => {}, [isDialogueOpen]);
   return (
     <div className="flex w-full flex-col items-start justify-between rounded-md border px-4 py-3 sm:flex-row sm:items-center">
       <p className="text-sm font-medium leading-none">
@@ -88,64 +89,15 @@ export function SessionsCombobox({
         <span className="text-muted-foreground">{title || "Title"}</span>
       </p>
 
-      {/* <DeleteDialogue
-        isOpen={isDialogueOpen}
-        value={value}
-        handleDeleteResult={() => console.log("delete")}
-      /> */}
-      {!isDialogueOpen && (
-        <>
-          <DeleteDialog2 isOpen={isDialogueOpen} />
-
-          {/* // <ShowAlert
-        //   value={value}
-        //   isOpen={isDialogueOpen}
-        //   handleDeleteResult={handleDeleteResult}
-        // /> */}
-          {/* <ConfirmDialog
-            title={"dddddd"}
-            isOpen={isDialogueOpen}
-            onClose={setDialogueOpen}
-            onConfirm={(event) => {
-              event.preventDefault();
-
-              console.log("delete");
-            }} */}
-          {/* /> */}
-          {/* <DeleteDialogue
-            isOpen={isDialogueOpen}
-            setIsOpen={setDialogueOpen}
-            value={value}
-            onDelete={(event) => {
-              event.preventDefault();
-
-              console.log("delete");
-            }}
-          /> */}
-        </>
-      )}
-      {/* <ShowAlert
-        value={value}
-        isOpen={isDialogueOpen}
-        handleDeleteResult={handleDeleteResult}
-      />   */}
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="sm">
             <MoreHorizontal />
           </Button>
-
-          {/* <span className="mr-2 rounded-lg bg-primary px-2 py-1 text-xs text-primary-foreground">
-          {label}
-        </span> */}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[200px]">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuGroup>
-            {/* {/* <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              Assign to...
-            </DropdownMenuItem> */}
             <DropdownMenuItem>
               <Button
                 variant="ghost"
@@ -162,36 +114,6 @@ export function SessionsCombobox({
               </Button>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            {/* {/* <DropdownMenuSub>  
-              <DropdownMenuSubTrigger>
-                <Tags className="mr-2 h-4 w-4" />
-                Apply label
-              </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent className="p-0">
-                <Command>
-                  <CommandInput
-                    placeholder="Filter label..."
-                    autoFocus={true}
-                  />
-                  <CommandList>
-                    <CommandEmpty>No label found.</CommandEmpty>
-                    <CommandGroup>
-                      {labels.map((label) => (
-                        <CommandItem
-                          key={label}
-                          onSelect={(value) => {
-                            setLabel(value);
-                            setOpen(false);
-                          }}
-                        >
-                          {label}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub> */}
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-600">
               <Button
@@ -201,16 +123,14 @@ export function SessionsCombobox({
                 data-valuid={valueid}
                 onClick={() => {
                   // handleDeleteResult(value);
-                  handleConfirmDeleteButton(value);
                   setDialogueOpen(true);
+                  handleConfirmDeleteButton(value);
                 }}
               >
                 {" "}
                 <Trash className="mr-2 h-4 w-4" />
                 Delete Session
               </Button>
-
-              {/* <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut> */}
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>

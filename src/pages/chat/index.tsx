@@ -23,7 +23,6 @@ import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { TextInputForm } from "@/components/text-input-form";
-import { DeleteDialogue } from "@/components/delete-dialogue";
 import { toast } from "@/components/ui/use-toast";
 const DEFAULT_ID = "defaultId";
 
