@@ -182,48 +182,6 @@ const ChatPage: NextPage = () => {
     setIsShowingPrevResults(false);
   };
 
-  // useEffect(() => {
-  //   if (currentSession.id === DEFAULT_ID) {
-  //     handleCreateNewSession();
-  //   }
-  //   // setNeedRefresh(true);
-  //   void ctx.session.getChatSessionsByAuthorId.invalidate();
-  //   void session.refetch();
-  //   void sessionRefetch();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (currentSession.id === DEFAULT_ID) {
-  //     handleCreateNewSession();
-  //     void session.refetch();
-  //     void sessionRefetch();
-  //   }
-  //   void session.refetch();
-  //   void sessionRefetch();
-  // }, [isSessionActivated, currentSession.id]);
-
-  // useEffect(() => {
-  //   console.log("currentSession", currentSession);
-  // }, [isSessionActivated]);
-
-  // const handleUserStartTyping = () => {
-  //   console.log("fdfdfdfdfdf");
-  //   if (currentSession.id === DEFAULT_ID) {
-  //     console.log("currentSession");
-  //     handleCreateNewSession();
-  //     return;
-  //   }
-  //   return;
-  // };
-
-  // // useEffect(() => {
-  //   window.addEventListener("keypress", handleUserStartTyping);
-
-  //   return () => {
-  //     window.removeEventListener("keypress", handleUserStartTyping);
-  //   };
-  // }, []);
-
   const handleCreateNewChateMessage = (
     chatHistory: { role: string; content: string }[],
     value: string,
@@ -280,10 +238,7 @@ const ChatPage: NextPage = () => {
       return handleToastError(["Please login to continue"]);
     }
     setIsSessionActivated(true);
-    // console.log(
-    //   "sessionData2323232",
-    //   sessionData?.filter((session) => session.id === currentSession.id)
-    // );
+
     const currentSessionMesages =
       sessionData?.filter((session) => session.id === currentSession.id) || [];
     if (currentSessionMesages[0] !== undefined) {
@@ -292,10 +247,6 @@ const ChatPage: NextPage = () => {
         currentSessionMesages[0]?.messages.length > 0
       ) {
         chatHistory = arrangeChatHistory(currentSessionMesages[0].messages);
-        // console.log(
-        //   "currentSessionMesages-----222---",
-        //   currentSessionMesages[0]?.messages
-        // );
       }
     }
 
@@ -334,13 +285,6 @@ const ChatPage: NextPage = () => {
     void session.refetch();
     void sessionRefetch();
   };
-  // const handleNewSessionButton = () => {
-  //   setCurrenSession({ id: DEFAULT_ID });
-  //   setIsSessionActivated(true);
-
-  //   void session.refetch();
-  //   void sessionRefetch();
-  // };
 
   const handleSelectSession2 = (sessionId: string) => {
     console.log("sessionId", sessionId);
@@ -362,9 +306,9 @@ const ChatPage: NextPage = () => {
     setIsDeleteDialogueOpen(false);
   };
 
-  const handleDialogueOpen = (id: string) => {
-    setIsDeleteDialogueOpen(true);
-  };
+  // const handleDialogueOpen = (id: string) => {
+  //   setIsDeleteDialogueOpen(true);
+  // };
 
   return (
     <>
@@ -392,7 +336,7 @@ const ChatPage: NextPage = () => {
                     onClick={handleSelectSession}
                     onSelect={handleSelectSession2}
                     onNewSession={handleCreateNewSession}
-                    handleDeleteResult={handleDialogueOpen}
+                    handleDeleteResult={handleDeleteResult}
                   />
                 </div>
               )}
@@ -403,7 +347,7 @@ const ChatPage: NextPage = () => {
                     onClick={handleSelectSession}
                     onSelect={handleSelectSession2}
                     onNewSession={handleCreateNewSession}
-                    handleDeleteResult={handleDialogueOpen}
+                    handleDeleteResult={handleDeleteResult}
                   />
                 </div>
               )}

@@ -53,6 +53,14 @@ const StoryPage: NextPage = () => {
     storyId:
       currentSession.storyId !== "default-id" ? currentSession.storyId : "",
   });
+  const deleteResult = api.story.deleteResult.useMutation({
+    async onSuccess() {
+      toast({
+        title: "Deleted 1 Story",
+      });
+      await sessionRefetch();
+    },
+  });
   const {
     mutate: mutateText,
     isLoading,
@@ -290,9 +298,9 @@ const StoryPage: NextPage = () => {
     setTitle("");
   };
   const handleDeleteResult = (id: string) => {
-    // void deleteResult.mutate({
-    //   id: id,
-    // });
+    void deleteResult.mutate({
+      id: id,
+    });
     void sessionRefetch();
   };
   return (

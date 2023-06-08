@@ -199,4 +199,16 @@ export const storyRouter = createTRPCRouter({
       console.log("storyresult", storyResult);
       return storyResult;
     }),
+  deleteResult: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      if (!input.id) return { id: "default-id" };
+      const storyDelteResult = await ctx.prisma.storyResult.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      // if (!SummarizeResult) throw new TRPCError({ code: "NOT_FOUND" });
+      // return SummarizeDelteResult;
+    }),
 });
