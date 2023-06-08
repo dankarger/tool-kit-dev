@@ -29,7 +29,7 @@ const listItemStep2 = ({ title, subTitle, checked }: ListItemProps) => {
         {checked ? <Icons.checkCircle /> : <Icons.disc />}
       </span>
       <h3 className="font-medium leading-tight">Generating Title</h3>
-      <p clclassNameass="text-sm">Step details here</p>
+      <p className="text-sm">Step details here</p>
     </li>
   );
 };

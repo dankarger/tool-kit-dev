@@ -50,6 +50,7 @@ const StoryPage: NextPage = () => {
     isLoading: selectedStoryLoading,
     refetch: selectedStoryRefetch,
     isSuccess: selectedStoryIsSucess,
+    remove: selectedStoryReset,
   } = api.story.getStoryByStoryId.useQuery({
     storyId:
       currentSession.storyId !== "default-id" ? currentSession.storyId : "",
@@ -284,6 +285,7 @@ const StoryPage: NextPage = () => {
       });
       return;
     }
+    selectedStoryReset();
     textReset();
     titleReset();
     imageCloudinaryReset();
@@ -308,6 +310,10 @@ const StoryPage: NextPage = () => {
   };
 
   const handleCreateNewSession = () => {
+    selectedStoryReset();
+    textReset();
+    titleReset();
+    imageCloudinaryReset();
     setIsShowingPrevResults(false);
     setCurrenSession({ storyId: "default-id" });
     setImageUrlResult("");
@@ -383,9 +389,7 @@ const StoryPage: NextPage = () => {
               <StorySteps
                 completedStep1={textIsSuccess}
                 completedStep2={titleSuccess}
-                completedStep3={
-                  imageIsSuccess && imageCloudinaryStatus !== "loading"
-                }
+                completedStep3={imageIsSuccess}
               />
               <LoadingSpinner size={390} />
             </section>
