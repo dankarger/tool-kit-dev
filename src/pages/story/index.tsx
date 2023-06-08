@@ -274,7 +274,7 @@ const StoryPage: NextPage = () => {
   });
 
   const handleStoryGenerateButton = (text: string) => {
-    scrollDivRef.current?.scrollIntoView({ behaviour: "auto" });
+    scrollDivRef.current?.scrollIntoView();
     console.log("story", text);
     if (!text) {
       toast({
@@ -337,7 +337,7 @@ const StoryPage: NextPage = () => {
 
   function handleScroll() {
     window.scroll({
-      bottom: 12, // or document.scrollingElement || document.body
+      top: 12, // or document.scrollingElement || document.body
       left: 10,
       behavior: "smooth",
     });
