@@ -70,7 +70,7 @@ export function SessionsCombobox({
   const [open, setOpen] = React.useState(false);
   const [isDialogueOpen, setDialogueOpen] = React.useState(false);
 
-  const handleConfirmDeleteButton = async (value: string) => {
+  const handleConfirmDeleteButton = (value: string) => {
     // setDialogueOpen(true);
     // const res = alert(value);
     const res = window.confirm("are you sure you want to delete this session");
@@ -124,7 +124,7 @@ export function SessionsCombobox({
                 onClick={() => {
                   // handleDeleteResult(value);
                   setDialogueOpen(true);
-                  handleConfirmDeleteButton(value);
+                  void handleConfirmDeleteButton(value);
                 }}
               >
                 {" "}

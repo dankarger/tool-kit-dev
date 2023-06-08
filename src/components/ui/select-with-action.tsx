@@ -103,6 +103,12 @@ export function SelectElement({
     return option.text.substring(0, 10);
   }
 
+  // TODO : fix order
+  const optionsTemp = [...options];
+  const sortedOptions: ReturnLabelProp[] = (
+    optionsTemp as ReturnLabelProp[]
+  ).reverse();
+
   return (
     <Form {...form}>
       <form
@@ -124,27 +130,44 @@ export function SelectElement({
                 <SelectContent>
                   {/* {!options && <div>LoadingPage...</div>} */}
                   <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
-                    {options.toReversed().map((option) => (
-                      // <SelectItem
-                      //   key={option.id}
-                      //   value={option.id}
-                      //   data-valueid={option.id}
-                      // >
-                      //   {returnLabelFromOption(option)}
-                      // </SelectItem>
+                    {/* {options.toReversed().map(
+                      (
+                        option:
+                          | Session
+                          | StoryResult
+                          | TranslationResultType
+                          | SummarizeResultType
+                      ) => ( */}
 
-                      // <SelectItem>
-                      <SessionsCombobox
-                        value={option.id}
-                        valueid={option.id}
-                        label={returnLabelFromOption(option)}
-                        title={returnLabelFromOption(option)}
-                        key={option.id}
-                        onSelect={onSelect}
-                        handleDeleteResult={handleDeleteResult}
-                      />
-                      // </SelectItem>
-                    ))}
+                    {sortedOptions.map(
+                      (
+                        option:
+                          | Session
+                          | StoryResult
+                          | TranslationResultType
+                          | SummarizeResultType
+                      ) => (
+                        // <SelectItem
+                        //   key={option.id}
+                        //   value={option.id}
+                        //   data-valueid={option.id}
+                        // >
+                        //   {returnLabelFromOption(option)}
+                        // </SelectItem>
+
+                        // <SelectItem>
+                        <SessionsCombobox
+                          value={option.id}
+                          valueid={option.id}
+                          label={returnLabelFromOption(option)}
+                          title={returnLabelFromOption(option)}
+                          key={option.id}
+                          onSelect={onSelect}
+                          handleDeleteResult={handleDeleteResult}
+                        />
+                        // </SelectItem>
+                      )
+                    )}
                   </ScrollArea>
                 </SelectContent>
               </Select>
