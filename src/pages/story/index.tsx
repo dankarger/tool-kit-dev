@@ -17,6 +17,7 @@ import { StorySection } from "@/components/story-section";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@radix-ui/react-separator";
 import { StoryResultDiv } from "@/components/story-result";
+import { StorySteps } from "@/components/story-steps";
 
 const StoryPage: NextPage = () => {
   const [userPromt, setUserPrompt] = useState("");
@@ -61,10 +62,14 @@ const StoryPage: NextPage = () => {
       await sessionRefetch();
     },
   });
+
   const {
     mutate: mutateText,
+    isSuccess: textIsSuccess,
     isLoading,
     data: textData,
+    status: textStatus,
+    reset: textReset,
   } = api.story.createStoryTextResult.useMutation({
     onSuccess: (data) => {
       // void session.refetch();
@@ -191,6 +196,9 @@ const StoryPage: NextPage = () => {
     mutate: createTitle,
     data: dataTitle,
     isLoading: titleisLoading,
+    isSuccess: titleSuccess,
+    status: titleStatus,
+    reset: titleReset,
   } = api.story.createTitle.useMutation({
     onSuccess: (data) => {
       // void session.refetch();
@@ -227,21 +235,27 @@ const StoryPage: NextPage = () => {
     },
   });
 
-  const { mutate: uplaodImageToCloudinary, isLoading: cloudinaryIsLoading } =
-    api.story.uploadImageToCloudinary.useMutation({
-      onSuccess(data: string) {
-        console.log(";cloudinary result", data);
-        setImageCloudinaryUrl(data);
-        createFullStoryResult({
-          title: title,
-          text: userPromt,
-          resultText: textResult,
-          resultPrompt: promptForImage,
-          resultImageUrl: data,
-        });
-      },
-      //TODO : ADD ERROR handeling
-    });
+  const {
+    mutate: uplaodImageToCloudinary,
+    data: imageCloudinaryData,
+    status: imageCloudinaryStatus,
+    reset: imageCloudinaryReset,
+    isLoading: cloudinaryIsLoading,
+    isSuccess: imageIsSuccess,
+  } = api.story.uploadImageToCloudinary.useMutation({
+    onSuccess(data: string) {
+      console.log(";cloudinary result", data);
+      setImageCloudinaryUrl(data);
+      createFullStoryResult({
+        title: title,
+        text: userPromt,
+        resultText: textResult,
+        resultPrompt: promptForImage,
+        resultImageUrl: data,
+      });
+    },
+    //TODO : ADD ERROR handeling
+  });
 
   const {
     mutate: createFullStoryResult,
@@ -270,6 +284,9 @@ const StoryPage: NextPage = () => {
       });
       return;
     }
+    textReset();
+    titleReset();
+    imageCloudinaryReset();
     setIsShowingPrevResults(false);
     setUserPrompt(text);
     handleCreateNewSession();
@@ -339,17 +356,8 @@ const StoryPage: NextPage = () => {
                 />
               )}
             </div>
-            {(isLoading ||
-              isFullStoryLoading ||
-              ImageIsLoading ||
-              titleisLoading ||
-              cloudinaryIsLoading ||
-              promptIsLoading) && (
-              <div className="flex h-fit w-full items-center justify-center">
-                <LoadingSpinner size={390} />
-              </div>
-            )}
           </section>
+
           <div>
             {selectedStory &&
               isShowingPrevResults &&
@@ -364,6 +372,24 @@ const StoryPage: NextPage = () => {
                 </section>
               )}
           </div>
+          {(isLoading ||
+            isFullStoryLoading ||
+            ImageIsLoading ||
+            titleisLoading ||
+            cloudinaryIsLoading ||
+            promptIsLoading) && (
+            <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
+              {/* <div className="flex h-full w-full items-center justify-center"> */}
+              <StorySteps
+                completedStep1={textIsSuccess}
+                completedStep2={titleSuccess}
+                completedStep3={
+                  imageIsSuccess && imageCloudinaryStatus !== "loading"
+                }
+              />
+              <LoadingSpinner size={390} />
+            </section>
+          )}
           {data && !isShowingPrevResults && (
             // currentSession.storyId !== "default-id" &&
             <>

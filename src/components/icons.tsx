@@ -10,6 +10,7 @@ import {
   ChevronRight,
   Command,
   CreditCard,
+  Disc,
   File,
   FileText,
   HelpCircle,
@@ -23,6 +24,7 @@ import {
   Trash,
   User,
   X,
+  CheckCircle2,
   type Icon as LucideIcon,
 } from "lucide-react";
 
@@ -51,7 +53,10 @@ export const Icons = {
   pizza: Pizza,
   laptop: Laptop,
   check: Check,
+  checkCircle: CheckCircle2,
   image: Image,
+  disc: Disc,
+
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path
