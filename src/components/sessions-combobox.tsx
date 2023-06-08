@@ -162,7 +162,7 @@ export function SessionsCombobox({
               </Button>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-        <DropdownMenuSub>  
+            {/* {/* <DropdownMenuSub>  
               <DropdownMenuSubTrigger>
                 <Tags className="mr-2 h-4 w-4" />
                 Apply label
