@@ -53,11 +53,12 @@ export const StoryResultDiv = ({
             {/* <img src="/blur-2.png" alt="image" /> */}
             <Image
               src={resultImageUrl}
-              width={1850}
-              height={1850}
+              // width={1850}
+              // height={1850}
               alt={title}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               // loading="lazy"
+              fill={true}
               placeholder="blur"
               blurDataURL="/blur-3.png"
               // blurDataURL={rgbDataURL(238, 237, 234)}
