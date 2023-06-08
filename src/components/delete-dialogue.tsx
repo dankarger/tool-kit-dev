@@ -56,7 +56,13 @@ export function DeleteDialogue({
             }}
             className="bg-red-600 focus:ring-red-600"
           >
-            <Button variant="outline" color="red" onClick={()=>handleChange()}>click</Button>/>
+            <Button
+              variant="outline"
+              color="red"
+              onClick={() => handleChange()}
+            >
+              click
+            </Button>
             {isDeleteLoading ? (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             ) : (
