@@ -4,8 +4,7 @@ export const INTERNAL_VERSION = "1.5";
 
 export const siteConfig = {
   name: "GPTool-Kit",
-  description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+  description: "Unleash the Power of ChatGPT.",
   mainNav: [
     {
       title: "Home",

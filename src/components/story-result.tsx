@@ -58,8 +58,8 @@ export const StoryResultDiv = ({
               alt={title}
               // loading="lazy"
               placeholder="blur"
-              // blurDataURL="/public/blur-2.png"
-              blurDataURL={rgbDataURL(238, 237, 234)}
+              blurDataURL="/blur-2.png"
+              // blurDataURL={rgbDataURL(238, 237, 234)}
             />
           </div>
         </CardFooter>

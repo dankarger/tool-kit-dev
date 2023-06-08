@@ -348,7 +348,7 @@ const StoryPage: NextPage = () => {
       <Head>
         <title>Summarize</title>
         <meta name="description" content="GPTool kit" />
-        <link rel="icon" href="/favicon.ico" />
+        {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <DashboardShell>
         <main className="flex w-full flex-1 flex-col overflow-hidden">
