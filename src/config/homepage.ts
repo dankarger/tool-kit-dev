@@ -1,4 +1,4 @@
-import { HomePageConfig as HomePageConfigtype } from "@/types";
+import { type HomePageConfig as HomePageConfigtype } from "@/types";
 
 export const HomePageConfig: HomePageConfigtype = {
   title: "Introducing GPToolKit: Unleash the Power of OpenAI",

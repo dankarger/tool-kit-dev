@@ -6,7 +6,7 @@ import {
   publicProcedure,
   privateProcedure,
 } from "@/server/api/trpc";
-import { TranslationResult } from "@prisma/client";
+import { type TranslationResult } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import {
   ChatCompletionRequestMessage,

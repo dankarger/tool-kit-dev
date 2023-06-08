@@ -7,7 +7,7 @@ import {
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import {
-  ChatCompletionRequestMessage,
+  type ChatCompletionRequestMessage,
   ChatCompletionRequestMessageRoleEnum,
   ChatCompletionResponseMessage,
 } from "openai";

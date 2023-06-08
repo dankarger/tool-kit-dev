@@ -1,8 +1,8 @@
 import { z } from "zod";
 import openai from "@/lib/openai";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
-import { SummarizeResult } from "@prisma/client";
-import { SummarizeResultType } from "@/types";
+import { type SummarizeResult } from "@prisma/client";
+import { type SummarizeResultType } from "@/types";
 import { TRPCError } from "@trpc/server";
 import {
   ChatCompletionRequestMessage,

@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/collapsible";
 
 import { Separator } from "@/components/ui/separator";
-import { TranslationResult } from "@prisma/client";
+import { type TranslationResult } from "@prisma/client";
 
 import * as React from "react";
 

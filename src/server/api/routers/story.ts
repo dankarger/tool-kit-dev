@@ -1,7 +1,7 @@
 import { unknown, z } from "zod";
 import openai from "@/lib/openai";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
-import { StoryResult } from "@prisma/client";
+import { type StoryResult } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { Analytics, Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis";

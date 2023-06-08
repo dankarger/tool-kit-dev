@@ -1,7 +1,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
-import { NavItem } from "@/types/index";
+import { type NavItem } from "@/types/index";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
