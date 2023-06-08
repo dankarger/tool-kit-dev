@@ -2,7 +2,7 @@ import * as React from "react";
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
 import { type NavItem } from "@/types/index";
-import { siteConfig } from "@/config/site";
+import { siteConfig, dashboardConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { usePathname } from "next/navigation";
@@ -45,7 +45,13 @@ export function MainNav({ items, children }: MainNavProps) {
                     "flex items-center text-lg font-semibold text-muted-foreground sm:text-sm",
                     // item.disabled && "cursor-not-allowed opacity-80"
 
-                    path === item.href ? "underline" : "transparent"
+                    path === item.href
+                      ? //  ||
+                        //   dashboardConfig.sidebarNav.find(
+                        //     (item) => item.href === path
+                        //   )
+                        "underline"
+                      : "transparent"
                   )}
                 >
                   {item.title}
