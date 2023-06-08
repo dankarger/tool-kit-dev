@@ -32,6 +32,7 @@ const StoryPage: NextPage = () => {
   });
   const user = useUser();
   const ctx = api.useContext();
+  const scrollDivRef = React.useRef<HTMLDivElement>(null);
 
   // const { data, isLoading, isFetching } = api.translate.getAllTranslationsByAuthorId.useQ({
   //   authorId: user.user?.id,
@@ -273,6 +274,7 @@ const StoryPage: NextPage = () => {
   });
 
   const handleStoryGenerateButton = (text: string) => {
+    scrollDivRef.current?.scrollIntoView({ behaviour: "auto" });
     console.log("story", text);
     if (!text) {
       toast({
@@ -299,6 +301,12 @@ const StoryPage: NextPage = () => {
 
   const handleSelectStory = (storyId: string) => {
     setIsShowingPrevResults(true);
+    scrollDivRef.current?.scrollIntoView({
+      behavior: "auto",
+      // block: "end",
+      // inline: "nearest",
+    });
+    // handleScroll();
     console.log("storyId", storyId);
     const obj = {
       storyId: storyId ?? "default-id",
@@ -326,6 +334,15 @@ const StoryPage: NextPage = () => {
     });
     void sessionRefetch();
   };
+
+  function handleScroll() {
+    window.scroll({
+      bottom: 12, // or document.scrollingElement || document.body
+      left: 10,
+      behavior: "smooth",
+    });
+  }
+
   return (
     <>
       <Head>
@@ -385,13 +402,20 @@ const StoryPage: NextPage = () => {
             cloudinaryIsLoading ||
             promptIsLoading) && (
             <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
-              {/* <div className="flex h-full w-full items-center justify-center"> */}
-              <StorySteps
-                completedStep1={textIsSuccess}
-                completedStep2={titleSuccess}
-                completedStep3={imageIsSuccess}
-              />
-              <LoadingSpinner size={390} />
+              <div className="flex h-full w-full flex-col items-center justify-center">
+                <div className=" flex h-1/2 w-1/2 flex-col justify-center pl-4">
+                  {/* <LoadingSpinner size={16} /> */}
+                  <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+                    Please wait...
+                  </h4>
+                  {/* <LoadingSpinner size={16} /> */}
+                </div>
+                <StorySteps
+                  completedStep1={textIsSuccess}
+                  completedStep2={titleSuccess}
+                  completedStep3={imageIsSuccess}
+                />
+              </div>
             </section>
           )}
           {data && !isShowingPrevResults && (
@@ -416,6 +440,10 @@ const StoryPage: NextPage = () => {
               </section>
             </>
           )}
+          <div
+            className="visibility:hidden 	absolute bottom-10  left-0 right-0 "
+            ref={scrollDivRef}
+          ></div>
         </main>
       </DashboardShell>
     </>

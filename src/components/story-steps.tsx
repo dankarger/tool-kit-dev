@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { List } from "lucide-react";
-
+import { LoadingSpinner } from "@/components/ui/spinner";
 interface ListItemProps {
   title: string;
   subTitle: string;
@@ -59,10 +59,16 @@ export const StorySteps = ({
               completedStep1 ? "bg-green-200" : ""
             )}
           >
-            {completedStep1 ? <Icons.checkCircle /> : <Icons.disc />}
+            {completedStep1 ? (
+              <Icons.checkCircle />
+            ) : (
+              <LoadingSpinner size={8} />
+            )}
           </span>
           <h3 className="font-medium leading-tight">Generating Story</h3>
-          <p className="text-sm">Step details here</p>
+          <p className="text-sm">
+            Your story is being generated based on youe input
+          </p>
         </li>
         <li className="mb-10 ml-6">
           <span
@@ -71,7 +77,11 @@ export const StorySteps = ({
               completedStep2 ? "bg-green-200" : ""
             )}
           >
-            {completedStep2 ? <Icons.checkCircle /> : <Icons.disc />}
+            {completedStep2 ? (
+              <Icons.checkCircle />
+            ) : (
+              <LoadingSpinner size={8} />
+            )}
           </span>
           <h3 className="font-medium leading-tight">Generating Title</h3>
           <p className="text-sm">Step details here</p>
@@ -79,11 +89,15 @@ export const StorySteps = ({
         <li className="mb-10 ml-6">
           <span
             className={cn(
-              "absolute -left-4 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100  ring-4 ring-white dark:bg-green-900 dark:ring-gray-900",
+              "absolute -left-3 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100  ring-4 ring-white dark:bg-green-900 dark:ring-gray-900",
               completedStep3 ? "bg-green-200" : ""
             )}
           >
-            {completedStep3 ? <Icons.checkCircle /> : <Icons.disc />}
+            {completedStep3 ? (
+              <Icons.checkCircle />
+            ) : (
+              <LoadingSpinner size={8} />
+            )}
           </span>
           <h3 className="font-medium leading-tight">Generating Image</h3>
           <p className="text-sm">Step details here</p>

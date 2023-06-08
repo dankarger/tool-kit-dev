@@ -8,6 +8,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { StoryResult } from "@/types";
+const keyStr =
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+const triplet = (e1: number, e2: number, e3: number) =>
+  keyStr.charAt(e1 >> 2) +
+  keyStr.charAt(((e1 & 3) << 4) | (e2 >> 4)) +
+  keyStr.charAt(((e2 & 15) << 2) | (e3 >> 6)) +
+  keyStr.charAt(e3 & 63);
+
+const rgbDataURL = (r: number, g: number, b: number) =>
+  `data:image/gif;base64,R0lGODlhAQABAPAA${
+    triplet(0, r, g) + triplet(b, 255, 255)
+  }/yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==`;
 
 type Props = { title: string; resultText: string; resultImageUrl: string };
 export const StoryResultDiv = ({
@@ -34,8 +47,19 @@ export const StoryResultDiv = ({
           <p className="leading-7 [&:not(:first-child)]:mt-6">{resultText}</p>
         </CardContent>
         <CardFooter className="flex items-center justify-center">
-          <img src={resultImageUrl} alt="image" />
+          {/* <img src={resultImageUrl} alt="image" /> */}
           {/* <p>Card Footer</p> */}
+
+          <Image
+            src={resultImageUrl}
+            width={1850}
+            height={1850}
+            alt={title}
+            // loading="lazy"
+            placeholder="blur"
+            // blurDataURL="/public/blur-2.png"
+            blurDataURL={rgbDataURL(237, 181, 6)}
+          />
         </CardFooter>
       </Card>
     </div>
