@@ -49,13 +49,14 @@ export const StoryResultDiv = ({
         <CardFooter className="flex items-center justify-center">
           {/* <img src={resultImageUrl} alt="image" /> */}
           {/* <p>Card Footer</p> */}
-          <div className="h-[350px]  w-full bg-[url('/blur-3.png')] bg-cover bg-center bg-no-repeat">
+          <div className="relative h-[650px] w-full bg-[url('/blur-3.png')] bg-cover bg-center bg-no-repeat">
             {/* <img src="/blur-2.png" alt="image" /> */}
             <Image
               src={resultImageUrl}
               width={1850}
               height={1850}
               alt={title}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               // loading="lazy"
               placeholder="blur"
               blurDataURL="/blur-3.png"
