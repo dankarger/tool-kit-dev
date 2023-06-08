@@ -3,7 +3,7 @@ import { type NextPage } from "next";
 import type { Session, Response, ChatMessage } from "@/types";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import Head from "next/head";
-import { dashboardConfig } from "@/config/dashboard";
+import { dashboardConfig } from "@/config/site";
 import { SessionsSection } from "@/components/sessions-section";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
