@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Calendar, MoreHorizontal, Tags, Trash, User } from "lucide-react";
-import { DeleteDialogue } from "./delete-dialogue";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -44,18 +43,6 @@ type SessionsComboboxProps = {
   valueid: string;
   onSelect: (value: string) => void;
   handleDeleteResult: (value: string) => void;
-};
-
-const ShowAlert = (value: string, isOpen: boolean, handleDeleteResult: any) => {
-  if (!isOpen) return null;
-
-  return (
-    <DeleteDialogue
-      isOpen={isOpen}
-      // value={value}
-      handleDeleteResult={() => console.log("delete")}
-    />
-  );
 };
 
 export function SessionsCombobox({
