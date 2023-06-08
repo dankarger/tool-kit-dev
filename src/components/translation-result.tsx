@@ -41,13 +41,13 @@ export const TranslationResultComponent = (
         {/* <CardTitle>[{data.data.language}]</CardTitle> */}
         <CardDescription>
           {" "}
-          <p className="leading-7 [&:not(:first-child)]:mt-6">
-            <span className="flex items-center text-gray-500 underline">
-              {" "}
-              Original:{" "}
-            </span>{" "}
-            {data.data.text}
-          </p>
+          {/* <p className="leading-7 [&:not(:first-child)]:mt-6"> */}
+          <span className="flex items-center text-gray-500 underline">
+            {" "}
+            Original:{" "}
+          </span>{" "}
+          {data.data.text}
+          {/* </p> */}
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -19,7 +19,6 @@ import { SessionsSection2 } from "@/components/session-section2";
 import { SummarizeResult } from "@/components/summarize-result";
 import { ComboboxDropdownMenu } from "@/components/ui/ComboboxDropdownMenu";
 import { IdentificationLink } from "@clerk/nextjs/server";
-import { SessionsCombobox } from "@/components/sessions-combobox";
 
 // const fetchResult = (id: string) => {
 //   const helloNoArgs = api.summarize.getSummarizeResultById.useQuery({
