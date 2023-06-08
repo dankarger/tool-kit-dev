@@ -23,7 +23,9 @@ export function DeleteDialogue({
   setOpen,
 }: DeleteDialogueProps) {
   const [isDeleteLoading, setIsDeleteLoading] = React.useState<boolean>(false);
-
+  const handleChange = () => {
+    console.log("deleetetetett");
+  };
   return (
     <AlertDialog open={isOpen} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
@@ -40,11 +42,11 @@ export function DeleteDialogue({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            onClick={async (event) => {
-              event.preventDefault();
-              setIsDeleteLoading(true);
+            onClick={(event) => {
+              void event.preventDefault();
+              void setIsDeleteLoading(true);
               console.log("delete");
-              const deleted = await onDelete();
+              const deleted = void onDelete();
 
               if (deleted) {
                 setIsDeleteLoading(false);
@@ -54,6 +56,7 @@ export function DeleteDialogue({
             }}
             className="bg-red-600 focus:ring-red-600"
           >
+            <Button variant="outline" color="red" onClick={()=>handleChange()}>click</Button>/>
             {isDeleteLoading ? (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             ) : (

@@ -2,7 +2,8 @@ import * as React from "react";
 import { Calendar, MoreHorizontal, Tags, Trash, User } from "lucide-react";
 import { DeleteDialogue } from "./delete-dialogue";
 import { Button } from "@/components/ui/button";
-import { ConfirmDialog } from "@/components/ui/confirm-dialogue";
+// import { ConfirmDialog } from "@/components/ui/confirm-dialogue";
+import { DeleteDialog2 } from "@/components/ui/delete-dialog2";
 
 import {
   Command,
@@ -86,6 +87,7 @@ export function SessionsCombobox({
         </span> */}
         <span className="text-muted-foreground">{title || "Title"}</span>
       </p>
+
       {/* <DeleteDialogue
         isOpen={isDialogueOpen}
         value={value}
@@ -93,12 +95,14 @@ export function SessionsCombobox({
       /> */}
       {!isDialogueOpen && (
         <>
+          <DeleteDialog2 isOpen={isDialogueOpen} />
+
           {/* // <ShowAlert
         //   value={value}
         //   isOpen={isDialogueOpen}
         //   handleDeleteResult={handleDeleteResult}
         // /> */}
-          <ConfirmDialog
+          {/* <ConfirmDialog
             title={"dddddd"}
             isOpen={isDialogueOpen}
             onClose={setDialogueOpen}
@@ -106,9 +110,9 @@ export function SessionsCombobox({
               event.preventDefault();
 
               console.log("delete");
-            }}
-          />
-          <DeleteDialogue
+            }} */}
+          {/* /> */}
+          {/* <DeleteDialogue
             isOpen={isDialogueOpen}
             setIsOpen={setDialogueOpen}
             value={value}
@@ -117,7 +121,7 @@ export function SessionsCombobox({
 
               console.log("delete");
             }}
-          />
+          /> */}
         </>
       )}
       {/* <ShowAlert
@@ -157,8 +161,8 @@ export function SessionsCombobox({
                 Load Session
               </Button>
             </DropdownMenuItem>
-            {/* <DropdownMenuSeparator /> */}
-            {/* <DropdownMenuSub>
+            <DropdownMenuSeparator />
+        <DropdownMenuSub>  
               <DropdownMenuSubTrigger>
                 <Tags className="mr-2 h-4 w-4" />
                 Apply label
