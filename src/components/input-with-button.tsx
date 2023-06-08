@@ -1,7 +1,7 @@
 import { use, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import * as z from "zod";
 import e from "express";

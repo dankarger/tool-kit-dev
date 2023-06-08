@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Icons } from "@/components/icons";
-
+import { SessionsCombobox } from "@/components/sessions-combobox";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -30,6 +30,7 @@ import type {
   Response,
   ChatMessage,
 } from "@/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const FormSchema = z.object({
   session: z.string({
@@ -44,12 +45,14 @@ type SelectElementProps = {
     | SummarizeResultType[];
   onSelect: (value: string) => void;
   onNewSession: () => void;
+  handleDeleteResult: (value: string) => void;
 };
 
 export function SelectElement({
   options,
   onSelect,
   onNewSession,
+  handleDeleteResult,
 }: SelectElementProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -100,6 +103,12 @@ export function SelectElement({
     return option.text.substring(0, 10);
   }
 
+  // TODO : fix order
+  const optionsTemp = [...options];
+  const sortedOptions: ReturnLabelProp[] = (
+    optionsTemp as ReturnLabelProp[]
+  ).reverse();
+
   return (
     <Form {...form}>
       <form
@@ -120,15 +129,46 @@ export function SelectElement({
                 </FormControl>
                 <SelectContent>
                   {/* {!options && <div>LoadingPage...</div>} */}
-                  {options.map((option) => (
-                    <SelectItem
-                      key={option.id}
-                      value={option.id}
-                      data-valueid={option.id}
-                    >
-                      {returnLabelFromOption(option)}
-                    </SelectItem>
-                  ))}
+                  <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
+                    {/* {options.toReversed().map(
+                      (
+                        option:
+                          | Session
+                          | StoryResult
+                          | TranslationResultType
+                          | SummarizeResultType
+                      ) => ( */}
+
+                    {sortedOptions.map(
+                      (
+                        option:
+                          | Session
+                          | StoryResult
+                          | TranslationResultType
+                          | SummarizeResultType
+                      ) => (
+                        // <SelectItem
+                        //   key={option.id}
+                        //   value={option.id}
+                        //   data-valueid={option.id}
+                        // >
+                        //   {returnLabelFromOption(option)}
+                        // </SelectItem>
+
+                        // <SelectItem>
+                        <SessionsCombobox
+                          value={option.id}
+                          valueid={option.id}
+                          label={returnLabelFromOption(option)}
+                          title={returnLabelFromOption(option)}
+                          key={option.id}
+                          onSelect={onSelect}
+                          handleDeleteResult={handleDeleteResult}
+                        />
+                        // </SelectItem>
+                      )
+                    )}
+                  </ScrollArea>
                 </SelectContent>
               </Select>
               <FormDescription>
@@ -140,9 +180,9 @@ export function SelectElement({
           )}
         />
         <div className="flex justify-between align-middle ">
-          <Button disabled={!isDirty || !isValid} type="submit">
+          {/* <Button disabled={!isDirty || !isValid} type="submit">
             Load
-          </Button>
+          </Button> */}
           <Button
             className="w-16 bg-slate-400"
             onClick={() => {

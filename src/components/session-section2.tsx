@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Result } from "@/types";
-import { TranslationResult, SummarizeResult } from "prisma/prisma-client";
+import { TranslationResult, type SummarizeResult } from "prisma/prisma-client";
 import { ResultPopover } from "@/components/result-popover";
 
 interface SessionsSectionProps {

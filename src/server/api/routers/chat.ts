@@ -7,7 +7,7 @@ import {
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import {
-  ChatCompletionRequestMessage,
+  type ChatCompletionRequestMessage,
   ChatCompletionRequestMessageRoleEnum,
   ChatCompletionResponseMessage,
 } from "openai";
@@ -211,5 +211,17 @@ export const chatRouter = createTRPCRouter({
       // const chatMessage = { response: data };
       console.log("chatMessage/,", chatMessage);
       return chatMessage;
+    }),
+  deleteResult: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      if (!input.id) return;
+      const translateDelteResult = await ctx.prisma.chatSession.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      // if (!SummarizeResult) throw new TRPCError({ code: "NOT_FOUND" });
+      // return SummarizeDelteResult;
     }),
 });

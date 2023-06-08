@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { ResponseDiv } from "./response-div";
 import { Fragment } from "react";
 import type { ResponseSectionProps } from "@/types";
-import { ChatMessage } from "@prisma/client";
+import { type ChatMessage } from "@prisma/client";
 
 export function ResponseSection({
   messages,

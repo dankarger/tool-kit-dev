@@ -6,7 +6,7 @@ import {
   publicProcedure,
   privateProcedure,
 } from "@/server/api/trpc";
-import { TranslationResult } from "@prisma/client";
+import { type TranslationResult } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import {
   ChatCompletionRequestMessage,
@@ -126,6 +126,19 @@ export const TranslateRouter = createTRPCRouter({
       // const chatMessage = { response: data };
       console.log("transltae - data/,", translationresult);
       return translationresult;
+    }),
+
+  deleteResult: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      if (!input.id) return { id: "default-id" };
+      const translateDelteResult = await ctx.prisma.translationResult.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      // if (!SummarizeResult) throw new TRPCError({ code: "NOT_FOUND" });
+      // return SummarizeDelteResult;
     }),
 });
 // const response = await openai.createEdit({

@@ -18,6 +18,7 @@ interface SessionsSectionProps {
 
   // onSelect: (sessionId: string) => void;
   onNewSession: () => void;
+  handleDeleteResult: (resultId: string) => void;
 }
 
 export const SessionsSection = ({
@@ -25,6 +26,7 @@ export const SessionsSection = ({
   onClick,
   onSelect,
   onNewSession,
+  handleDeleteResult,
 }: SessionsSectionProps) => {
   if (!sessions) return null;
   return (
@@ -33,6 +35,7 @@ export const SessionsSection = ({
         options={sessions}
         onSelect={onSelect}
         onNewSession={onNewSession}
+        handleDeleteResult={handleDeleteResult}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -129,7 +129,7 @@ export function TranslateSection({
             </FormItem>
           )}
         />
-        <div>
+        <div className="w-full">
           <FormField
             control={form.control}
             name="text"
@@ -140,7 +140,7 @@ export function TranslateSection({
                   <Textarea
                     placeholder="Past or type here the text..."
                     rows={4}
-                    className="flex w-full grow"
+                    className="w-full"
                     autoFocus
                     {...field}
                   />

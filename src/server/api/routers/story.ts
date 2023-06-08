@@ -1,7 +1,7 @@
 import { unknown, z } from "zod";
 import openai from "@/lib/openai";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
-import { StoryResult } from "@prisma/client";
+import { type StoryResult } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { Analytics, Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis";
@@ -198,5 +198,17 @@ export const storyRouter = createTRPCRouter({
       });
       console.log("storyresult", storyResult);
       return storyResult;
+    }),
+  deleteResult: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      if (!input.id) return { id: "default-id" };
+      const storyDelteResult = await ctx.prisma.storyResult.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      // if (!SummarizeResult) throw new TRPCError({ code: "NOT_FOUND" });
+      // return SummarizeDelteResult;
     }),
 });

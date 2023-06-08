@@ -1,8 +1,8 @@
 import { z } from "zod";
 import openai from "@/lib/openai";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
-import { SummarizeResult } from "@prisma/client";
-import { SummarizeResultType } from "@/types";
+import { type SummarizeResult } from "@prisma/client";
+import { type SummarizeResultType } from "@/types";
 import { TRPCError } from "@trpc/server";
 import {
   ChatCompletionRequestMessage,
@@ -111,5 +111,18 @@ export const summarizeRouter = createTRPCRouter({
 
       console.log("summarizeResult - data/,", summarizeResult);
       return summarizeResult;
+    }),
+
+  deleteResult: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      if (!input.id) return { id: "default-id" };
+      const SumarizeDelteResult = await ctx.prisma.summarizeResult.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      // if (!SummarizeResult) throw new TRPCError({ code: "NOT_FOUND" });
+      // return SummarizeDelteResult;
     }),
 });

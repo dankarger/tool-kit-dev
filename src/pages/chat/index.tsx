@@ -18,14 +18,39 @@ import { InputWithButton } from "@/components/input-with-button";
 import { ResponseDiv } from "@/components/response-div";
 import { ResponseSection } from "@/components/response-sections";
 import { SessionsSection } from "@/components/sessions-section";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { TextInputForm } from "@/components/text-input-form";
-
+import { toast } from "@/components/ui/use-toast";
 const DEFAULT_ID = "defaultId";
+
+const handleToastError = (errorMessage: string[]) => {
+  if (errorMessage && errorMessage[0]) {
+    toast({
+      title: errorMessage[0],
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">
+            {JSON.stringify(errorMessage, null, 2)}
+          </code>
+        </pre>
+      ),
+    });
+    console.log("errorMessage", errorMessage[0]);
+  } else {
+    toast({
+      title: "fialed",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">Failed </code>
+        </pre>
+      ),
+    });
+    console.log("Failed to create translation, please try again");
+  }
+};
 
 const Sessionfeed = ({ id }: { id: string }) => {
   const { data, isLoading, isError, refetch } =
@@ -55,6 +80,7 @@ const ChatPage: NextPage = () => {
     id: DEFAULT_ID,
   });
   const router = useRouter();
+  const [isDeleteDialogueOpen, setIsDeleteDialogueOpen] = React.useState(false);
   const user = useUser();
   const randomName = useId();
   const ctx = api.useContext();
@@ -75,6 +101,15 @@ const ChatPage: NextPage = () => {
     isSuccess,
   } = api.session.getChatSessionsByAuthorId.useQuery({
     authorId: user.user?.id ?? "random3",
+  });
+
+  const deleteResult = api.chat.deleteResult.useMutation({
+    async onSuccess() {
+      toast({
+        title: "Deleted 1 Result",
+      });
+      await sessionRefetch();
+    },
   });
 
   const createNewSession = api.session.createChatSession.useMutation({
@@ -101,12 +136,13 @@ const ChatPage: NextPage = () => {
       void sessionRefetch();
       return sessionId;
     },
+    // errorHandler
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
       if (errorMessage && errorMessage[0]) {
-        toast.error(errorMessage[0]);
+        handleToastError(errorMessage);
       } else {
-        toast.error("Failed to create session, please try again");
+        handleToastError(["Failed to create translation, please try again"]);
       }
     },
   });
@@ -115,21 +151,23 @@ const ChatPage: NextPage = () => {
       setPromptValue("");
       void session.refetch();
     },
+    // errorHandler
+
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
       if (errorMessage && errorMessage[0]) {
-        toast.error(errorMessage[0]);
-        console.log("errorMessage", errorMessage[0]);
+        handleToastError(errorMessage);
       } else {
-        toast.error("Failed to create chat, please try again");
-        console.log("Failed to create post, please try again");
+        handleToastError(["Failed to create translation, please try again"]);
       }
     },
   });
 
   const handleCreateNewSession = () => {
     if (!user.user?.id) {
-      toast.error("Please login to create a new session");
+      // errorHandler
+
+      handleToastError(["You need to be logged in to create a new session"]);
       return;
     }
     const currentTime = new Date();
@@ -144,48 +182,6 @@ const ChatPage: NextPage = () => {
     });
     setIsShowingPrevResults(false);
   };
-
-  // useEffect(() => {
-  //   if (currentSession.id === DEFAULT_ID) {
-  //     handleCreateNewSession();
-  //   }
-  //   // setNeedRefresh(true);
-  //   void ctx.session.getChatSessionsByAuthorId.invalidate();
-  //   void session.refetch();
-  //   void sessionRefetch();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (currentSession.id === DEFAULT_ID) {
-  //     handleCreateNewSession();
-  //     void session.refetch();
-  //     void sessionRefetch();
-  //   }
-  //   void session.refetch();
-  //   void sessionRefetch();
-  // }, [isSessionActivated, currentSession.id]);
-
-  // useEffect(() => {
-  //   console.log("currentSession", currentSession);
-  // }, [isSessionActivated]);
-
-  // const handleUserStartTyping = () => {
-  //   console.log("fdfdfdfdfdf");
-  //   if (currentSession.id === DEFAULT_ID) {
-  //     console.log("currentSession");
-  //     handleCreateNewSession();
-  //     return;
-  //   }
-  //   return;
-  // };
-
-  // // useEffect(() => {
-  //   window.addEventListener("keypress", handleUserStartTyping);
-
-  //   return () => {
-  //     window.removeEventListener("keypress", handleUserStartTyping);
-  //   };
-  // }, []);
 
   const handleCreateNewChateMessage = (
     chatHistory: { role: string; content: string }[],
@@ -240,13 +236,10 @@ const ChatPage: NextPage = () => {
     setIsShowingPrevResults(false);
     setPromptValue(value);
     if (!user.user?.id) {
-      return toast.error("Please login to continue");
+      return handleToastError(["Please login to continue"]);
     }
     setIsSessionActivated(true);
-    // console.log(
-    //   "sessionData2323232",
-    //   sessionData?.filter((session) => session.id === currentSession.id)
-    // );
+
     const currentSessionMesages =
       sessionData?.filter((session) => session.id === currentSession.id) || [];
     if (currentSessionMesages[0] !== undefined) {
@@ -255,10 +248,6 @@ const ChatPage: NextPage = () => {
         currentSessionMesages[0]?.messages.length > 0
       ) {
         chatHistory = arrangeChatHistory(currentSessionMesages[0].messages);
-        // console.log(
-        //   "currentSessionMesages-----222---",
-        //   currentSessionMesages[0]?.messages
-        // );
       }
     }
 
@@ -297,13 +286,6 @@ const ChatPage: NextPage = () => {
     void session.refetch();
     void sessionRefetch();
   };
-  // const handleNewSessionButton = () => {
-  //   setCurrenSession({ id: DEFAULT_ID });
-  //   setIsSessionActivated(true);
-
-  //   void session.refetch();
-  //   void sessionRefetch();
-  // };
 
   const handleSelectSession2 = (sessionId: string) => {
     console.log("sessionId", sessionId);
@@ -316,7 +298,19 @@ const ChatPage: NextPage = () => {
     // ctx.chat.getSessionMessagesBySessionId.invalidate();
     void sessionRefetch();
   };
-  console.log("sid", currentSession.id);
+
+  const handleDeleteResult = (id: string) => {
+    void deleteResult.mutate({
+      id: id,
+    });
+    void sessionRefetch();
+    setIsDeleteDialogueOpen(false);
+  };
+
+  // const handleDialogueOpen = (id: string) => {
+  //   setIsDeleteDialogueOpen(true);
+  // };
+
   return (
     <>
       <Head>
@@ -328,7 +322,8 @@ const ChatPage: NextPage = () => {
         <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">
           <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
           <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-            <div className="flex  w-full  flex-row justify-between ">
+            {/* <div className="flex  w-full  flex-row justify-between "> */}
+            <div className="lg:dark:hover: flex h-full w-full  flex-col items-start justify-start rounded-md p-4 align-middle lg:flex-row  lg:flex-wrap lg:items-center  lg:justify-between  lg:gap-x-4  lg:gap-y-0 lg:rounded-md  lg:border lg:border-gray-200  lg:bg-white   lg:px-3 lg:py-8  lg:align-middle  lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-400">
               <TextInputForm
                 inputType="text"
                 placeholder={"Type your message here."}
@@ -342,6 +337,7 @@ const ChatPage: NextPage = () => {
                     onClick={handleSelectSession}
                     onSelect={handleSelectSession2}
                     onNewSession={handleCreateNewSession}
+                    handleDeleteResult={handleDeleteResult}
                   />
                 </div>
               )}
@@ -352,10 +348,15 @@ const ChatPage: NextPage = () => {
                     onClick={handleSelectSession}
                     onSelect={handleSelectSession2}
                     onNewSession={handleCreateNewSession}
+                    handleDeleteResult={handleDeleteResult}
                   />
                 </div>
               )}
             </div>
+            {/* <DeleteDialogue
+              onDelete={handleDeleteResult}
+              isOpen={isDeleteDialogueOpen}
+            /> */}
           </section>
           <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
             {isLoading && (

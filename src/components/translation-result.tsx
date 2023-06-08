@@ -5,7 +5,7 @@ import {
 } from "@/components/ui/collapsible";
 
 import { Separator } from "@/components/ui/separator";
-import { TranslationResult } from "@prisma/client";
+import { type TranslationResult } from "@prisma/client";
 
 import * as React from "react";
 
@@ -34,13 +34,20 @@ interface TranslationResultProps {
 export const TranslationResultComponent = (
   data: TranslationResultProps
 ): React.ReactElement => {
+  const text = data.data.text.split("]")[1];
   return (
     <Card className="w-full text-left">
       <CardHeader>
-        <CardTitle>[{data.data.language}]</CardTitle>
+        {/* <CardTitle>[{data.data.language}]</CardTitle> */}
         <CardDescription>
           {" "}
-          <span className="text-gray-100"> Original: </span> {data.data.text}
+          {/* <p className="leading-7 [&:not(:first-child)]:mt-6"> */}
+          <span className="flex items-center text-gray-500 underline">
+            {" "}
+            Original:{" "}
+          </span>{" "}
+          {data.data.text}
+          {/* </p> */}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -54,11 +61,11 @@ export const TranslationResultComponent = (
           </div> */}
         <div>
           <p className="leading-7 [&:not(:first-child)]:mt-6">
-            <span className="text-gray-500 underline">
+            <span className="flex items-center text-gray-500 underline">
               {" "}
               #{data.data.language}{" "}
             </span>
-            : {data.data.translation}
+            {data.data.translation}
           </p>
         </div>
       </CardContent>

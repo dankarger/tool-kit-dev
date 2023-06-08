@@ -41,8 +41,20 @@ const SummarizePage: NextPage = () => {
   } = api.summarize.getAllSummarizeByAuthorId.useQuery({
     authorId: user.user?.id ?? "",
   });
-  const tesing = api.summarize.getSummarizeResultById.useQuery({
-    id: currentSession.id,
+  const deleteResult = api.summarize.deleteResult.useMutation({
+    async onSuccess() {
+      toast({
+        title: "Deleted 1 Result",
+        // description: (
+        //   <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+        //     <code className="text-white">
+        //       Failed to summarize , please try again{" "}
+        //     </code>
+        //   </pre>
+        // ),
+      });
+      await sessionRefetch();
+    },
   });
   const {
     data: selectedSummarizeResult,
@@ -63,7 +75,6 @@ const SummarizePage: NextPage = () => {
   const { mutate, isLoading, data } =
     api.summarize.createSummarizeResult.useMutation({
       onSuccess: () => {
-        // void session.refetch();
         console.log("sucesss ");
       },
       onError: (error) => {
@@ -108,7 +119,7 @@ const SummarizePage: NextPage = () => {
       });
       return;
     }
-    console.log("translate button clicked");
+    console.log("summarize button clicked");
     console.log("text", text);
     setIsShowingPrevResults(false);
     void mutate({
@@ -116,23 +127,10 @@ const SummarizePage: NextPage = () => {
     });
   };
 
-  // useEffect(() => {}, [currentSession.id]);
-
-  // const handleSelectSummary = (id: string) => {
-  //   console.log("Summary", id);
-  //   const obj = {
-  //     id: id ?? "default-id",
-  //   };
-  //   setCurrenSession(obj);
-  //   void sessionRefetch();
-  //   setIsShowingPrevResults(true);
-  //   void selectedSummarizeRefetch();
-  //   // tesing.refetch();
-  // };
-  const handleSelectSummary = (translateId: string) => {
-    console.log("storyId", translateId);
+  const handleSelectSummary = (id: string) => {
+    console.log("id", id);
     const obj = {
-      id: translateId ?? "default-id",
+      id: id ?? "default-id",
     };
     setCurrenSession(obj);
     void sessionRefetch();
@@ -144,6 +142,15 @@ const SummarizePage: NextPage = () => {
     setCurrenSession({ id: "default-id" });
     setIsShowingPrevResults(false);
   };
+  const handleDeleteResult = (id: string) => {
+    if (id && id.length > 0) {
+      void deleteResult.mutate({
+        id: id,
+      });
+    }
+    void sessionRefetch();
+  };
+
   return (
     <>
       <Head>
@@ -175,6 +182,7 @@ const SummarizePage: NextPage = () => {
                   sessions={[]}
                   onSelect={handleSelectSummary}
                   onNewSession={handleCreateNewSession}
+                  handleDeleteResult={handleDeleteResult}
                   // disabled={true}
                 />
               )}
@@ -183,10 +191,11 @@ const SummarizePage: NextPage = () => {
                   sessions={sessionData}
                   onSelect={handleSelectSummary}
                   onNewSession={handleCreateNewSession}
+                  handleDeleteResult={handleDeleteResult}
                 />
               )}
             </div>
-            <ComboboxDropdownMenu />
+            {/* {/* <ComboboxDropdownMenu /> */}
             {isLoading && (
               <div className="flex h-fit w-full items-center justify-center">
                 <LoadingSpinner size={90} />
@@ -203,13 +212,12 @@ const SummarizePage: NextPage = () => {
           {data && (
             <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
               <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                {data &&
-                  !isShowingPrevResults &&
-                  currentSession.id !== "default-id" && (
-                    <div>
-                      <SummarizeResult result={data.result} />
-                    </div>
-                  )}
+                {data && !isShowingPrevResults && (
+                  // currentSession.id !== "default-id" && (
+                  <div>
+                    <SummarizeResult result={data.result} />
+                  </div>
+                )}
               </div>
             </section>
           )}
