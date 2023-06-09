@@ -121,10 +121,10 @@ export function TextInputForm({
           <CardFooter>
             <div className="flex  items-center justify-between space-x-2">
               <button
-                variant="default"
+                // variant="default"
                 type="submit"
                 className={cn(buttonVariants(), className)}
-                disabled={isSaving}
+                // disabled={isSaving}
               >
                 {isSaving && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />

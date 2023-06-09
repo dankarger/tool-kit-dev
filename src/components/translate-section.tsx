@@ -36,8 +36,8 @@ const LANGUAGES = [
 ];
 
 export const FormSchema = z.object({
-  text: z.string().min(2, {
-    message: "Cant translate less than 2 characters.",
+  text: z.string().min(1, {
+    message: "Cant translate empty text.",
   }),
   // .max(960, {
   //   message: "The text is too long...",
@@ -153,7 +153,10 @@ export function TranslateSection({
             )}
           />
           <div className="items-top flex justify-start gap-4 space-x-2 py-3">
-            <Button disabled={!form.formState.isValid} type="submit">
+            <Button
+              // disabled={!form.formState.isValid}
+              type="submit"
+            >
               Translate
             </Button>
             <Button
