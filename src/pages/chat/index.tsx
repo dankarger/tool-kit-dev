@@ -316,6 +316,7 @@ const ChatPage: NextPage = () => {
       <Head>
         <title>Chat</title>
         <meta name="description" content="GPTool kit" />
+        <link rel="icon" href="/fav.png" />
       </Head>
       <DashboardShell>
         <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">

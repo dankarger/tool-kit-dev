@@ -97,14 +97,14 @@ export function TranslateSection({
     <Form {...form}>
       <form
         onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
-        className="bg-grey-950 first-letter:  flex w-2/3 flex-row-reverse items-start  justify-between  gap-6 rounded-md  border px-6 py-4"
+        className="bg-grey-950 first-letter:  flex w-2/3 flex-row-reverse items-start  justify-between  gap-8 rounded-md  border px-6 py-4"
       >
         <FormField
           control={form.control}
           name="language"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Select Language</FormLabel>
+            <FormItem className="w-1/3">
+              <FormLabel className="text-sm">Translate to:</FormLabel>
               <Select
                 onValueChange={field.onChange}
                 defaultValue={LANGUAGES[0]}
@@ -129,13 +129,13 @@ export function TranslateSection({
             </FormItem>
           )}
         />
-        <div className="w-full">
+        <div className="w-2/3">
           <FormField
             control={form.control}
             name="text"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>text for translate:</FormLabel>
+                {/* <FormLabel>text for translate:</FormLabel> */}
                 <FormControl>
                   <Textarea
                     placeholder="Past or type here the text..."
@@ -152,7 +152,7 @@ export function TranslateSection({
               </FormItem>
             )}
           />
-          <div className="items-top flex justify-start gap-4 space-x-2 py-3">
+          <div className="items-top flex justify-start gap-4 space-x-2  py-4">
             <Button
               // disabled={!form.formState.isValid}
               type="submit"

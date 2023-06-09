@@ -168,13 +168,12 @@ const TranslatePage: NextPage = () => {
             text="Translate a text with GPTool."
           />
 
-          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-6">
-            {" "}
+          <section className="jus flex   gap-2 space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-2">
             {/* <div className="flex  w-full  flex-row justify-between "> */}
-            <div className="lg:dark:hover: flex h-full w-full flex-col  items-start justify-start rounded-md px-4   align-middle lg:flex-row  lg:flex-wrap lg:items-center  lg:justify-between    lg:gap-y-0 lg:rounded-md  lg:border lg:border-gray-200  lg:bg-white   lg:py-8  lg:align-middle  lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
+            <div className="lg:dark:hover: flex w-full flex-col  items-start  justify-between gap-6 rounded-md  px-4  lg:flex-row      lg:gap-y-0 lg:rounded-md  lg:border lg:border-gray-200  lg:bg-white   lg:py-8   lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
               <TranslateSection handleTranslateButton={handleTranslateButton} />
               {/* <Separator orientation="vertical" /> */}
-              <div className=" flex w-1/3   flex-col items-end justify-center   ">
+              <div className=" flex w-1/3     ">
                 {sessionSectionLoading && (
                   <SessionsSection
                     sessions={[]}
