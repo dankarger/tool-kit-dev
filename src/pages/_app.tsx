@@ -15,7 +15,7 @@ import { siteConfig } from "@/config/site";
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/site-header";
-// import { TailwindIndicator } from "@/components/tailwind-indicator";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { ThemeProvider } from "@/components/theme-provider";
 import SiteFooter from "@/components/site-footer";
 import { Toaster } from "@/components/ui/toaster";
@@ -83,7 +83,7 @@ const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
               <Component {...pageProps} />
             </section>
           </div>
-          {/* <TailwindIndicator /> */}
+          <TailwindIndicator />
           <Toaster />
         </ThemeProvider>
         <SiteFooter />
