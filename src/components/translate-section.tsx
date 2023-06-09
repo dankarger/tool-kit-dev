@@ -103,19 +103,19 @@ export function TranslateSection({
 
   return (
     <Card>
-      <CardHeader>
-        {/* <CardTitle>Report an issue</CardTitle>
+      <Form {...form}>
+        <form
+          onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
+          // className="bg-grey-950 first-letter:  flex w-2/3 flex-row-reverse items-start  justify-between  gap-8 rounded-md  border px-6 py-4"
+        >
+          <CardHeader>
+            {/* <CardTitle>Report an issue</CardTitle>
         <CardDescription>
           What area are you having problems with?
         </CardDescription> */}
-      </CardHeader>
-      <CardContent
-      // className=" grid gap-6 "
-      >
-        <Form {...form}>
-          <form
-            onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
-            // className="bg-grey-950 first-letter:  flex w-2/3 flex-row-reverse items-start  justify-between  gap-8 rounded-md  border px-6 py-4"
+          </CardHeader>
+          <CardContent
+          // className=" grid gap-6 "
           >
             <div className="grid grid-cols-5 grid-rows-1 gap-4">
               {/* <CardExample> */}
@@ -178,30 +178,30 @@ export function TranslateSection({
                 />
               </div>
             </div>
-          </form>
-        </Form>
-      </CardContent>
-      <CardFooter className="grid grid-cols-5 grid-rows-1 gap-4">
-        <div className="col-span-4">
-          <div className="flex items-center justify-between">
-            <Button
-              // disabled={!form.formState.isValid}
-              type="submit"
-            >
-              Translate
-            </Button>
-            <Button
-              variant={"outline"}
-              onClick={(e) => {
-                e.preventDefault();
-                form.reset({ text: "" });
-              }}
-            >
-              Clear
-            </Button>
-          </div>
-        </div>
-      </CardFooter>
+          </CardContent>
+          <CardFooter className="grid grid-cols-5 grid-rows-1 gap-4">
+            <div className="col-span-4">
+              <div className="flex items-center justify-between">
+                <Button
+                  // disabled={!form.formState.isValid}
+                  type="submit"
+                >
+                  Translate
+                </Button>
+                <Button
+                  variant={"ghost"}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    form.reset({ text: "" });
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
+            </div>
+          </CardFooter>
+        </form>
+      </Form>
     </Card>
   );
 }

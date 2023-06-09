@@ -171,13 +171,13 @@ const TranslatePage: NextPage = () => {
           <section className="flex w-full   gap-2 space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-2">
             {/* <div className="flex  w-full  flex-row justify-between "> */}
             <div className="lg:dark:hover: flex w-full flex-col  items-start  justify-between gap-6 rounded-md  px-4  lg:flex-row      lg:gap-y-0 lg:rounded-md    lg:bg-white   lg:py-8   lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
-              <div className="w-2/3">
+              <div className="w-3/4">
                 <TranslateSection
                   handleTranslateButton={handleTranslateButton}
                 />
               </div>
               {/* <Separator orientation="vertical" /> */}
-              <div className=" flex w-1/3    ">
+              <div className=" flex w-1/4    ">
                 {sessionSectionLoading && (
                   <SessionsSection
                     sessions={[]}
@@ -209,10 +209,9 @@ const TranslatePage: NextPage = () => {
                 <Separator className="mt-2" />
 
                 <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
-                  <DashboardHeader
-                    heading="Result"
-                    text="You can see past result with the  top right select menu"
-                  />
+                  <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+                    Result
+                  </h2>
                   <TranslationResultComponent data={data} />
                 </div>
               </section>
@@ -220,13 +219,11 @@ const TranslatePage: NextPage = () => {
           {selectedTranslateResult &&
             isShowingPrevResults &&
             selectedTranslateResult.id !== "default-id" && (
-              <section className=" space-y-2py-2  w-full dark:bg-transparent md:py-8 lg:py-6">
-                <DashboardHeader
-                  heading="Result"
-                  text="You can see past result with the  top right select menu"
-                />
-                {/* <Separator className="mt-2" /> */}
-                <div className="py-4">
+              <section className=" space-y-2py-2  w-full px-8 dark:bg-transparent md:py-8 lg:py-6">
+                <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+                  Result
+                </h2>
+                <div className=" py-6">
                   <TranslationResultComponent data={selectedTranslateResult} />
                 </div>
               </section>
