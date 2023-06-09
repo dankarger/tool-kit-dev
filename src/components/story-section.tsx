@@ -85,7 +85,7 @@ export function StorySection({ handleSubmitButton }: StorylateSectionProps) {
             </FormItem>
           )}
         />
-        <div className="flex items-center justify-between space-x-2">
+        <div className="items-top flex justify-start gap-4 space-x-2 py-3">
           <Button disabled={!form.formState.isValid} type="submit">
             Generate
           </Button>

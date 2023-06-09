@@ -30,7 +30,7 @@ interface TextInputFormProps extends React.HTMLAttributes<HTMLFormElement> {
   children?: React.ReactNode;
 }
 const TextInputSchema = z.object({
-  text: z.string().min(2).max(1330),
+  text: z.string().min(1).max(1330),
 });
 type FormData = z.infer<typeof TextInputSchema>;
 
@@ -105,7 +105,7 @@ export function TextInputForm({
                 <Input
                   id="text"
                   autoFocus
-                  className="w-full"
+                  // className="w-full"
                   placeholder={placeholder}
                   size={70}
                   {...register("text")}
@@ -119,8 +119,9 @@ export function TextInputForm({
             </div>
           </CardContent>
           <CardFooter>
-            <div className="flex w-full items-center justify-between space-x-2">
+            <div className="flex  items-center justify-between space-x-2">
               <button
+                variant="default"
                 type="submit"
                 className={cn(buttonVariants(), className)}
                 disabled={isSaving}

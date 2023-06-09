@@ -152,7 +152,7 @@ export function TranslateSection({
               </FormItem>
             )}
           />
-          <div className="items-top flex justify-between space-x-2 py-3">
+          <div className="items-top flex justify-start gap-4 space-x-2 py-3">
             <Button disabled={!form.formState.isValid} type="submit">
               Translate
             </Button>
