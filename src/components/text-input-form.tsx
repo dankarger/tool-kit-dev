@@ -120,8 +120,9 @@ export function TextInputForm({
           </CardContent>
           <CardFooter>
             <div className="flex  items-center justify-between space-x-2">
-              <button
+              <Button
                 // variant="default"
+                variant={"default"}
                 type="submit"
                 className={cn(buttonVariants(), className)}
                 // disabled={isSaving}
@@ -130,7 +131,7 @@ export function TextInputForm({
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
                 <span>Submit</span>
-              </button>
+              </Button>
               <Button
                 variant={"destructive"}
                 onClick={(e) => {

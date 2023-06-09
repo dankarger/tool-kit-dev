@@ -32,16 +32,16 @@ export const StoryResultDiv = ({
 
   return (
     <div>
-      <Card>
+      <Card className="pt-6">
         <CardHeader>
-          <CardTitle className="scroll-m-20  font-extrabold tracking-tight lg:text-5xl">
+          <CardTitle className="scroll-m-20  font-extrabold tracking-tight lg:text-5xl ">
             {/* <h3 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl"> */}
             {title}
             {/* </h3> */}
           </CardTitle>
           {/* <CardDescription>{resultText} </CardDescription> */}
         </CardHeader>
-        <CardContent className="flex justify-start align-middle">
+        <CardContent className="mt-6 flex justify-start align-middle">
           {/* <Image src={resultImageUrl} width={1250} height={1250} alt={title} /> */}
 
           <p className="leading-7 [&:not(:first-child)]:mt-6">{resultText}</p>
@@ -49,18 +49,19 @@ export const StoryResultDiv = ({
         <CardFooter className="flex items-center justify-center">
           {/* <img src={resultImageUrl} alt="image" /> */}
           {/* <p>Card Footer</p> */}
-          <div className="relative h-[650px] w-full bg-[url('/blur-3.png')] bg-cover bg-center bg-no-repeat">
+          <div className="relative  mt-6 w-full bg-[url('/blur-3.png')] bg-cover bg-center bg-no-repeat">
             {/* <img src="/blur-2.png" alt="image" /> */}
             <Image
               src={resultImageUrl}
-              // width={1850}
-              // height={1850}
+              width={1850}
+              height={1850}
               alt={title}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               // loading="lazy"
-              fill={true}
-              placeholder="blur"
-              blurDataURL="/blur-3.png"
+              style={{ objectFit: "cover", height: "auto" }}
+              // fill={true}
+              // placeholder="blur"
+              // blurDataURL="/blur-3.png"
               // blurDataURL={rgbDataURL(238, 237, 234)}
             />
           </div>
