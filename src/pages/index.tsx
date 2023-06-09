@@ -26,9 +26,9 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>test4</title>
+        <title>GPToolKIT | {siteConfig.name}</title>
         <meta name="description" content="GPTool kit" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/fav.png" />
       </Head>
       <div className="flex max-w-[980px] flex-col items-start gap-4">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-3xl md:text-5xl lg:text-6xl">

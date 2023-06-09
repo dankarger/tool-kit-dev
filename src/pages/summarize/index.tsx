@@ -2,7 +2,7 @@ import React, { use, useEffect, useState } from "react";
 import { type NextPage } from "next";
 import type { SummarizeResultType } from "@/types";
 import Head from "next/head";
-import { dashboardConfig } from "@/config/dashboard";
+import { dashboardConfig } from "@/config/site";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
 import { DashboardHeader } from "@/components/header";
@@ -156,7 +156,7 @@ const SummarizePage: NextPage = () => {
       <Head>
         <title>Summarize</title>
         <meta name="description" content="GPTool kit" />
-        <link rel="icon" href="/favicon.ico" />
+        {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <DashboardShell>
         <main className="flex w-full flex-1 flex-col overflow-hidden">

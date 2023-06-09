@@ -4,8 +4,7 @@ export const INTERNAL_VERSION = "1.5";
 
 export const siteConfig = {
   name: "GPTool-Kit",
-  description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+  description: "Unleash the Power of ChatGPT.",
   mainNav: [
     {
       title: "Home",
@@ -15,62 +14,15 @@ export const siteConfig = {
       title: "Tools",
       href: "/chat",
     },
-    // {
-    //   title: "Translate",
-    //   href: "/translate",
-    // },
-    // {
-    //   title: "Summarize",
-    //   href: "/summarize",
-    // },
-    {
-      title: "Story Mode",
-      href: "/story",
-    },
     {
       title: "Games",
       href: "/games",
     },
-    // {
-    //   title: "Tic Tac Toe",
-    //   href: "/tic-tac-toe",
-    // },
   ],
-  sidebarNav: [
-    {
-      title: "Chat",
-      href: "/chat",
-      icon: "post",
-    },
-    {
-      title: "Translate",
-      href: "/translate",
-      icon: "billing",
-    },
-    {
-      title: "Summarize",
-      href: "/summarize",
-      icon: "settings",
-    },
-    // {
-    //   title: "Summarize",
-    //   href: "/summarize",
-    //   icon: "settings",
-    // },
-    // {
-    //   title: "Summarize",
-    //   href: "/summarize",
-    //   icon: "settings",
-    // },
-    // {
-    //   title: "Summarize",
-    //   href: "/summarize",
-    //   icon: "settings",
-    // },
-  ],
+
   links: {
     twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/",
+    github: "https://github.com/dankarger",
     docs: "https://ui.shadcn.com",
   },
 };
@@ -102,22 +54,12 @@ export const dashboardConfig: DashboardConfig = {
     {
       title: "Summarize",
       href: "/summarize",
-      icon: "settings",
+      icon: "moon",
     },
-    // {
-    //   title: "Summarize",
-    //   href: "/summarize",
-    //   icon: "settings",
-    // },
-    // {
-    //   title: "Summarize",
-    //   href: "/summarize",
-    //   icon: "settings",
-    // },
-    // {
-    //   title: "Summarize",
-    //   href: "/summarize",
-    //   icon: "settings",
-    // },
+    {
+      title: "Story Mode",
+      href: "/story",
+      icon: "image",
+    },
   ],
 };

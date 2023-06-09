@@ -9,7 +9,7 @@ import type {
 } from "@/types";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import Head from "next/head";
-import { dashboardConfig } from "@/config/dashboard";
+import { dashboardConfig } from "@/config/site";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
 import { DashboardHeader } from "@/components/header";
@@ -316,7 +316,6 @@ const ChatPage: NextPage = () => {
       <Head>
         <title>Chat</title>
         <meta name="description" content="GPTool kit" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <DashboardShell>
         <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">

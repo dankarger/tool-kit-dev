@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { type NextPage } from "next";
 import type { Session, Response, ChatMessage } from "@/types";
 import Head from "next/head";
-import { dashboardConfig } from "@/config/dashboard";
+import { dashboardConfig } from "@/config/site";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
 import { DashboardHeader } from "@/components/header";
@@ -17,6 +17,7 @@ import { StorySection } from "@/components/story-section";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@radix-ui/react-separator";
 import { StoryResultDiv } from "@/components/story-result";
+import { StorySteps } from "@/components/story-steps";
 
 const StoryPage: NextPage = () => {
   const [userPromt, setUserPrompt] = useState("");
@@ -31,6 +32,7 @@ const StoryPage: NextPage = () => {
   });
   const user = useUser();
   const ctx = api.useContext();
+  const scrollDivRef = React.useRef<HTMLDivElement>(null);
 
   // const { data, isLoading, isFetching } = api.translate.getAllTranslationsByAuthorId.useQ({
   //   authorId: user.user?.id,
@@ -49,6 +51,7 @@ const StoryPage: NextPage = () => {
     isLoading: selectedStoryLoading,
     refetch: selectedStoryRefetch,
     isSuccess: selectedStoryIsSucess,
+    remove: selectedStoryReset,
   } = api.story.getStoryByStoryId.useQuery({
     storyId:
       currentSession.storyId !== "default-id" ? currentSession.storyId : "",
@@ -61,10 +64,14 @@ const StoryPage: NextPage = () => {
       await sessionRefetch();
     },
   });
+
   const {
     mutate: mutateText,
+    isSuccess: textIsSuccess,
     isLoading,
     data: textData,
+    status: textStatus,
+    reset: textReset,
   } = api.story.createStoryTextResult.useMutation({
     onSuccess: (data) => {
       // void session.refetch();
@@ -191,6 +198,9 @@ const StoryPage: NextPage = () => {
     mutate: createTitle,
     data: dataTitle,
     isLoading: titleisLoading,
+    isSuccess: titleSuccess,
+    status: titleStatus,
+    reset: titleReset,
   } = api.story.createTitle.useMutation({
     onSuccess: (data) => {
       // void session.refetch();
@@ -227,21 +237,27 @@ const StoryPage: NextPage = () => {
     },
   });
 
-  const { mutate: uplaodImageToCloudinary, isLoading: cloudinaryIsLoading } =
-    api.story.uploadImageToCloudinary.useMutation({
-      onSuccess(data: string) {
-        console.log(";cloudinary result", data);
-        setImageCloudinaryUrl(data);
-        createFullStoryResult({
-          title: title,
-          text: userPromt,
-          resultText: textResult,
-          resultPrompt: promptForImage,
-          resultImageUrl: data,
-        });
-      },
-      //TODO : ADD ERROR handeling
-    });
+  const {
+    mutate: uplaodImageToCloudinary,
+    data: imageCloudinaryData,
+    status: imageCloudinaryStatus,
+    reset: imageCloudinaryReset,
+    isLoading: cloudinaryIsLoading,
+    isSuccess: imageIsSuccess,
+  } = api.story.uploadImageToCloudinary.useMutation({
+    onSuccess(data: string) {
+      console.log(";cloudinary result", data);
+      setImageCloudinaryUrl(data);
+      createFullStoryResult({
+        title: title,
+        text: userPromt,
+        resultText: textResult,
+        resultPrompt: promptForImage,
+        resultImageUrl: data,
+      });
+    },
+    //TODO : ADD ERROR handeling
+  });
 
   const {
     mutate: createFullStoryResult,
@@ -258,6 +274,7 @@ const StoryPage: NextPage = () => {
   });
 
   const handleStoryGenerateButton = (text: string) => {
+    scrollDivRef.current?.scrollIntoView();
     console.log("story", text);
     if (!text) {
       toast({
@@ -270,6 +287,10 @@ const StoryPage: NextPage = () => {
       });
       return;
     }
+    selectedStoryReset();
+    textReset();
+    titleReset();
+    imageCloudinaryReset();
     setIsShowingPrevResults(false);
     setUserPrompt(text);
     handleCreateNewSession();
@@ -280,6 +301,12 @@ const StoryPage: NextPage = () => {
 
   const handleSelectStory = (storyId: string) => {
     setIsShowingPrevResults(true);
+    scrollDivRef.current?.scrollIntoView({
+      behavior: "auto",
+      // block: "end",
+      // inline: "nearest",
+    });
+    // handleScroll();
     console.log("storyId", storyId);
     const obj = {
       storyId: storyId ?? "default-id",
@@ -291,6 +318,10 @@ const StoryPage: NextPage = () => {
   };
 
   const handleCreateNewSession = () => {
+    selectedStoryReset();
+    textReset();
+    titleReset();
+    imageCloudinaryReset();
     setIsShowingPrevResults(false);
     setCurrenSession({ storyId: "default-id" });
     setImageUrlResult("");
@@ -303,12 +334,21 @@ const StoryPage: NextPage = () => {
     });
     void sessionRefetch();
   };
+
+  function handleScroll() {
+    window.scroll({
+      top: 12, // or document.scrollingElement || document.body
+      left: 10,
+      behavior: "smooth",
+    });
+  }
+
   return (
     <>
       <Head>
         <title>Summarize</title>
         <meta name="description" content="GPTool kit" />
-        <link rel="icon" href="/favicon.ico" />
+        {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <DashboardShell>
         <main className="flex w-full flex-1 flex-col overflow-hidden">
@@ -339,17 +379,8 @@ const StoryPage: NextPage = () => {
                 />
               )}
             </div>
-            {(isLoading ||
-              isFullStoryLoading ||
-              ImageIsLoading ||
-              titleisLoading ||
-              cloudinaryIsLoading ||
-              promptIsLoading) && (
-              <div className="flex h-fit w-full items-center justify-center">
-                <LoadingSpinner size={390} />
-              </div>
-            )}
           </section>
+
           <div>
             {selectedStory &&
               isShowingPrevResults &&
@@ -364,6 +395,29 @@ const StoryPage: NextPage = () => {
                 </section>
               )}
           </div>
+          {(isLoading ||
+            isFullStoryLoading ||
+            ImageIsLoading ||
+            titleisLoading ||
+            cloudinaryIsLoading ||
+            promptIsLoading) && (
+            <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
+              <div className="flex h-full w-full flex-col items-center justify-center">
+                <div className=" flex h-1/2 w-1/2 flex-col justify-center pl-4">
+                  {/* <LoadingSpinner size={16} /> */}
+                  <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+                    Please wait...
+                  </h4>
+                  {/* <LoadingSpinner size={16} /> */}
+                </div>
+                <StorySteps
+                  completedStep1={textIsSuccess}
+                  completedStep2={titleSuccess}
+                  completedStep3={imageIsSuccess}
+                />
+              </div>
+            </section>
+          )}
           {data && !isShowingPrevResults && (
             // currentSession.storyId !== "default-id" &&
             <>
@@ -386,6 +440,10 @@ const StoryPage: NextPage = () => {
               </section>
             </>
           )}
+          <div
+            className="visibility:hidden 	absolute bottom-10  left-0 right-0 "
+            ref={scrollDivRef}
+          ></div>
         </main>
       </DashboardShell>
     </>

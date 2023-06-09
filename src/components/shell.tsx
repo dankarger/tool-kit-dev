@@ -1,6 +1,6 @@
 import * as React from "react";
 import { siteConfig } from "@/config/site";
-import { dashboardConfig } from "@/config/dashboard";
+import { dashboardConfig } from "@/config/site";
 import { DashboardNav } from "@/components/nav";
 import { cn } from "@/lib/utils";
 

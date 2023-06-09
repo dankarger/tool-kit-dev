@@ -2,11 +2,12 @@ import * as React from "react";
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
 import { type NavItem } from "@/types/index";
-import { siteConfig } from "@/config/site";
+import { siteConfig, dashboardConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
-
+import { usePathname } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
+
 interface MainNavProps {
   items?: NavItem[];
   children?: React.ReactNode;
@@ -14,6 +15,11 @@ interface MainNavProps {
 
 export function MainNav({ items, children }: MainNavProps) {
   // if(!theme.theme=== undefined) theme.theme = 'light'
+  const [isSelected, setIsSelected] = React.useState(
+    siteConfig.mainNav[0]?.title
+  );
+  const path = usePathname();
+
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false);
   // const user = useUser();
   // const username = user.user?.username || "User";
@@ -36,8 +42,16 @@ export function MainNav({ items, children }: MainNavProps) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    "flex items-center text-lg font-semibold text-muted-foreground sm:text-sm"
+                    "flex items-center text-lg font-semibold text-muted-foreground sm:text-sm",
                     // item.disabled && "cursor-not-allowed opacity-80"
+
+                    path === item.href
+                      ? //  ||
+                        //   dashboardConfig.sidebarNav.find(
+                        //     (item) => item.href === path
+                        //   )
+                        "underline"
+                      : "transparent"
                   )}
                 >
                   {item.title}

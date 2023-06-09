@@ -1,17 +1,19 @@
+import { cn } from "@/lib/utils";
+
 export const LoadingSpinner = (props: { size?: number }) => {
   const { size } = props;
   return (
-    <div
-      role="status"
-      className=" flex   w-full items-center justify-center py-20"
-    >
+    <div role="status" className="  items-center justify-center p-20">
       <svg
         aria-hidden="true"
-        className="mr-2 h-16 w-16 animate-spin fill-slate-600 text-gray-200 dark:text-gray-800"
+        className={cn(
+          "mr-2 h-16 w-16 animate-spin fill-slate-600 text-gray-200 dark:text-gray-800",
+          size ? `h-${size} w-${size}` : "h-16 w-16"
+        )}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        width={size ?? 16}
+        width={size ?? 12}
         height={size ?? 16}
       >
         <path
