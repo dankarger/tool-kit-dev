@@ -5,6 +5,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
+import { CardExample } from "./card-example";
 import {
   Form,
   FormControl,
@@ -21,7 +22,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 const LANGUAGES = [
   "English",
   "Spanish",
@@ -94,65 +102,88 @@ export function TranslateSection({
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
-        className="bg-grey-950 first-letter:  flex w-2/3 flex-row-reverse items-start  justify-between  gap-8 rounded-md  border px-6 py-4"
+    <Card>
+      <CardHeader>
+        {/* <CardTitle>Report an issue</CardTitle>
+        <CardDescription>
+          What area are you having problems with?
+        </CardDescription> */}
+      </CardHeader>
+      <CardContent
+      // className=" grid gap-6 "
       >
-        <FormField
-          control={form.control}
-          name="language"
-          render={({ field }) => (
-            <FormItem className="w-1/3">
-              <FormLabel className="text-sm">Translate to:</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={LANGUAGES[0]}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a target language " />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {LANGUAGES.map((language) => (
-                    <SelectItem value={language} key={language}>
-                      {language}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {/* <FormDescription>
-                You can manage email addresses in your{" "}
-              </FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="w-2/3">
-          <FormField
-            control={form.control}
-            name="text"
-            render={({ field }) => (
-              <FormItem>
-                {/* <FormLabel>text for translate:</FormLabel> */}
-                <FormControl>
-                  <Textarea
-                    placeholder="Past or type here the text..."
-                    rows={4}
-                    className="w-full"
-                    autoFocus
-                    {...field}
-                  />
-                </FormControl>
-                {/* <FormDescription>
+        <Form {...form}>
+          <form
+            onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
+            // className="bg-grey-950 first-letter:  flex w-2/3 flex-row-reverse items-start  justify-between  gap-8 rounded-md  border px-6 py-4"
+          >
+            <div className="grid grid-cols-5 grid-rows-1 gap-4">
+              {/* <CardExample> */}
+
+              <div className="col-span-4">
+                <FormField
+                  control={form.control}
+                  name="text"
+                  render={({ field }) => (
+                    <FormItem>
+                      {/* <FormLabel>text for translate:</FormLabel> */}
+                      <FormControl>
+                        <Textarea
+                          placeholder="Past or type here the text..."
+                          rows={4}
+                          className="w-full"
+                          autoFocus
+                          {...field}
+                        />
+                      </FormControl>
+                      {/* <FormDescription>
                   You can view older translations results
                 </FormDescription> */}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="items-top flex justify-start gap-4 space-x-2  py-4">
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              {/* </CardExample> */}
+              <div className=" col-start-5 ">
+                <FormField
+                  control={form.control}
+                  name="language"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel className="text-sm">Translate to:</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={LANGUAGES[0]}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a target language " />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {LANGUAGES.map((language) => (
+                            <SelectItem value={language} key={language}>
+                              {language}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {/* <FormDescription>
+                You can manage email addresses in your{" "}
+              </FormDescription> */}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+      <CardFooter className="grid grid-cols-5 grid-rows-1 gap-4">
+        <div className="col-span-4">
+          <div className="flex items-center justify-between">
             <Button
               // disabled={!form.formState.isValid}
               type="submit"
@@ -160,7 +191,7 @@ export function TranslateSection({
               Translate
             </Button>
             <Button
-              variant={"destructive"}
+              variant={"outline"}
               onClick={(e) => {
                 e.preventDefault();
                 form.reset({ text: "" });
@@ -170,7 +201,7 @@ export function TranslateSection({
             </Button>
           </div>
         </div>
-      </form>
-    </Form>
+      </CardFooter>
+    </Card>
   );
 }
