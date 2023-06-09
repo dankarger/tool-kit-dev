@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { type NextPage } from "next";
-import type { Session, Response, ChatMessage } from "@/types";
+import type {
+  Session,
+  Response,
+  ChatMessage,
+  TranslationResultType,
+} from "@/types";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import Head from "next/head";
 import { dashboardConfig } from "@/config/site";
@@ -67,7 +72,7 @@ const TranslatePage: NextPage = () => {
       //   console.log("mutate");
 
       // },
-      onSuccess: (data) => {
+      onSuccess: (data: TranslationResultType) => {
         setCurrenSession({ id: data.id });
         // setPromptValue("");
         // void session.refetch();

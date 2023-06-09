@@ -205,9 +205,11 @@ const SummarizePage: NextPage = () => {
           {selectedSummarizeResult &&
             isShowingPrevResults &&
             selectedSummarizeResult.id !== "default-id" && (
-              <div>
-                <SummarizeResult result={selectedSummarizeResult.result} />
-              </div>
+              <section className="  container  flex space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
+                <div className="   relative flex h-fit w-full max-w-[64rem] flex-col items-start gap-4   p-2 ">
+                  <SummarizeResult data={selectedSummarizeResult} />
+                </div>
+              </section>
             )}
           {data && (
             <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
@@ -215,7 +217,7 @@ const SummarizePage: NextPage = () => {
                 {data && !isShowingPrevResults && (
                   // currentSession.id !== "default-id" && (
                   <div>
-                    <SummarizeResult result={data.result} />
+                    <SummarizeResult data={data} />
                   </div>
                 )}
               </div>
