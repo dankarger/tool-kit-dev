@@ -2,7 +2,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 // import { User } from "@prisma/client"
-import { useForm } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import * as z from "zod";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/components/ui/use-toast";
@@ -30,9 +39,11 @@ interface TextInputFormProps extends React.HTMLAttributes<HTMLFormElement> {
   children?: React.ReactNode;
 }
 const TextInputSchema = z.object({
-  text: z.string().min(2).max(1330),
+  text: z.string().min(1).max(1330),
 });
-type FormData = z.infer<typeof TextInputSchema>;
+type FormData = {
+  text: string;
+};
 
 export function TextInputForm({
   // user,
@@ -45,20 +56,31 @@ export function TextInputForm({
   ...props
 }: TextInputFormProps) {
   const router = useRouter();
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    reset,
-  } = useForm<FormData>({
+
+  const form = useForm<FormData>({
     resolver: zodResolver(TextInputSchema),
-    defaultValues: {
-      text: "",
-    },
+    // defaultValues,
+    // mode: "onChange",
   });
+
+  // const {
+  //   handleSubmit,
+  //   register,
+  //   formState: { errors },
+  //   reset,
+  // } = useForm<FormData>({
+  //   resolver: zodResolver(TextInputSchema),
+  //   defaultValues: {
+  //     text: "",
+  //   },
+  // });
+
   const [isSaving, setIsSaving] = React.useState<boolean>(false);
 
-  function onSubmit(data: FormData, e?: React.BaseSyntheticEvent) {
+  const onSubmit: SubmitHandler<FormData> = (
+    data: z.infer<typeof TextInputSchema>,
+    e?: React.BaseSyntheticEvent
+  ) => {
     e?.preventDefault();
     void handleSubmitButton(data.text);
     console.log("from onSubmit", data.text);
@@ -70,13 +92,13 @@ export function TextInputForm({
         </pre>
       ),
     });
-  }
+  };
 
   return (
-    <div>
+    <Form {...form}>
       <form
         className={cn(className)}
-        onSubmit={(e) => void handleSubmit(onSubmit)(e)}
+        onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
         {...props}
       >
         <Card>
@@ -87,58 +109,89 @@ export function TextInputForm({
           <CardDescription>{description}</CardDescription> */}
           </CardHeader>
           <CardContent>
-            <div className="grid w-full gap-1">
+            <div className="grid w-full ">
               <Label className="sr-only" htmlFor="name">
                 Text
               </Label>
               {inputType === "area" ? (
-                <Textarea
-                  id="text"
-                  className="w-full"
-                  placeholder={placeholder}
-                  autoFocus
-                  max={332}
-                  min={130}
-                  {...register("text")}
+                <FormField
+                  control={form.control}
+                  name="text"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Text</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          id="text"
+                          // className="w-full"
+                          placeholder={placeholder}
+                          autoFocus
+                          // max={332}
+                          // min={130}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        You can <span>@mention</span> other users and
+                        organizations to link to them.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               ) : (
-                <Input
-                  id="text"
-                  autoFocus
-                  className="w-full"
-                  placeholder={placeholder}
-                  size={70}
-                  {...register("text")}
+                <FormField
+                  control={form.control}
+                  name="text"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Text</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="text"
+                          autoFocus
+                          // className="w-full"
+                          placeholder={placeholder}
+                          size={70}
+                          {...form.register("text")}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        You can load and continue previous chats by using the
+                        panel on the right
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              )}
-              {errors?.text && (
-                <p className="px-1 text-xs text-red-600">
-                  {errors.text.message}
-                </p>
               )}
             </div>
           </CardContent>
-          <CardFooter>
-            <div className="flex w-full items-center justify-between space-x-2">
-              <button
-                type="submit"
-                className={cn(buttonVariants(), className)}
-                disabled={isSaving}
-              >
-                {isSaving && (
-                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                <span>Submit</span>
-              </button>
-              <Button
-                variant={"destructive"}
-                onClick={(e) => {
-                  e.preventDefault();
-                  reset({ text: "" });
-                }}
-              >
-                Clear
-              </Button>
+          <CardFooter className="grid grid-cols-4 grid-rows-1 gap-4">
+            <div className="col-span-4">
+              <div className="flex w-full items-center justify-between">
+                <Button
+                  // variant="default"
+                  variant={"default"}
+                  type="submit"
+                  // className={cn(buttonVariants(), className)}
+                  // disabled={isSaving}
+                >
+                  {isSaving && (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  <span>Submit</span>
+                </Button>
+                <Button
+                  variant={"outline"}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    form.reset({ text: "" });
+                  }}
+                >
+                  Clear
+                </Button>
+              </div>
             </div>
           </CardFooter>
           {/* </div>
@@ -146,6 +199,6 @@ export function TextInputForm({
           </div> */}
         </Card>
       </form>
-    </div>
+    </Form>
   );
 }

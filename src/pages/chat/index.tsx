@@ -188,18 +188,11 @@ const ChatPage: NextPage = () => {
     value: string,
     currentSessionVariable: string
   ) => {
-    // console.log("sessionData", sessionData);
-    // setTimeout(() => {
-    // if (currentSession.id === DEFAULT_ID) {
-    //   alert("d");
-    //   return;
-    // }
     mutate({
       latestMessage: value,
       messages: chatHistory,
       sessionId: currentSessionVariable,
     });
-    // }, 1000);
     setIsShowingPrevResults(false);
     void sessionRefetch();
   };
@@ -307,41 +300,40 @@ const ChatPage: NextPage = () => {
     setIsDeleteDialogueOpen(false);
   };
 
-  // const handleDialogueOpen = (id: string) => {
-  //   setIsDeleteDialogueOpen(true);
-  // };
-
   return (
     <>
       <Head>
         <title>Chat</title>
         <meta name="description" content="GPTool kit" />
+        <link rel="icon" href="/fav.png" />
       </Head>
       <DashboardShell>
-        <main className="flex w-full flex-1 flex-col gap-2 overflow-hidden">
+        <main className="flex w-full flex-1 flex-col overflow-hidden">
           <DashboardHeader heading="Chat" text="Have a Chat with ChatGPT." />
-          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-            {/* <div className="flex  w-full  flex-row justify-between "> */}
-            <div className="lg:dark:hover: flex h-full w-full  flex-col items-start justify-start rounded-md p-4 align-middle lg:flex-row  lg:flex-wrap lg:items-center  lg:justify-between  lg:gap-x-4  lg:gap-y-0 lg:rounded-md  lg:border lg:border-gray-200  lg:bg-white   lg:px-3 lg:py-8  lg:align-middle  lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-400">
-              <TextInputForm
-                inputType="text"
-                placeholder={"Type your message here."}
-                handleSubmitButton={handleSubmitButton}
-                className="flex-grow:1 flex-1"
-              ></TextInputForm>
-              {sessionSectionLoading && (
-                <div className=" flex w-1/3   flex-col items-end justify-center   ">
-                  <SessionsSection
-                    sessions={[]}
-                    onClick={handleSelectSession}
-                    onSelect={handleSelectSession2}
-                    onNewSession={handleCreateNewSession}
-                    handleDeleteResult={handleDeleteResult}
-                  />
-                </div>
-              )}
+          <section className="flex w-full   gap-2 space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-2">
+            {" "}
+            <div className="lg:dark:hover: flex w-full flex-col  items-start  justify-between gap-6 rounded-md  px-4  lg:flex-row      lg:gap-y-0 lg:rounded-md    lg:bg-white   lg:py-8   lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
+              <div className="w-3/4">
+                <TextInputForm
+                  inputType="text"
+                  placeholder={"Type your message here."}
+                  handleSubmitButton={handleSubmitButton}
+                  // className="flex-grow:1 flex-1"
+                ></TextInputForm>
+                {sessionSectionLoading && (
+                  <div className=" flex w-1/4    ">
+                    <SessionsSection
+                      sessions={[]}
+                      onClick={handleSelectSession}
+                      onSelect={handleSelectSession2}
+                      onNewSession={handleCreateNewSession}
+                      handleDeleteResult={handleDeleteResult}
+                    />
+                  </div>
+                )}
+              </div>
               {sessionData && (
-                <div className=" flex w-1/3   flex-col items-end justify-center   ">
+                <div className=" flex w-1/4    ">
                   <SessionsSection
                     sessions={sessionData}
                     onClick={handleSelectSession}
@@ -352,33 +344,16 @@ const ChatPage: NextPage = () => {
                 </div>
               )}
             </div>
-            {/* <DeleteDialogue
-              onDelete={handleDeleteResult}
-              isOpen={isDeleteDialogueOpen}
-            /> */}
           </section>
           <div className=" container relative flex max-w-[64rem] flex-col items-center gap-4 text-center">
             {isLoading && (
               <div className="flex w-full items-center justify-center">
-                <LoadingSpinner size={40} />
+                <LoadingSpinner size={90} />
               </div>
             )}
             {session.data && <ResponseSection messages={session.data} />}
           </div>
-          {/* {isShowingPrevResults && currentSession.id !== DEFAULT_ID && (
-            // {sessionData && currentSession.id !== DEFAULT_ID && (
-            <Sessionfeed id={currentSession.id} />
-          )} */}
-          {/* {data &&
-            // !isShowingPrevResults &&
-            currentSession.id !== DEFAULT_ID && (
-              // {data && (
-              <div>
-                <Sessionfeed id={currentSession.id} />
-              </div>
-            )} */}
         </main>
-        {/* </div> */}
       </DashboardShell>
     </>
   );

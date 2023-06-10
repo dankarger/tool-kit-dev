@@ -17,7 +17,7 @@ interface InputWithButtonProps {
 //   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const postPatchSchema = z.object({
-  prompt: z.string(z.string().min(3).max(128)),
+  prompt: z.string(z.string().min(1).max(128)),
 });
 
 export function InputWithButton({

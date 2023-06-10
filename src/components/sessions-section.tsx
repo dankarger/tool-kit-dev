@@ -30,7 +30,9 @@ export const SessionsSection = ({
 }: SessionsSectionProps) => {
   if (!sessions) return null;
   return (
-    <div className=" z-150 top-59 left-1  h-full  px-2 pb-4">
+    <div
+    // className=" z-150 top-59 left-1  h-full  px-2 pb-4"
+    >
       <SelectElement
         options={sessions}
         onSelect={onSelect}

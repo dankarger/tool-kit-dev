@@ -22,6 +22,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import type {
   Session,
   StoryResult,
@@ -102,102 +110,88 @@ export function SelectElement({
     if (checkStoryType(option)) return option.title;
     return option.text.substring(0, 10);
   }
-
-  // TODO : fix order
   const optionsTemp = [...options];
   const sortedOptions: ReturnLabelProp[] = (
     optionsTemp as ReturnLabelProp[]
   ).reverse();
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
-        className="w-full space-y-6"
+    <Card>
+      <CardHeader>
+        <CardTitle>Previous Results</CardTitle>
+        <CardDescription>
+          You can load or delete previous results from here.
+        </CardDescription>
+      </CardHeader>
+      <CardContent
+      // className=" grid gap-6 "
       >
-        <FormField
-          control={form.control}
-          name="session"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Previous </FormLabel>
-              <Select onValueChange={field.onChange} defaultValue="none">
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="New Session" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {/* {!options && <div>LoadingPage...</div>} */}
-                  <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
-                    {/* {options.toReversed().map(
-                      (
-                        option:
-                          | Session
-                          | StoryResult
-                          | TranslationResultType
-                          | SummarizeResultType
-                      ) => ( */}
-
-                    {sortedOptions.map(
-                      (
-                        option:
-                          | Session
-                          | StoryResult
-                          | TranslationResultType
-                          | SummarizeResultType
-                      ) => (
-                        // <SelectItem
-                        //   key={option.id}
-                        //   value={option.id}
-                        //   data-valueid={option.id}
-                        // >
-                        //   {returnLabelFromOption(option)}
-                        // </SelectItem>
-
-                        // <SelectItem>
-                        <SessionsCombobox
-                          value={option.id}
-                          valueid={option.id}
-                          label={returnLabelFromOption(option)}
-                          title={returnLabelFromOption(option)}
-                          key={option.id}
-                          onSelect={onSelect}
-                          handleDeleteResult={handleDeleteResult}
-                        />
-                        // </SelectItem>
-                      )
-                    )}
-                  </ScrollArea>
-                </SelectContent>
-              </Select>
-              <FormDescription>
-                You can resume a previous chat{" "}
-                {/* <Link href="/examples/forms">email settings</Link>. */}
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex justify-between align-middle ">
-          {/* <Button disabled={!isDirty || !isValid} type="submit">
-            Load
-          </Button> */}
-          <Button
-            className="w-16 bg-slate-400"
-            onClick={() => {
-              onNewSession();
-              form.reset();
-            }}
-            type="button"
+        <Form {...form}>
+          <form
+            onSubmit={(e) => void form.handleSubmit(onSubmit)(e)}
+            className="w-full space-y-6"
           >
-            <span>
-              <Icons.add className="mr-2 h-4 w-4" />
-            </span>
-            NEW
-          </Button>
-        </div>
-      </form>
-    </Form>
+            <FormField
+              control={form.control}
+              name="session"
+              render={({ field }) => (
+                <FormItem>
+                  {/* <FormLabel>Previous </FormLabel> */}
+                  <Select onValueChange={field.onChange} defaultValue="none">
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="New Session" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
+                        {sortedOptions.map(
+                          (
+                            option:
+                              | Session
+                              | StoryResult
+                              | TranslationResultType
+                              | SummarizeResultType
+                          ) => (
+                            <SessionsCombobox
+                              value={option.id}
+                              valueid={option.id}
+                              label={returnLabelFromOption(option)}
+                              title={returnLabelFromOption(option)}
+                              key={option.id}
+                              onSelect={onSelect}
+                              handleDeleteResult={handleDeleteResult}
+                            />
+                          )
+                        )}
+                      </ScrollArea>
+                    </SelectContent>
+                  </Select>
+                  {/* <FormDescription>
+                    You can resume a previous chat{" "}
+                  </FormDescription> */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex justify-between align-middle ">
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  onNewSession();
+                  form.reset();
+                }}
+                type="button"
+              >
+                <span>
+                  <Icons.add className="mr-2 h-4 w-4" />
+                </span>
+                NEW
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

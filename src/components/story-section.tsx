@@ -17,8 +17,8 @@ import {
 export const FormSchema = z.object({
   text: z
     .string()
-    .min(2, {
-      message: "Cant proceed with less than 2 characters.",
+    .min(1, {
+      message: "Cant proceed with empty text.",
     })
     .max(1300),
 });
@@ -85,8 +85,11 @@ export function StorySection({ handleSubmitButton }: StorylateSectionProps) {
             </FormItem>
           )}
         />
-        <div className="flex items-center justify-between space-x-2">
-          <Button disabled={!form.formState.isValid} type="submit">
+        <div className="items-top flex justify-start gap-4 space-x-2 py-3">
+          <Button
+            //  disabled={!form.formState.isValid}
+            type="submit"
+          >
             Generate
           </Button>
           <Button

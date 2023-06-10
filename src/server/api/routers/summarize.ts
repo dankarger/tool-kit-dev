@@ -44,14 +44,14 @@ export const summarizeRouter = createTRPCRouter({
           title: "",
           result: "",
           authorId: "",
-        } as SummarizeResult;
+        } as SummarizeResultType;
       const result = await ctx.prisma.summarizeResult.findUnique({
         where: {
           id: input.id,
         },
       });
       if (!result) throw new TRPCError({ code: "NOT_FOUND" });
-      return result;
+      return result as SummarizeResultType;
     }),
 
   createSummarizeResult: privateProcedure
@@ -110,7 +110,7 @@ export const summarizeRouter = createTRPCRouter({
         });
 
       console.log("summarizeResult - data/,", summarizeResult);
-      return summarizeResult;
+      return summarizeResult as SummarizeResultType;
     }),
 
   deleteResult: privateProcedure

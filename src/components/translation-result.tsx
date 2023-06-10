@@ -1,15 +1,7 @@
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { type TranslationResult } from "@prisma/client";
-
 import * as React from "react";
-
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -18,15 +10,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import {
+//   Collapsible,
+//   CollapsibleContent,
+//   CollapsibleTrigger,
+// } from "@/components/ui/collapsible";
 
 interface TranslationResultProps {
   data: TranslationResult;
@@ -34,44 +22,29 @@ interface TranslationResultProps {
 export const TranslationResultComponent = (
   data: TranslationResultProps
 ): React.ReactElement => {
-  const text = data.data.text.split("]")[1];
   return (
     <Card className="w-full text-left">
       <CardHeader>
-        {/* <CardTitle>[{data.data.language}]</CardTitle> */}
-        <CardDescription>
+        <CardDescription className="flex gap-2 ">
           {" "}
-          {/* <p className="leading-7 [&:not(:first-child)]:mt-6"> */}
-          <span className="flex items-center text-gray-500 underline">
+          <span className="flex items-center text-gray-500 ">
             {" "}
-            Original:{" "}
+            <Badge variant="secondary">Original </Badge>
           </span>{" "}
           {data.data.text}
-          {/* </p> */}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Separator />
-
-        {/* <div className="rounded-md bg-slate-200 p-4">
-            <Collapsible className="justify-start  align-top">
-              <CollapsibleTrigger>Show original text</CollapsibleTrigger>
-              <CollapsibleContent>{data.data.text}</CollapsibleContent>
-            </Collapsible>
-          </div> */}
-        <div>
-          <p className="leading-7 [&:not(:first-child)]:mt-6">
-            <span className="flex items-center text-gray-500 underline">
-              {" "}
-              #{data.data.language}{" "}
-            </span>
-            {data.data.translation}
-          </p>
+        <div className="flex gap-2 pt-4 ">
+          <span className="flex items-center text-gray-500 ">
+            {" "}
+            <Badge variant="default">{data.data.language} </Badge>
+          </span>
+          {data.data.translation}
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        {/* {data.data.translation} */}
-      </CardFooter>
+      <CardFooter className="flex justify-between"></CardFooter>
     </Card>
   );
 };
