@@ -164,36 +164,39 @@ const SummarizePage: NextPage = () => {
             heading="Summarize"
             text="Summarize a text with GPTool."
           />
-          <section className=" items-top flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-            <div className="flex w-full ">
+          <section className="flex w-full   gap-2 space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-2">
+            <div className="lg:dark:hover: flex w-full flex-col  items-start  justify-between gap-6 rounded-md  px-4  lg:flex-row      lg:gap-y-0 lg:rounded-md    lg:bg-white   lg:py-8   lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
+              {" "}
               {/* <SummarizeSection
                   handleSummarizeButton={handleSummarizeButton}
                 /> */}
-              <div className="w-full">
+              <div className="w-3/4">
                 <TextInputForm
                   inputType="area"
                   handleSubmitButton={handleSummarizeButton}
                   placeholder="Type or past text here to summarize...."
                 />
               </div>
-              {sessionSectionLoading && (
-                // <Skeleton className="h-[150px] w-[200px]" />
-                <SessionsSection
-                  sessions={[]}
-                  onSelect={handleSelectSummary}
-                  onNewSession={handleCreateNewSession}
-                  handleDeleteResult={handleDeleteResult}
-                  // disabled={true}
-                />
-              )}
-              {sessionData && (
-                <SessionsSection
-                  sessions={sessionData}
-                  onSelect={handleSelectSummary}
-                  onNewSession={handleCreateNewSession}
-                  handleDeleteResult={handleDeleteResult}
-                />
-              )}
+              <div className="w-1/4">
+                {sessionSectionLoading && (
+                  // <Skeleton className="h-[150px] w-[200px]" />
+                  <SessionsSection
+                    sessions={[]}
+                    onSelect={handleSelectSummary}
+                    onNewSession={handleCreateNewSession}
+                    handleDeleteResult={handleDeleteResult}
+                    // disabled={true}
+                  />
+                )}
+                {sessionData && (
+                  <SessionsSection
+                    sessions={sessionData}
+                    onSelect={handleSelectSummary}
+                    onNewSession={handleCreateNewSession}
+                    handleDeleteResult={handleDeleteResult}
+                  />
+                )}
+              </div>
             </div>
             {/* {/* <ComboboxDropdownMenu /> */}
             {isLoading && (
@@ -205,8 +208,8 @@ const SummarizePage: NextPage = () => {
           {selectedSummarizeResult &&
             isShowingPrevResults &&
             selectedSummarizeResult.id !== "default-id" && (
-              <section className="  container  flex space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
-                <div className="   relative flex h-fit w-full max-w-[64rem] flex-col items-start gap-4   p-2 ">
+              <section className="  container flex   space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
+                <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
                   <SummarizeResult data={selectedSummarizeResult} />
                 </div>
               </section>

@@ -120,7 +120,7 @@ export function TranslateSection({
             <div className="grid grid-cols-5 grid-rows-1 gap-4">
               {/* <CardExample> */}
 
-              <div className="col-span-4">
+              <div className="col-span-3">
                 <FormField
                   control={form.control}
                   name="text"
@@ -145,7 +145,7 @@ export function TranslateSection({
                 />
               </div>
               {/* </CardExample> */}
-              <div className=" col-start-5 ">
+              <div className=" col-span-2 col-start-4 ">
                 <FormField
                   control={form.control}
                   name="language"
@@ -179,9 +179,9 @@ export function TranslateSection({
               </div>
             </div>
           </CardContent>
-          <CardFooter className="grid grid-cols-5 grid-rows-1 gap-4">
+          <CardFooter className="grid grid-cols-4 grid-rows-1 gap-4">
             <div className="col-span-4">
-              <div className="flex items-center justify-between">
+              <div className="flex w-3/5 items-center justify-between">
                 <Button
                   // disabled={!form.formState.isValid}
                   type="submit"
