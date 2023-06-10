@@ -199,29 +199,27 @@ const SummarizePage: NextPage = () => {
               </div>
             </div>
             {/* {/* <ComboboxDropdownMenu /> */}
-            {isLoading && (
-              <div className="flex h-fit w-full items-center justify-center">
-                <LoadingSpinner size={90} />
-              </div>
-            )}
           </section>
+          {isLoading && (
+            <div className="flex h-fit w-full items-center justify-center">
+              <LoadingSpinner size={90} />
+            </div>
+          )}
           {selectedSummarizeResult &&
             isShowingPrevResults &&
             selectedSummarizeResult.id !== "default-id" && (
               <section className="  container flex   space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
-                <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
+                <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col  gap-4   p-2 text-center">
                   <SummarizeResult data={selectedSummarizeResult} />
                 </div>
               </section>
             )}
           {data && (
-            <section className="container space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
-              <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-center gap-4   p-2 text-center">
+            <section className="  container flex   space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
+              <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-start  gap-4   p-2 text-center">
                 {data && !isShowingPrevResults && (
                   // currentSession.id !== "default-id" && (
-                  <div>
-                    <SummarizeResult data={data} />
-                  </div>
+                  <SummarizeResult data={data} />
                 )}
               </div>
             </section>
