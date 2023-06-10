@@ -24,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 // import { on } from "process";
+import { SimpleModal } from "@/components/ui/simple-modal";
 
 const labels = [
   "feature",
@@ -56,18 +57,27 @@ export function SessionsCombobox({
   const [open, setOpen] = React.useState(false);
   const [isDialogueOpen, setDialogueOpen] = React.useState(false);
 
-  const handleConfirmDeleteButton = (value: string) => {
+  const handleConfirmDeleteButton = (confirm: boolean) => {
     // setDialogueOpen(true);
     // const res = alert(value);
-    const res = window.confirm("are you sure you want to delete this session");
-    if (res) {
-      handleDeleteResult(value);
+    setDialogueOpen(true);
+    // const res = window.confirm("are you sure you want to delete this session");
+    // if (res) {
+    if (confirm) {
+      //   // handleDeleteResult(value);
       console.log(`deleting - ${value}`);
     }
+    // }
   };
 
   return (
     <div className="flex w-full flex-col items-start justify-between rounded-md border px-4 py-3 sm:flex-row sm:items-center">
+      {/* <SimpleModal
+        handleAction={handleDeleteResult}
+        value={value}
+
+        // setDialogueOpen={setDialogueOpen}
+      /> */}
       <p className="text-sm font-medium leading-none">
         {/* <span className="mr-2 rounded-lg bg-primary px-2 py-1 text-xs text-primary-foreground">
           {label}
@@ -101,8 +111,13 @@ export function SessionsCombobox({
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-600">
-              <Button
+            <DropdownMenuItem
+              className="text-red-600"
+              onSelect={(e) => {
+                e.preventDefault();
+              }}
+            >
+              {/* <Button
                 variant="ghost"
                 size="sm"
                 value={value}
@@ -110,13 +125,22 @@ export function SessionsCombobox({
                 onClick={() => {
                   // handleDeleteResult(value);
                   setDialogueOpen(true);
-                  void handleConfirmDeleteButton(value);
+                  // void handleConfirmDeleteButton(value);
                 }}
               >
                 {" "}
                 <Trash className="mr-2 h-4 w-4" />
                 Delete Session
-              </Button>
+              </Button> */}
+              <div className="flex items-center px-3 py-2">
+                <Trash className="mr-2 h-4 w-4" />
+                <SimpleModal
+                  handleAction={handleDeleteResult}
+                  value={value}
+
+                  // setDialogueOpen={setDialogueOpen}
+                />
+              </div>
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
