@@ -119,7 +119,7 @@ export function TextInputForm({
                   name="text"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Text</FormLabel>
+                      {/* <FormLabel>Text</FormLabel> */}
                       <FormControl>
                         <Textarea
                           id="text"

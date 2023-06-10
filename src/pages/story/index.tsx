@@ -18,6 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@radix-ui/react-separator";
 import { StoryResultDiv } from "@/components/story-result";
 import { StorySteps } from "@/components/story-steps";
+import { TextInputForm } from "@/components/text-input-form";
 
 const StoryPage: NextPage = () => {
   const [userPromt, setUserPrompt] = useState("");
@@ -356,28 +357,37 @@ const StoryPage: NextPage = () => {
             heading="Generate Story"
             text="Generate a Story with"
           />
-          <section className=" items-top mb-6 flex-col justify-center space-y-2 px-3 pb-10 pt-2 md:pb-2 md:pt-4 lg:py-12">
-            {/* <div className="f-full container flex justify-between gap-12  rounded-md  border border-slate-400  shadow-md dark:bg-transparent md:py-8 lg:py-14"> */}
-            <div className="lg:dark:hover: flex h-full w-full  flex-col items-start justify-start rounded-md p-4 align-middle lg:flex-row  lg:flex-wrap lg:items-center  lg:justify-between  lg:gap-x-4  lg:gap-y-0 lg:rounded-md  lg:border lg:border-gray-200  lg:bg-white   lg:p-8  lg:align-middle  lg:shadow-lg  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
-              <StorySection handleSubmitButton={handleStoryGenerateButton} />
-              {sessionSectionLoading && (
-                // <Skeleton className="h-[150px] w-[200px]" />
-                <SessionsSection
-                  sessions={[]}
-                  onSelect={handleSelectStory}
-                  onNewSession={handleCreateNewSession}
-                  handleDeleteResult={handleDeleteResult}
-                  // disabled={true}
+          <section className="flex w-full   gap-2 space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-2">
+            <div className="lg:dark:hover: flex w-full flex-col  items-start  justify-between gap-6 rounded-md  px-4  lg:flex-row      lg:gap-y-0 lg:rounded-md    lg:bg-white   lg:py-8   lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
+              {" "}
+              <div className="w-3/4">
+                {/* <StorySection handleSubmitButton={handleStoryGenerateButton} /> */}
+                <TextInputForm
+                  inputType="area"
+                  handleSubmitButton={handleStoryGenerateButton}
+                  placeholder="Type or past a text here to generate a Story...."
                 />
-              )}
-              {sessionData && (
-                <SessionsSection
-                  sessions={sessionData}
-                  onSelect={handleSelectStory}
-                  onNewSession={handleCreateNewSession}
-                  handleDeleteResult={handleDeleteResult}
-                />
-              )}
+              </div>
+              <div className="w-1/4">
+                {sessionSectionLoading && (
+                  // <Skeleton className="h-[150px] w-[200px]" />
+                  <SessionsSection
+                    sessions={[]}
+                    onSelect={handleSelectStory}
+                    onNewSession={handleCreateNewSession}
+                    handleDeleteResult={handleDeleteResult}
+                    // disabled={true}
+                  />
+                )}
+                {sessionData && (
+                  <SessionsSection
+                    sessions={sessionData}
+                    onSelect={handleSelectStory}
+                    onNewSession={handleCreateNewSession}
+                    handleDeleteResult={handleDeleteResult}
+                  />
+                )}
+              </div>
             </div>
           </section>
 
