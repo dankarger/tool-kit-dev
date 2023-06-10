@@ -24,6 +24,7 @@ import { LoadingSpinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 import { TextInputForm } from "@/components/text-input-form";
 import { toast } from "@/components/ui/use-toast";
+
 const DEFAULT_ID = "defaultId";
 
 const handleToastError = (errorMessage: string[]) => {
