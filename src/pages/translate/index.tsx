@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import { type NextPage } from "next";
-import type {
-  Session,
-  Response,
-  ChatMessage,
-  TranslationResultType,
-} from "@/types";
-import { ChatCompletionRequestMessageRoleEnum } from "openai";
+import type { TranslationResultType } from "@/types";
 import Head from "next/head";
-import { dashboardConfig } from "@/config/site";
 import { SessionsSection } from "@/components/sessions-section";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
@@ -18,15 +11,15 @@ import { useUser } from "@clerk/nextjs";
 // import toast from "react-hot-toast";
 import { toast } from "@/components/ui/use-toast";
 import { TranslateSection } from "@/components/translate-section";
-import { FormSchema } from "@/components/translate-section";
 import { TranslationResultComponent } from "@/components/translation-result";
-import { InputAreaWithButton } from "@/components/input-area-with-button";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Separator } from "@/components/ui/separator";
 
+const DEFAULT_ID = "defaultId";
+
 const TranslatePage: NextPage = () => {
   const [currentSession, setCurrenSession] = React.useState({
-    id: "default-id",
+    id: DEFAULT_ID,
   });
   const [isShowingPrevResults, setIsShowingPrevResults] = useState(false);
   const user = useUser();
@@ -37,7 +30,7 @@ const TranslatePage: NextPage = () => {
     refetch: sessionRefetch,
     isSuccess,
   } = api.translate.getAllTranslationsByAuthorId.useQuery({
-    authorId: user.user?.id || "random",
+    authorId: user.user?.id || DEFAULT_ID,
   });
   const deleteResult = api.translate.deleteResult.useMutation({
     async onSuccess() {
@@ -61,9 +54,9 @@ const TranslatePage: NextPage = () => {
     isSuccess: selectedTranslateIsSucess,
   } = api.translate.getTranlateResultById.useQuery(
     {
-      id: currentSession.id !== "default-id" ? currentSession.id : "",
-    },
-    { trpc: { abortOnUnmount: true } }
+      id: currentSession.id !== DEFAULT_ID ? currentSession.id : DEFAULT_ID,
+    }
+    // { trpc: { abortOnUnmount: true } }
   );
 
   const { mutate, isLoading, data } =
@@ -131,7 +124,7 @@ const TranslatePage: NextPage = () => {
   const handleSelectStory = (translateId: string) => {
     console.log("storyId", translateId);
     const obj = {
-      id: translateId ?? "default-id",
+      id: translateId ?? DEFAULT_ID,
     };
     setCurrenSession(obj);
     void sessionRefetch();
@@ -141,8 +134,8 @@ const TranslatePage: NextPage = () => {
   };
 
   const handleCreateNewSession = () => {
-    // setCurrenSession({ storyId: "default-id" });
-    setCurrenSession({ id: "default-id" });
+    // setCurrenSession({ storyId: DEFAULT_ID });
+    setCurrenSession({ id: DEFAULT_ID });
     // setImageUrlResult("");
     // setTextResult("");
     // setTitle("");
@@ -204,7 +197,7 @@ const TranslatePage: NextPage = () => {
           )}
           {data &&
             !isShowingPrevResults &&
-            currentSession.id !== "default-id" && (
+            currentSession.id !== DEFAULT_ID && (
               <section className=" w-full  space-y-2 py-2 dark:bg-transparent md:py-8 lg:py-6">
                 <Separator className="mt-2" />
 
@@ -218,7 +211,7 @@ const TranslatePage: NextPage = () => {
             )}
           {selectedTranslateResult &&
             isShowingPrevResults &&
-            selectedTranslateResult.id !== "default-id" && (
+            selectedTranslateResult.id !== DEFAULT_ID && (
               <section className=" space-y-2py-2  w-full px-8 dark:bg-transparent md:py-8 lg:py-6">
                 <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
                   Result

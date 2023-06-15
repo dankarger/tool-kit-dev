@@ -8,6 +8,7 @@ import {
 } from "@/server/api/trpc";
 import { type TranslationResult } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+import { TranslationResultType } from "@/types";
 import {
   ChatCompletionRequestMessage,
   ChatCompletionRequestMessageRoleEnum,
@@ -33,6 +34,7 @@ import { Redis } from "@upstash/redis";
 
 // Usage example
 // const response: ChatCompletionResponse = openai.createChatCompletion(/* ... */);
+const DEFAULT_ID = "defaultId";
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -55,20 +57,24 @@ export const TranslateRouter = createTRPCRouter({
 
       return translationResults;
     }),
+
   getTranlateResultById: privateProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       console.log("d", input);
-      if (input.id === "default-id" || input.id.length === 0)
+      if (input.id === DEFAULT_ID || input.id.length === 0) {
         return {
-          id: "default-id",
+          id: DEFAULT_ID,
           createdAt: new Date(),
           title: "",
           text: "",
           translation: "",
           authorId: "",
           language: "",
-        } as TranslationResult;
+        } as TranslationResultType;
+      }
+
+      console.log("dasdasdasdasdasdasdasdasda--------", input);
       const result = await ctx.prisma.translationResult.findUnique({
         where: {
           id: input.id,
@@ -131,7 +137,7 @@ export const TranslateRouter = createTRPCRouter({
   deleteResult: privateProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      if (!input.id) return { id: "default-id" };
+      if (!input.id) return { id: DEFAULT_ID };
       const translateDelteResult = await ctx.prisma.translationResult.delete({
         where: {
           id: input.id,

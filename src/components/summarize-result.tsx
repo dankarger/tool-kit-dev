@@ -33,7 +33,7 @@ export const SummarizeResult = ({ data }: { data: SummarizeResultType }) => {
             <CollapsibleContent className=" flex flex-wrap	gap-4">
               <CardTitle className="flex-start flex">Original</CardTitle>
 
-              <div className="bg-slate-50  p-3 py-4 text-left leading-7">
+              <div className="bg-secondary  p-3 py-4 text-left leading-7">
                 {data.text}
               </div>
             </CollapsibleContent>
