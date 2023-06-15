@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import { type NextPage } from "next";
-import type {
-  Session,
-  Response,
-  ChatMessage,
-  TranslationResultType,
-} from "@/types";
-import { ChatCompletionRequestMessageRoleEnum } from "openai";
+import type { TranslationResultType } from "@/types";
 import Head from "next/head";
-import { dashboardConfig } from "@/config/site";
 import { SessionsSection } from "@/components/sessions-section";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
@@ -18,15 +11,15 @@ import { useUser } from "@clerk/nextjs";
 // import toast from "react-hot-toast";
 import { toast } from "@/components/ui/use-toast";
 import { TranslateSection } from "@/components/translate-section";
-import { FormSchema } from "@/components/translate-section";
 import { TranslationResultComponent } from "@/components/translation-result";
-import { InputAreaWithButton } from "@/components/input-area-with-button";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Separator } from "@/components/ui/separator";
 
+const DEFAULT_ID = "defaultId";
+
 const TranslatePage: NextPage = () => {
   const [currentSession, setCurrenSession] = React.useState({
-    id: "default-id",
+    id: DEFAULT_ID,
   });
   const [isShowingPrevResults, setIsShowingPrevResults] = useState(false);
   const user = useUser();
@@ -37,7 +30,7 @@ const TranslatePage: NextPage = () => {
     refetch: sessionRefetch,
     isSuccess,
   } = api.translate.getAllTranslationsByAuthorId.useQuery({
-    authorId: user.user?.id || "random",
+    authorId: user.user?.id || DEFAULT_ID,
   });
   const deleteResult = api.translate.deleteResult.useMutation({
     async onSuccess() {
@@ -61,9 +54,9 @@ const TranslatePage: NextPage = () => {
     isSuccess: selectedTranslateIsSucess,
   } = api.translate.getTranlateResultById.useQuery(
     {
-      id: currentSession.id !== "default-id" ? currentSession.id : "",
-    },
-    { trpc: { abortOnUnmount: true } }
+      id: currentSession.id !== DEFAULT_ID ? currentSession.id : DEFAULT_ID,
+    }
+    // { trpc: { abortOnUnmount: true } }
   );
 
   const { mutate, isLoading, data } =
@@ -131,7 +124,7 @@ const TranslatePage: NextPage = () => {
   const handleSelectStory = (translateId: string) => {
     console.log("storyId", translateId);
     const obj = {
-      id: translateId ?? "default-id",
+      id: translateId ?? DEFAULT_ID,
     };
     setCurrenSession(obj);
     void sessionRefetch();
@@ -141,8 +134,8 @@ const TranslatePage: NextPage = () => {
   };
 
   const handleCreateNewSession = () => {
-    // setCurrenSession({ storyId: "default-id" });
-    setCurrenSession({ id: "default-id" });
+    // setCurrenSession({ storyId: DEFAULT_ID });
+    setCurrenSession({ id: DEFAULT_ID });
     // setImageUrlResult("");
     // setTextResult("");
     // setTitle("");
@@ -168,16 +161,16 @@ const TranslatePage: NextPage = () => {
             text="Translate a text with GPTool."
           />
 
-          <section className="flex w-full   gap-2 space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-2">
+          <section className="flex w-full gap-2 space-y-2 p-0   px-0 pb-2 pt-2   sm:px-0 md:pb-2 md:pt-4 lg:px-3 lg:py-2">
             {/* <div className="flex  w-full  flex-row justify-between "> */}
-            <div className="lg:dark:hover: flex w-full flex-col  items-start  justify-between gap-6 rounded-md  px-4  lg:flex-row      lg:gap-y-0 lg:rounded-md    lg:bg-white   lg:py-8   lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
-              <div className="w-3/4">
+            <div className="lg:dark:hover: flex w-full flex-col-reverse items-start justify-between gap-6 rounded-md  px-0  sm:flex-col-reverse sm:px-0 md:flex-col-reverse  lg:flex-row  lg:gap-y-0 lg:rounded-md    lg:bg-white   lg:py-8   lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
+              <div className="w-full sm:w-full md:w-full lg:w-3/4">
                 <TranslateSection
                   handleTranslateButton={handleTranslateButton}
                 />
               </div>
               {/* <Separator orientation="vertical" /> */}
-              <div className=" flex w-1/4    ">
+              <div className=" w-full sm:w-full  md:w-full  lg:w-1/4 ">
                 {sessionSectionLoading && (
                   <SessionsSection
                     sessions={[]}
@@ -204,7 +197,7 @@ const TranslatePage: NextPage = () => {
           )}
           {data &&
             !isShowingPrevResults &&
-            currentSession.id !== "default-id" && (
+            currentSession.id !== DEFAULT_ID && (
               <section className=" w-full  space-y-2 py-2 dark:bg-transparent md:py-8 lg:py-6">
                 <Separator className="mt-2" />
 
@@ -218,7 +211,7 @@ const TranslatePage: NextPage = () => {
             )}
           {selectedTranslateResult &&
             isShowingPrevResults &&
-            selectedTranslateResult.id !== "default-id" && (
+            selectedTranslateResult.id !== DEFAULT_ID && (
               <section className=" space-y-2py-2  w-full px-8 dark:bg-transparent md:py-8 lg:py-6">
                 <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
                   Result

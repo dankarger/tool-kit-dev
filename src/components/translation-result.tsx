@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { type TranslationResult } from "@prisma/client";
+import { type TranslationResultType } from "@/types";
 import * as React from "react";
 import {
   Card,
@@ -17,7 +18,7 @@ import {
 // } from "@/components/ui/collapsible";
 
 interface TranslationResultProps {
-  data: TranslationResult;
+  data: TranslationResultType;
 }
 export const TranslationResultComponent = (
   data: TranslationResultProps
