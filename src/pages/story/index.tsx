@@ -357,10 +357,9 @@ const StoryPage: NextPage = () => {
             heading="Generate Story"
             text="Generate a Story with"
           />
-          <section className="flex w-full   gap-2 space-y-2 px-3 pb-2 pt-2 md:pb-2 md:pt-4 lg:py-2">
-            <div className="lg:dark:hover: flex w-full flex-col  items-start  justify-between gap-6 rounded-md  px-4  lg:flex-row      lg:gap-y-0 lg:rounded-md    lg:bg-white   lg:py-8   lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
-              {" "}
-              <div className="w-3/4">
+          <section className="flex w-full gap-2 space-y-2 p-0   px-0 pb-2 pt-2   sm:px-0 md:pb-2 md:pt-4 lg:px-3 lg:py-2">
+            <div className="lg:dark:hover: flex w-full flex-col-reverse items-start justify-between gap-6 rounded-md  px-0  sm:flex-col-reverse sm:px-0 md:flex-col-reverse  lg:flex-row  lg:gap-y-0 lg:rounded-md    lg:bg-white   lg:py-8   lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
+              <div className="w-full sm:w-full md:w-full lg:w-3/4">
                 {/* <StorySection handleSubmitButton={handleStoryGenerateButton} /> */}
                 <TextInputForm
                   inputType="area"
@@ -368,7 +367,7 @@ const StoryPage: NextPage = () => {
                   placeholder="Type or past a text here to generate a Story...."
                 />
               </div>
-              <div className="w-1/4">
+              <div className=" w-full sm:w-full  md:w-full  lg:w-1/4 ">
                 {sessionSectionLoading && (
                   // <Skeleton className="h-[150px] w-[200px]" />
                   <SessionsSection

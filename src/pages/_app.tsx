@@ -79,7 +79,7 @@ const MyApp: AppType = ({ Component, pageProps }: AppProps) => {
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="relative flex min-h-screen flex-col">
             <SiteHeader />
-            <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
+            <section className="container grid items-center gap-6 pb-8 pt-6 sm:py-2 md:py-10 ">
               <Component {...pageProps} />
             </section>
           </div>

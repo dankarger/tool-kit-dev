@@ -38,8 +38,8 @@ export function DashboardShell({
 }: DashboardShellProps) {
   return (
     <div className={cn("grid items-start gap-8", className)} {...props}>
-      <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
-        <aside className="hidden w-[200px] flex-col md:flex">
+      <div className="grid flex-1 gap-12 md:container lg:container md:grid-cols-[200px_1fr]">
+        <aside className=" w-[200px] flex-col sm:w-0 md:flex">
           <DashboardNav items={dashboardConfig.sidebarNav} />
         </aside>
         {children}
