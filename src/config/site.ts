@@ -1,6 +1,6 @@
 export type SiteConfig = typeof siteConfig;
 import { type DashboardConfig } from "@/types";
-export const INTERNAL_VERSION = "1.5";
+export const INTERNAL_VERSION = "1.6";
 
 export const siteConfig = {
   name: "GPTool-Kit",

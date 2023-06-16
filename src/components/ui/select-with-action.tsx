@@ -120,7 +120,9 @@ export function SelectElement({
       <CardHeader>
         <CardTitle>Previous Results</CardTitle>
         <CardDescription>
-          You can load or delete previous results from here.
+          You can load or delete previous results
+          {/* , click on the box below and */}
+          {/* press the three dots to load or delete */}
         </CardDescription>
       </CardHeader>
       <CardContent
@@ -136,11 +138,21 @@ export function SelectElement({
               name="session"
               render={({ field }) => (
                 <FormItem>
-                  {/* <FormLabel>Previous </FormLabel> */}
-                  <Select onValueChange={field.onChange} defaultValue="none">
+                  {/* <FormLabel>Click below </FormLabel> */}
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={options.length === 0}
+                  >
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="New Session" />
+                        <SelectValue
+                          placeholder={
+                            options.length > 0
+                              ? "Previous Results"
+                              : "No previous results"
+                          }
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
