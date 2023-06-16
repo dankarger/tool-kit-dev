@@ -174,6 +174,7 @@ export function TextInputForm({
                   // variant="default"
                   variant={"default"}
                   type="submit"
+                  id="chat_submit"
                   // className={cn(buttonVariants(), className)}
                   // disabled={isSaving}
                 >

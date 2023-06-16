@@ -39,7 +39,7 @@ export function DashboardShell({
   return (
     <div className={cn("grid items-start gap-8", className)} {...props}>
       <div className="grid flex-1 gap-12 md:container lg:container md:grid-cols-[200px_1fr]">
-        <aside className=" w-[200px] flex-col sm:w-0 md:flex">
+        <aside className=" w-[300px] flex-col sm:w-[900px]  md:flex md:w-[500px]">
           <DashboardNav items={dashboardConfig.sidebarNav} />
         </aside>
         {children}
