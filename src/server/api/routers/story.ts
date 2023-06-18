@@ -55,7 +55,7 @@ export const storyRouter = createTRPCRouter({
       const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: prompt }],
-        max_tokens: 90,
+        max_tokens: 400,
         stop: "\n",
         temperature: 0.9,
       });

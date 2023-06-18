@@ -71,7 +71,7 @@ export const summarizeRouter = createTRPCRouter({
       // const prompt = `we are having a chat ,this is our chat history so far: ${input.messages.flat()}`;
       if (!input.text) throw new TRPCError({ code: "NOT_FOUND" });
       const prompt =
-        'Please summarize in bullet points (seperate them with a "*") the following text: \n\n' +
+        'Please summarize in bullet points (separate them with a "*") the following text: \n\n' +
         input.text;
       const response = await openai.createChatCompletion({
         // engine: model_engine,
