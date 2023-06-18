@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 // import { User } from "@prisma/client"
 import { useForm, type SubmitHandler } from "react-hook-form";
@@ -55,8 +54,6 @@ export function TextInputForm({
   handleSubmitButton,
   ...props
 }: TextInputFormProps) {
-  const router = useRouter();
-
   const form = useForm<FormData>({
     resolver: zodResolver(TextInputSchema),
     // defaultValues,
