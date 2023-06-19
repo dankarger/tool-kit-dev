@@ -31,6 +31,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 const LANGUAGES = [
+  "",
   "English",
   "Spanish",
   "French",
@@ -154,7 +155,7 @@ export function TranslateSection({
                       <FormLabel className="text-sm">Translate to:</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={LANGUAGES[0]}
+                        defaultValue={LANGUAGES[1]}
                       >
                         <FormControl>
                           <SelectTrigger>
