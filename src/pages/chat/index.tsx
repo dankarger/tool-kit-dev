@@ -1,27 +1,14 @@
-import React, { use, useEffect, useId } from "react";
+import React from "react";
 import { type NextPage } from "next";
-import type {
-  Session,
-  Response,
-  ChatMessage,
-  StoryResult,
-  TranslationResultType,
-} from "@/types";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import Head from "next/head";
-import { dashboardConfig } from "@/config/site";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
 import { DashboardHeader } from "@/components/header";
-import { DashboardNav } from "@/components/nav";
-import { InputWithButton } from "@/components/input-with-button";
-import { ResponseDiv } from "@/components/response-div";
 import { ResponseSection } from "@/components/response-sections";
 import { SessionsSection } from "@/components/sessions-section";
-import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
-import { Button } from "@/components/ui/button";
 import { TextInputForm } from "@/components/text-input-form";
 import { toast } from "@/components/ui/use-toast";
 
@@ -53,38 +40,16 @@ const handleToastError = (errorMessage: string[]) => {
   }
 };
 
-const Sessionfeed = ({ id }: { id: string }) => {
-  const { data, isLoading, isError, refetch } =
-    api.chat.getSessionMessagesBySessionId.useQuery({
-      id: id,
-    });
-  if (!data) return null;
-  if (isLoading)
-    return (
-      <div>
-        <LoadingSpinner />
-      </div>
-    );
-  if (isError) return <div>Error</div>;
-  return <ResponseSection messages={data} />;
-};
-
 const ChatPage: NextPage = () => {
   const [promptValue, setPromptValue] = React.useState("");
-  const [chatResponce, setChatResponse] = React.useState("");
   const [chatHistory, setChatHistory] = React.useState([
     { role: "", content: "" },
   ]);
-  const [isSessionActivated, setIsSessionActivated] = React.useState(false);
-  const [needRefresh, setNeedRefresh] = React.useState(false);
+
   const [currentSession, setCurrenSession] = React.useState({
     id: DEFAULT_ID,
   });
-  const router = useRouter();
-  const [isDeleteDialogueOpen, setIsDeleteDialogueOpen] = React.useState(false);
   const user = useUser();
-  const randomName = useId();
-  const ctx = api.useContext();
 
   const [isShowingPrevResults, setIsShowingPrevResults] = React.useState(false);
 
@@ -104,6 +69,11 @@ const ChatPage: NextPage = () => {
     authorId: user.user?.id ?? "random3",
   });
 
+  const renameSession = api.session.renameSessionById.useMutation({
+    async onSuccess() {
+      await sessionRefetch();
+    },
+  });
   const deleteResult = api.chat.deleteResult.useMutation({
     async onSuccess() {
       toast({
@@ -127,10 +97,10 @@ const ChatPage: NextPage = () => {
     },
     onSettled: (sessionId, arg2NotUsed, data) => {
       setCurrenSession({ id: sessionId ?? DEFAULT_ID });
-      console.log(
-        "Yes, I have access to props after I receive the response: " +
-          JSON.stringify(sessionId)
-      );
+      // console.log(
+      //   "Yes, I have access to props after I receive the response: " +
+      //     JSON.stringify(sessionId)
+      // );
 
       // handleCreateNewChateMessage(chatHistory, promptValue);
       void session.refetch();
@@ -143,12 +113,13 @@ const ChatPage: NextPage = () => {
       if (errorMessage && errorMessage[0]) {
         handleToastError(errorMessage);
       } else {
-        handleToastError(["Failed to create translation, please try again"]);
+        handleToastError(["Failed to create chat, please try again"]);
       }
     },
   });
   const { mutate, isLoading, data } = api.chat.create.useMutation({
     onSuccess: (data) => {
+      console.log("datata", data);
       setPromptValue("");
       void session.refetch();
     },
@@ -196,6 +167,11 @@ const ChatPage: NextPage = () => {
     });
     setIsShowingPrevResults(false);
     void sessionRefetch();
+    console.log("ChatHistory", chatHistory.length);
+    if (chatHistory.length === 1) {
+      const newName = `${value.slice(0, 30)}...`;
+      void renameSession.mutate({ id: currentSessionVariable, name: newName });
+    }
   };
 
   const arrangeChatHistory = (
@@ -232,7 +208,7 @@ const ChatPage: NextPage = () => {
     if (!user.user?.id) {
       return handleToastError(["Please login to continue"]);
     }
-    setIsSessionActivated(true);
+    // setIsSessionActivated(true);
 
     const currentSessionMesages =
       sessionData?.filter((session) => session.id === currentSession.id) || [];
@@ -271,7 +247,6 @@ const ChatPage: NextPage = () => {
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     const selectedSessionId = e.currentTarget.dataset?.valueid;
-    console.log("hi", selectedSessionId);
     const obj = {
       id: selectedSessionId ?? DEFAULT_ID,
     };
@@ -282,7 +257,7 @@ const ChatPage: NextPage = () => {
   };
 
   const handleSelectSession2 = (sessionId: string) => {
-    console.log("sessionId", sessionId);
+    // console.log("sessionId", sessionId);
     const obj = {
       id: sessionId ?? DEFAULT_ID,
     };
@@ -298,7 +273,7 @@ const ChatPage: NextPage = () => {
       id: id,
     });
     void sessionRefetch();
-    setIsDeleteDialogueOpen(false);
+    // setIsDeleteDialogueOpen(false);
   };
 
   return (
