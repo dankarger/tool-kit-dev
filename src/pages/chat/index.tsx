@@ -69,6 +69,11 @@ const ChatPage: NextPage = () => {
     authorId: user.user?.id ?? "random3",
   });
 
+  const renameSession = api.session.renameSessionById.useMutation({
+    async onSuccess() {
+      await sessionRefetch();
+    },
+  });
   const deleteResult = api.chat.deleteResult.useMutation({
     async onSuccess() {
       toast({
@@ -92,10 +97,10 @@ const ChatPage: NextPage = () => {
     },
     onSettled: (sessionId, arg2NotUsed, data) => {
       setCurrenSession({ id: sessionId ?? DEFAULT_ID });
-      console.log(
-        "Yes, I have access to props after I receive the response: " +
-          JSON.stringify(sessionId)
-      );
+      // console.log(
+      //   "Yes, I have access to props after I receive the response: " +
+      //     JSON.stringify(sessionId)
+      // );
 
       // handleCreateNewChateMessage(chatHistory, promptValue);
       void session.refetch();
@@ -108,12 +113,13 @@ const ChatPage: NextPage = () => {
       if (errorMessage && errorMessage[0]) {
         handleToastError(errorMessage);
       } else {
-        handleToastError(["Failed to create translation, please try again"]);
+        handleToastError(["Failed to create chat, please try again"]);
       }
     },
   });
   const { mutate, isLoading, data } = api.chat.create.useMutation({
     onSuccess: (data) => {
+      console.log("datata", data);
       setPromptValue("");
       void session.refetch();
     },
@@ -161,6 +167,11 @@ const ChatPage: NextPage = () => {
     });
     setIsShowingPrevResults(false);
     void sessionRefetch();
+    console.log("ChatHistory", chatHistory.length);
+    if (chatHistory.length === 1) {
+      const newName = `${value.slice(0, 30)}...`;
+      void renameSession.mutate({ id: currentSessionVariable, name: newName });
+    }
   };
 
   const arrangeChatHistory = (
@@ -236,7 +247,6 @@ const ChatPage: NextPage = () => {
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     const selectedSessionId = e.currentTarget.dataset?.valueid;
-    console.log("hi", selectedSessionId);
     const obj = {
       id: selectedSessionId ?? DEFAULT_ID,
     };
@@ -247,7 +257,7 @@ const ChatPage: NextPage = () => {
   };
 
   const handleSelectSession2 = (sessionId: string) => {
-    console.log("sessionId", sessionId);
+    // console.log("sessionId", sessionId);
     const obj = {
       id: sessionId ?? DEFAULT_ID,
     };
