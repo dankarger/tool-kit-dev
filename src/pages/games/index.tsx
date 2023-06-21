@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { type NextPage } from "next";
-import type { TranslationResultType } from "@/types";
 import Head from "next/head";
 import { SessionsSection } from "@/components/sessions-section";
 import { api } from "@/utils/api";
@@ -10,15 +9,14 @@ import { DashboardNav } from "@/components/nav";
 import { useUser } from "@clerk/nextjs";
 // import toast from "react-hot-toast";
 import { toast } from "@/components/ui/use-toast";
-import { TranslateSection } from "@/components/translate-section";
-import { TranslationResultComponent } from "@/components/translation-result";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { TicTacToeBoard } from "@/components/TicTacToeBoard";
 
 const DEFAULT_ID = "defaultId";
-const INITIALBOARD = Array(9).fill("empty");
-
+const INITIALBOARD = Array(3).fill(Array(3).fill("_"));
+console.log("111", INITIALBOARD);
 // const gameBoard = new Array(9);
 // let gameStateArr = Array(9).fill("empty");
 
@@ -66,6 +64,9 @@ const GamesPage: NextPage = () => {
   const makePlay = api.games.playTicTacToe.useMutation({
     onSuccess(data) {
       console.log("play", data);
+      const updatedGameState = data?.split(",");
+      setGameState(gameState);
+      console.log("updatedGameState", updatedGameState);
     },
   });
   const {
@@ -108,6 +109,18 @@ const GamesPage: NextPage = () => {
     setTurnNumber(0);
     setPlayerTurn(false);
   };
+  React.useEffect(() => {}, [gameState]);
+
+  const handleSelectCell = (cellNumber: number[]) => {
+    console.log("ccc", cellNumber);
+    const currentGameBoard = [...gameState];
+    const [cell, row] = cellNumber;
+    console.log(currentGameBoard, cell);
+    currentGameBoard[row][cell] = "X";
+    console.log("currentGameBoard", currentGameBoard);
+    setGameState(currentGameBoard);
+  };
+
   return (
     <>
       <Head>
@@ -122,9 +135,16 @@ const GamesPage: NextPage = () => {
             text="Play Games with the GPTools."
           />
 
-          <section className="flex w-full gap-2 space-y-2 p-0   px-0 pb-2 pt-2   sm:px-0 md:pb-2 md:pt-4 lg:px-3 lg:py-2">
-            <div>Board</div>
-            <Button onClick={handleNewGame}>New Game</Button>
+          <section className="flex w-full flex-col gap-2 space-y-2 p-0  px-0 pb-2 pt-2   sm:px-0 md:pb-2 md:pt-4 lg:px-3 lg:py-2">
+            <div>
+              <TicTacToeBoard
+                board={gameState}
+                turnNumber={turnNumber}
+                handleNewGame={handleNewGame}
+                handleSelectCell={handleSelectCell}
+              />
+            </div>
+            {/* <Button onClick={handleNewGame}>New Game</Button> */}
             <Button onClick={handleRequestMove}>Play</Button>
           </section>
         </main>
