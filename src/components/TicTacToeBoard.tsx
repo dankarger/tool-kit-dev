@@ -15,7 +15,10 @@ interface CellProps {
   // player: string;
   // cellNumber: number;
   // disabled: boolean;
+  cellNumber: [number, number];
   handleClick: (cellNumber: [number, number]) => void;
+  // handleClick <T extends IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement> (cellNumber :number[] ): void;
+  // onClick?: MouseEventHandler<T> | undefined;
 }
 
 const Cell = (props: CellProps) => {
@@ -23,18 +26,25 @@ const Cell = (props: CellProps) => {
     value,
     // player,
     handleClick,
-    //  cellNumber, disabled
+    cellNumber,
+    //  , disabled
   } = props;
+
+  const handleCellClick = () => {
+    handleClick(cellNumber);
+  };
+
   return (
     // <Card sx={{border:"1px solid black"}} >
     <Button
       variant="outline"
-      onClick={handleClick}
+      onClick={handleCellClick}
       value={value}
       disabled={value != "_"}
     >
       {value !== "_" ? value : ""}
     </Button>
+
     // </Card>
   );
 };
@@ -44,6 +54,7 @@ interface BoardProps {
   turnNumber: number;
   handleNewGame: () => void;
   handleSelectCell: (cellNumber: [number, number]) => void;
+  // handleSelectCell <T extends IntrinsicAttributes & ButtonProps & RefAttributes<HTMLButtonElement> (cellNumber :number[] ): void;
 }
 
 export function TicTacToeBoard({
@@ -57,7 +68,7 @@ export function TicTacToeBoard({
       <CardHeader>
         <CardTitle>{turnNumber % 2 == 0 ? "Your turn" : "AI turn"}</CardTitle>
         <CardDescription>
-          {turnNumber != 0 ? "Turn number" + { turnNumber } : ""}
+          {turnNumber != 0 ? `Turn number ${turnNumber}` : ""}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -68,9 +79,10 @@ export function TicTacToeBoard({
           {board.map((row, rowIndex) =>
             row.map((cell, index) => (
               <Cell
+                cellNumber={[index, rowIndex]}
                 value={cell}
                 key={`${index}-${rowIndex}`}
-                handleClick={() => handleSelectCell([index, rowIndex])}
+                handleClick={handleSelectCell}
               />
             ))
           )}
