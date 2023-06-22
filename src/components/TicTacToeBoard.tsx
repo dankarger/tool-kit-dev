@@ -15,21 +15,21 @@ interface CellProps {
   // player: string;
   // cellNumber: number;
   // disabled: boolean;
-  onClick: () => void;
+  handleClick: (cellNumber: [number, number]) => void;
 }
 
 const Cell = (props: CellProps) => {
   const {
     value,
     // player,
-    onClick,
+    handleClick,
     //  cellNumber, disabled
   } = props;
   return (
     // <Card sx={{border:"1px solid black"}} >
     <Button
       variant="outline"
-      onClick={onClick}
+      onClick={handleClick}
       value={value}
       disabled={value != "_"}
     >
@@ -43,7 +43,7 @@ interface BoardProps {
   board: string[][];
   turnNumber: number;
   handleNewGame: () => void;
-  handleSelectCell: ([]) => void;
+  handleSelectCell: (cellNumber: [number, number]) => void;
 }
 
 export function TicTacToeBoard({
@@ -70,7 +70,7 @@ export function TicTacToeBoard({
               <Cell
                 value={cell}
                 key={`${index}-${rowIndex}`}
-                onClick={() => handleSelectCell([index, rowIndex])}
+                handleClick={() => handleSelectCell([index, rowIndex])}
               />
             ))
           )}

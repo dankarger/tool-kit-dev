@@ -13,9 +13,15 @@ import { LoadingSpinner } from "@/components/ui/spinner";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { TicTacToeBoard } from "@/components/TicTacToeBoard";
+import { object } from "zod";
 
 const DEFAULT_ID = "defaultId";
-const INITIALBOARD = Array(3).fill(Array(3).fill("_"));
+// const INITIALBOARD = Array(3).fill(Array(3).fill("_"));
+const INITIALBOARD = [
+  ["_", "_", "_"],
+  ["_", "_", "_"],
+  ["_", "_", "_"],
+];
 console.log("111", INITIALBOARD);
 // const gameBoard = new Array(9);
 // let gameStateArr = Array(9).fill("empty");
@@ -65,8 +71,14 @@ const GamesPage: NextPage = () => {
     onSuccess(data) {
       console.log("play", data);
       const updatedGameState = data?.split(",");
-      setGameState(gameState);
-      console.log("updatedGameState", updatedGameState);
+      const formatedUpdatedGameState = [] as typeof INITIALBOARD;
+      for (let i = 0; i < 9; i += 3) {
+        const chunk = updatedGameState?.slice(i, i + 3);
+        if (chunk) formatedUpdatedGameState.push(chunk);
+      }
+
+      setGameState(formatedUpdatedGameState);
+      console.log("updatedGameState", formatedUpdatedGameState);
     },
   });
   const {
@@ -79,46 +91,62 @@ const GamesPage: NextPage = () => {
   });
 
   const handleRequestMove = () => {
+    // void makePlay.mutate({
+    //   board: [
+    //     ["X", "_", "_"],
+    //     ["_", "O", "_"],
+    //     ["_", "_", "X"],
+    //   ],
+    // });
     void makePlay.mutate({
-      board: [
-        ["X", "_", "_"],
-        ["_", "O", "_"],
-        ["_", "_", "X"],
-      ],
+      board: gameState,
     });
   };
 
-  const deleteResult = api.translate.deleteResult.useMutation({
-    async onSuccess() {
-      toast({
-        title: "Deleted 1 Result",
-        // description: (
-        //   <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-        //     <code className="text-white">
-        //       Failed to summarize , please try again{" "}
-        //     </code>
-        //   </pre>
-        // ),
-      });
-      await sessionRefetch();
-    },
-  });
+  // const deleteResult = api.translate.deleteResult.useMutation({
+  //   async onSuccess() {
+  //     toast({
+  //       title: "Deleted 1 Result",
+  //       // description: (
+  //       //   <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+  //       //     <code className="text-white">
+  //       //       Failed to summarize , please try again{" "}
+  //       //     </code>
+  //       //   </pre>
+  //       // ),
+  //     });
+  //     await sessionRefetch();
+  //   },
+  // });
   const handleNewGame = () => {
+    console.log("ffffff");
     setGameState(INITIALBOARD);
     setGameOver(false);
     setTurnNumber(0);
     setPlayerTurn(false);
   };
-  React.useEffect(() => {}, [gameState]);
+  React.useEffect(() => {
+    console.log("refresh");
+  }, [turnNumber]);
 
-  const handleSelectCell = (cellNumber: number[]) => {
+  const handleSelectCell = (cellNumber: [arg0: number, arg1: number]) => {
     console.log("ccc", cellNumber);
-    const currentGameBoard = [...gameState];
+    // if(typeof cellNumber===undefined) return
+    const currentGameBoard: string[][] = [...gameState] || INITIALBOARD;
     const [cell, row] = cellNumber;
-    console.log(currentGameBoard, cell);
-    currentGameBoard[row][cell] = "X";
-    console.log("currentGameBoard", currentGameBoard);
+    // const cell = cellNumber[0]
+    console.log(currentGameBoard[row]);
+    console.log(typeof currentGameBoard, "cell");
+    if (!currentGameBoard) return;
+    // if (typeof currentGameBoard === typeof INITIALBOARD)
+    const currentRow = currentGameBoard[row] || [["_"], ["_"], ["_"]];
+    const currentcell = (currentRow[cell] = "X");
+    // const currentGameBoard
+    console.log("2222222", currentGameBoard);
+    // currentGameBoard[row][cell] = "X";
+    console.log("currentGameBoard", typeof INITIALBOARD);
     setGameState(currentGameBoard);
+    handleRequestMove();
   };
 
   return (
