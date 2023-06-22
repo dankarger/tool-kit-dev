@@ -119,7 +119,6 @@ const ChatPage: NextPage = () => {
   });
   const { mutate, isLoading, data } = api.chat.create.useMutation({
     onSuccess: (data) => {
-      console.log("datata", data);
       setPromptValue("");
       void session.refetch();
     },
@@ -167,7 +166,6 @@ const ChatPage: NextPage = () => {
     });
     setIsShowingPrevResults(false);
     void sessionRefetch();
-    console.log("ChatHistory", chatHistory.length);
     if (chatHistory.length === 1) {
       const newName = `${value.slice(0, 30)}...`;
       void renameSession.mutate({ id: currentSessionVariable, name: newName });
@@ -220,19 +218,12 @@ const ChatPage: NextPage = () => {
         chatHistory = arrangeChatHistory(currentSessionMesages[0].messages);
       }
     }
-
-    // if (currentSession.id === DEFAULT_ID) alert("fffffffff");
-
     chatHistory.push(prompt);
-    console.log("chatHistory", chatHistory);
-
-    // handleCreateNewSession();
-    // setTimeout(() => {
+    // console.log("chatHistory", chatHistory);
     setChatHistory(chatHistory);
     setPromptValue(value);
     if (currentSession.id === DEFAULT_ID) {
       void handleCreateNewSession();
-      console.log("wwf");
       return;
     } else {
       handleCreateNewChateMessage(chatHistory, value, currentSession.id);
@@ -240,9 +231,8 @@ const ChatPage: NextPage = () => {
       void sessionRefetch();
       return;
     }
-    // return message;
-    // }, 5000);
   };
+
   const handleSelectSession = (
     e: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
