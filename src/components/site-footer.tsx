@@ -24,7 +24,7 @@ export default function SiteFooter() {
               </a>
               . With design components by{" "}
               <a
-                href={siteConfig.links.twitter}
+                href={siteConfig.links.shadcn}
                 target="_blank"
                 rel="noreferrer"
                 className="font-medium underline underline-offset-4"
@@ -42,7 +42,7 @@ export default function SiteFooter() {
               </a>
               . The source code is available on{" "}
               <a
-                href={siteConfig.links.github}
+                href={siteConfig.links.repo}
                 target="_blank"
                 rel="noreferrer"
                 className="font-medium underline underline-offset-4"
