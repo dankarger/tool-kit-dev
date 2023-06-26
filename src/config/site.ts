@@ -21,8 +21,10 @@ export const siteConfig = {
   ],
 
   links: {
+    shadcn: "https://ui.shadcn.com",
     twitter: "https://twitter.com/shadcn",
     github: "https://github.com/dankarger",
+    repo: "https://github.com/dankarger/tool-kit-dev",
     docs: "https://ui.shadcn.com",
   },
 };
