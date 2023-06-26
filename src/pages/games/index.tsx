@@ -164,16 +164,15 @@ const GamesPage: NextPage = () => {
           />
 
           <section className="flex w-full flex-col gap-2 space-y-2 p-0  px-0 pb-2 pt-2   sm:px-0 md:pb-2 md:pt-4 lg:px-3 lg:py-2">
-            <div>
-              <TicTacToeBoard
+            <div className="p-4">
+              {/* <TicTacToeBoard
                 board={gameState}
                 turnNumber={turnNumber}
                 handleNewGame={handleNewGame}
                 handleSelectCell={handleSelectCell}
-              />
+              /> */}
+              <h1>Comming soon...</h1>
             </div>
-            {/* <Button onClick={handleNewGame}>New Game</Button> */}
-            <Button onClick={handleRequestMove}>Play</Button>
           </section>
         </main>
       </DashboardShell>
