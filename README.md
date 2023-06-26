@@ -2,7 +2,7 @@
 
 ### By Dan Karger
 
-### [Live demo](tool-kit-dev.vercel.app)
+### [Live demo](https://tool-kit-dev.vercel.app)
 
 "Unlock Limitless Creativity with GPT Tool Kit - Your Ultimate OpenAI-Powered Companion.",
 "Chat: Build intelligent chatbots and conversational interfaces",
