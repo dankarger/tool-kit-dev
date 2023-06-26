@@ -2,7 +2,7 @@
 
 ### By Dan Karger
 
-### [Live demo](tool-kit-dev.vercel.app)
+### [Live demo](https://tool-kit-dev.vercel.app)
 
 "Unlock Limitless Creativity with GPT Tool Kit - Your Ultimate OpenAI-Powered Companion.",
 "Chat: Build intelligent chatbots and conversational interfaces",
@@ -16,10 +16,6 @@
 
 # tech Stack:
 
-ChadCn
-"shadcn",
-url: "https://shadcn.com",
-
 [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
 - [Next.js](https://nextjs.org)
@@ -28,3 +24,7 @@ url: "https://shadcn.com",
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 - [PlanetScale](https://planetscale.com/)
+
+# Design with:
+
+- [ShadCn](https://ui.shadcn.com/)
