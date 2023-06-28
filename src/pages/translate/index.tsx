@@ -6,9 +6,7 @@ import { SessionsSection } from "@/components/sessions-section";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
 import { DashboardHeader } from "@/components/header";
-import { DashboardNav } from "@/components/nav";
 import { useUser } from "@clerk/nextjs";
-// import toast from "react-hot-toast";
 import { toast } from "@/components/ui/use-toast";
 import { TranslateSection } from "@/components/translate-section";
 import { TranslationResultComponent } from "@/components/translation-result";
@@ -61,15 +59,8 @@ const TranslatePage: NextPage = () => {
 
   const { mutate, isLoading, data } =
     api.translate.createTranslation.useMutation({
-      // mutationFn:async({text,language}:)=>{
-      //   console.log("mutate");
-
-      // },
       onSuccess: (data: TranslationResultType) => {
         setCurrenSession({ id: data.id });
-        // setPromptValue("");
-        // void session.refetch();
-        console.log("sucesss ");
       },
       onError: (error) => {
         const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -111,14 +102,11 @@ const TranslatePage: NextPage = () => {
       });
       return;
     }
-    console.log("translate button clicked");
-    console.log("text", text);
-    console.log("language", language);
+
     setIsShowingPrevResults(false);
     void mutate({
       text: text,
       language: language,
-      // title: text.substring(0,15)
     });
   };
   const handleSelectStory = (translateId: string) => {
@@ -130,15 +118,10 @@ const TranslatePage: NextPage = () => {
     void sessionRefetch();
     void selectedTranslateRefetch();
     setIsShowingPrevResults(true);
-    // void fullStoryReset();
   };
 
   const handleCreateNewSession = () => {
-    // setCurrenSession({ storyId: DEFAULT_ID });
     setCurrenSession({ id: DEFAULT_ID });
-    // setImageUrlResult("");
-    // setTextResult("");
-    // setTitle("");
     setIsShowingPrevResults(false);
   };
   const handleDeleteResult = (id: string) => {
@@ -162,14 +145,12 @@ const TranslatePage: NextPage = () => {
           />
 
           <section className="flex w-full gap-2 space-y-2 p-0   px-0 pb-2 pt-2   sm:px-0 md:pb-2 md:pt-4 lg:px-3 lg:py-2">
-            {/* <div className="flex  w-full  flex-row justify-between "> */}
             <div className="lg:dark:hover: flex w-full flex-col-reverse items-start justify-between gap-6 rounded-md  px-0  sm:flex-col-reverse sm:px-0 md:flex-col-reverse  lg:flex-row  lg:gap-y-0 lg:rounded-md    lg:bg-white   lg:py-8   lg:shadow-sm  lg:dark:border-gray-700    lg:dark:bg-gray-900  lg:dark:text-white  lg:dark:shadow-none  lg:dark:hover:border-gray-700  lg:dark:hover:bg-gray-800  lg:dark:hover:text-white     lg:dark:hover:shadow-xl lg:dark:hover:shadow-gray-900">
               <div className="w-full sm:w-full md:w-full lg:w-3/4">
                 <TranslateSection
                   handleTranslateButton={handleTranslateButton}
                 />
               </div>
-              {/* <Separator orientation="vertical" /> */}
               <div className=" w-full sm:w-full  md:w-full  lg:w-1/4 ">
                 {sessionSectionLoading && (
                   <SessionsSection

@@ -97,12 +97,6 @@ const ChatPage: NextPage = () => {
     },
     onSettled: (sessionId, arg2NotUsed, data) => {
       setCurrenSession({ id: sessionId ?? DEFAULT_ID });
-      // console.log(
-      //   "Yes, I have access to props after I receive the response: " +
-      //     JSON.stringify(sessionId)
-      // );
-
-      // handleCreateNewChateMessage(chatHistory, promptValue);
       void session.refetch();
       void sessionRefetch();
       return sessionId;
@@ -178,7 +172,6 @@ const ChatPage: NextPage = () => {
     if (!data) return [];
     // let chatHistory;
     const chatHistory = data.map((item) => {
-      // messages: [{ role: "user", content: input.message }],
       const userMessage = {
         role: ChatCompletionRequestMessageRoleEnum.User,
         content: item.message,
@@ -187,8 +180,7 @@ const ChatPage: NextPage = () => {
         role: ChatCompletionRequestMessageRoleEnum.Assistant,
         content: item.response,
       };
-      // chatHistory.push(userMessage);
-      // chatHistory.push(botMessage);
+
       return [{ ...userMessage }, { ...botMessage }];
     });
     const result = chatHistory.flat();
@@ -206,7 +198,6 @@ const ChatPage: NextPage = () => {
     if (!user.user?.id) {
       return handleToastError(["Please login to continue"]);
     }
-    // setIsSessionActivated(true);
 
     const currentSessionMesages =
       sessionData?.filter((session) => session.id === currentSession.id) || [];
@@ -219,7 +210,6 @@ const ChatPage: NextPage = () => {
       }
     }
     chatHistory.push(prompt);
-    // console.log("chatHistory", chatHistory);
     setChatHistory(chatHistory);
     setPromptValue(value);
     if (currentSession.id === DEFAULT_ID) {
@@ -247,14 +237,12 @@ const ChatPage: NextPage = () => {
   };
 
   const handleSelectSession2 = (sessionId: string) => {
-    // console.log("sessionId", sessionId);
     const obj = {
       id: sessionId ?? DEFAULT_ID,
     };
     setCurrenSession(obj);
     void session.refetch();
     setIsShowingPrevResults(true);
-    // ctx.chat.getSessionMessagesBySessionId.invalidate();
     void sessionRefetch();
   };
 
@@ -263,7 +251,6 @@ const ChatPage: NextPage = () => {
       id: id,
     });
     void sessionRefetch();
-    // setIsDeleteDialogueOpen(false);
   };
 
   return (
@@ -284,7 +271,6 @@ const ChatPage: NextPage = () => {
                   inputType="text"
                   placeholder={"Type your message here."}
                   handleSubmitButton={handleSubmitButton}
-                  // className="flex-grow:1 flex-1"
                 ></TextInputForm>
                 {sessionSectionLoading && (
                   <div className=" w-full sm:w-full  md:w-full  lg:w-1/4 ">
