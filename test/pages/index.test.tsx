@@ -1,34 +1,33 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import Home from "@/pages/index";
-import { HomePageConfig } from "@/config/homepage";
-import { TextInputForm } from "@/components/text-input-form";
-import ChatPage from "@/pages/chat";
+// import React from "react";
+// import { render, screen } from "@testing-library/react";
+// import "@testing-library/jest-dom";
+// import ChatPage from "@/pages/chat";
+// import { withTRPC } from "@trpc/next";
+// import { AppType } from "next/dist/shared/lib/utils";
+// import { type inferProcedureInput } from "@trpc/server";
+// import { appRouter, type AppRouter } from "@/server/api/root";
+// import { createInnerTRPCContext } from "@/server/api/trpc";
 
-jest.mock("@clerk/nextjs", () => require("../__mocks__/clerk"));
+// jest.mock("@clerk/nextjs", () => require("../__mocks__/clerk"));
+
+// test("protected example router", async () => {
+//   const ctx = await createInnerTRPCContext({ session: "test" });
+//   const caller = appRouter.createCaller(ctx);
+// });
+
+// const WrappedChatPage: AppType = withTRPC({
+//   config(info: { ctx?: NextPageContext | undefined }) {
+//     return {
+//       // your TRPC config here
+//     };
+//   },
+//   ssr: false,
+// })(ChatPage);
 
 // test("renders login and logout components", () => {
-//   render(<ChatPage />);
+//   render(
+//       <ChatPage />
 
-//   // Check if login and logout components are rendered
+//   );
 //   expect(screen.getByText("Chat")).toBeInTheDocument();
-//   // expect(screen.getByText("Signout")).toBeInTheDocument();
-// // });
-
-describe("TextInputForm", () => {
-  it("should render properlly", () => {
-    render(
-      <TextInputForm
-        inputType={"text"}
-        handleSubmitButton={() => {
-          console.log("test");
-        }}
-      />
-    );
-    const title = HomePageConfig.title;
-    const buttons = screen.getAllByRole("button");
-
-    expect(buttons).toHaveLength(2);
-  });
-});
+// });

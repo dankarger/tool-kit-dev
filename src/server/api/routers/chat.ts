@@ -189,7 +189,7 @@ export const chatRouter = createTRPCRouter({
           },
         ] as ChatCompletionRequestMessage[],
         // prompt: input.latestMessage,
-        max_tokens: 90,
+        max_tokens: 300,
         // stop: "\n",
         temperature: 0.5,
       });

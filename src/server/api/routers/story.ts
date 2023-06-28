@@ -88,7 +88,7 @@ export const storyRouter = createTRPCRouter({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: query }],
         // prompt: "Say it s party time",
-        max_tokens: 90,
+        max_tokens: 200,
         stop: "\n",
         temperature: 0.9,
       });
