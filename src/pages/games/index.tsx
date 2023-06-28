@@ -5,15 +5,10 @@ import { SessionsSection } from "@/components/sessions-section";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
 import { DashboardHeader } from "@/components/header";
-import { DashboardNav } from "@/components/nav";
 import { useUser } from "@clerk/nextjs";
-// import toast from "react-hot-toast";
 import { toast } from "@/components/ui/use-toast";
-import { LoadingSpinner } from "@/components/ui/spinner";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { TicTacToeBoard } from "@/components/TicTacToeBoard";
-import { object } from "zod";
 
 const DEFAULT_ID = "defaultId";
 // const INITIALBOARD = Array(3).fill(Array(3).fill("_"));

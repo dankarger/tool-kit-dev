@@ -1,8 +1,7 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { type NextPage } from "next";
-import type { SummarizeResultType } from "@/types";
+
 import Head from "next/head";
-import { dashboardConfig } from "@/config/site";
 import { api } from "@/utils/api";
 import { DashboardShell } from "@/components/shell";
 import { DashboardHeader } from "@/components/header";
@@ -14,18 +13,7 @@ import { TextInputForm } from "@/components/text-input-form";
 import { toast } from "@/components/ui/use-toast";
 import { useUser } from "@clerk/nextjs";
 import { LoadingSpinner } from "@/components/ui/spinner";
-import { SummarizeSection } from "@/components/summarize-section2";
-import { SessionsSection2 } from "@/components/session-section2";
 import { SummarizeResult } from "@/components/summarize-result";
-import { ComboboxDropdownMenu } from "@/components/ui/ComboboxDropdownMenu";
-import { IdentificationLink } from "@clerk/nextjs/server";
-
-// const fetchResult = (id: string) => {
-//   const helloNoArgs = api.summarize.getSummarizeResultById.useQuery({
-//     id: id,
-//   });
-//   return helloNoArgs;
-// };
 
 const SummarizePage: NextPage = () => {
   const [currentSession, setCurrenSession] = React.useState({
@@ -67,10 +55,6 @@ const SummarizePage: NextPage = () => {
     },
     { trpc: { abortOnUnmount: true } }
   );
-
-  // const {data: selectedSummarizeData , isLoading} = api.summarize.getSummarizeResultById.useQuery({
-
-  // })
 
   const { mutate, isLoading, data } =
     api.summarize.createSummarizeResult.useMutation({
@@ -136,7 +120,6 @@ const SummarizePage: NextPage = () => {
     void sessionRefetch();
     void selectedSummarizeRefetch();
     setIsShowingPrevResults(true);
-    // void fullStoryReset();
   };
   const handleCreateNewSession = () => {
     setCurrenSession({ id: "default-id" });
@@ -176,7 +159,6 @@ const SummarizePage: NextPage = () => {
               </div>
               <div className=" w-full sm:w-full  md:w-full  lg:w-1/4 ">
                 {sessionSectionLoading && (
-                  // <Skeleton className="h-[150px] w-[200px]" />
                   <SessionsSection
                     sessions={[]}
                     onSelect={handleSelectSummary}
@@ -195,7 +177,6 @@ const SummarizePage: NextPage = () => {
                 )}
               </div>
             </div>
-            {/* {/* <ComboboxDropdownMenu /> */}
           </section>
           {isLoading && (
             <div className="flex h-fit w-full items-center justify-center">
@@ -215,7 +196,6 @@ const SummarizePage: NextPage = () => {
             <section className="  container flex   space-y-2 bg-slate-50 py-2 dark:bg-transparent md:py-8 lg:py-14">
               <div className="container  relative flex h-fit w-full max-w-[64rem] flex-col items-start  gap-4   p-2 text-center">
                 {data && !isShowingPrevResults && (
-                  // currentSession.id !== "default-id" && (
                   <SummarizeResult data={data} />
                 )}
               </div>
