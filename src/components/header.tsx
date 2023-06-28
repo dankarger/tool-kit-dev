@@ -1,5 +1,3 @@
-import { Separator } from "@/components/ui/separator";
-
 interface DashboardHeaderProps {
   heading: string;
   text?: string;
@@ -18,7 +16,6 @@ export function DashboardHeader({
           {heading}
         </h1>
         {text && <p className="text-lg text-muted-foreground">{text}</p>}
-        {/* <Separator className="my-2" /> */}
       </div>
       {children}
     </div>

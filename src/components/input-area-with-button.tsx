@@ -24,8 +24,6 @@ const FormSchema = z.object({
 interface InputAreaWithButtonProps {
   handleSubmitteButton: (text: string) => void;
   placeholder: string;
-  // setSelectedLanguage: React.Dispatch<React.SetStateAction<string>>;
-  // setTextToTranslate: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export function InputAreaWithButton({
@@ -61,7 +59,6 @@ export function InputAreaWithButton({
           name="text"
           render={({ field }) => (
             <FormItem>
-              {/* <FormLabel>Past here text to summarize</FormLabel> */}
               <FormControl>
                 <Textarea
                   placeholder={placeholder}
@@ -71,9 +68,6 @@ export function InputAreaWithButton({
                   {...field}
                 />
               </FormControl>
-              {/* <FormDescription>
-                You can view older translations results
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
