@@ -59,7 +59,7 @@ export const dashboardConfig: DashboardConfig = {
       icon: "moon",
     },
     {
-      title: "Story Mode",
+      title: "Story Generator",
       href: "/story",
       icon: "image",
     },
