@@ -12,7 +12,9 @@ import { TicTacToeBoard } from "@/components/TicTacToeBoard";
 
 const DEFAULT_ID = "defaultId";
 // const INITIALBOARD = Array(3).fill(Array(3).fill("_"));
-const INITIALBOARD = [
+type cellOption = "_" | "X" | "O";
+type Board = cellOption[][];
+const INITIALBOARD: Board = [
   ["_", "_", "_"],
   ["_", "_", "_"],
   ["_", "_", "_"],
@@ -49,8 +51,8 @@ const GamesPage: NextPage = () => {
   const [isShowingPrevResults, setIsShowingPrevResults] = useState(false);
   const user = useUser();
 
-  function getWinner(gameState: typeof INITIALBOARD) {
-    const winConditions = [
+  function getWinner(gameState: Board) {
+    const winConditions: [number, number][][] = [
       [
         [0, 0],
         [0, 1],
@@ -92,18 +94,20 @@ const GamesPage: NextPage = () => {
         [2, 0],
       ], // right to left diagonal
     ];
-    if (!gameState == undefined || typeof gameState !== "object") return null;
+    // if (!gameState == undefined || typeof gameState !== "object") return null;
     for (const condition of winConditions) {
+      if (!condition[0] || !condition[1] || !condition[3]) return null;
       const [[x1, y1], [x2, y2], [x3, y3]] = condition;
       // if (!x1 || !x2 || !x3 || !y1 || !y2 || !y3) return null;
 
       if (
-        gameState[x1][y1] !== "_" &&
-        gameState[x1][y1] === gameState[x2][y2] &&
-        gameState[x1][y1] === gameState[x3][y3]
+        gameState[x1]?.[y1] !== undefined &&
+        gameState[x1]?.[y1] !== "_" &&
+        gameState[x1]?.[y1] === gameState[x2]?.[y2] &&
+        gameState[x1]?.[y1] === gameState[x3]?.[y3]
       ) {
         console.log("wiin");
-        return gameState[x1][y1] === "X" ? "You are the Winner" : "You lost";
+        return gameState[x1]?.[y1] === "X" ? "You are the Winner" : "You lost";
       }
     }
     console.log("no   -- - -  -wiin");
