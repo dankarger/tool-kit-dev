@@ -49,19 +49,66 @@ const GamesPage: NextPage = () => {
   const [isShowingPrevResults, setIsShowingPrevResults] = useState(false);
   const user = useUser();
 
-  // function getWinner() {
-  //   const winConditions = [
-  //     [0, 1, 2], [3, 4, 5], [6, 7, 8], // horizontal rows
-  //     [0, 3, 6], [1, 4, 7], [2, 5, 8], // vertical columns
-  //     [0, 4, 8], [2, 4, 6], // diagonals
-  //   ];
-  //   for (const condition of winConditions) {
-  //     const [a, b, c] = condition;
-  //     if (gameState[a] !== 'empty' && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
-  //       return gameState[a];
-  //     }
-  //   }
-  //   return null;
+  function getWinner(gameState: typeof INITIALBOARD) {
+    const winConditions = [
+      [
+        [0, 0],
+        [0, 1],
+        [0, 2],
+      ], // first row
+      [
+        [1, 0],
+        [1, 1],
+        [1, 2],
+      ], // second row
+      [
+        [2, 0],
+        [2, 1],
+        [2, 2],
+      ], // third row
+      [
+        [0, 0],
+        [1, 0],
+        [2, 0],
+      ], // first column
+      [
+        [0, 1],
+        [1, 1],
+        [2, 1],
+      ], // second column
+      [
+        [0, 2],
+        [1, 2],
+        [2, 2],
+      ], // third column
+      [
+        [0, 0],
+        [1, 1],
+        [2, 2],
+      ], // left to right diagonal
+      [
+        [0, 2],
+        [1, 1],
+        [2, 0],
+      ], // right to left diagonal
+    ];
+    if (!gameState == undefined || typeof gameState !== "object") return null;
+    for (const condition of winConditions) {
+      const [[x1, y1], [x2, y2], [x3, y3]] = condition;
+      // if (!x1 || !x2 || !x3 || !y1 || !y2 || !y3) return null;
+
+      if (
+        gameState[x1][y1] !== "_" &&
+        gameState[x1][y1] === gameState[x2][y2] &&
+        gameState[x1][y1] === gameState[x3][y3]
+      ) {
+        console.log("wiin");
+        return gameState[x1][y1] === "X" ? "You are the Winner" : "You lost";
+      }
+    }
+    console.log("no   -- - -  -wiin");
+    return null;
+  }
   const makePlay = api.games.playTicTacToe.useMutation({
     onSuccess(data) {
       console.log("play", data);
@@ -121,8 +168,8 @@ const GamesPage: NextPage = () => {
     setPlayerTurn(false);
   };
   React.useEffect(() => {
-    console.log("refresh");
-  }, [turnNumber]);
+    console.log(getWinner(gameState));
+  }, [turnNumber, gameState]);
 
   const handleSelectCell = (cellNumber: [arg0: number, arg1: number]) => {
     console.log("ccc", cellNumber);
@@ -143,7 +190,7 @@ const GamesPage: NextPage = () => {
     setGameState(currentGameBoard);
     handleRequestMove();
   };
-
+  // console.log(getWinner(gameState));
   return (
     <>
       <Head>
@@ -160,13 +207,13 @@ const GamesPage: NextPage = () => {
 
           <section className="flex w-full flex-col gap-2 space-y-2 p-0  px-0 pb-2 pt-2   sm:px-0 md:pb-2 md:pt-4 lg:px-3 lg:py-2">
             <div className="p-4">
-              {/* <TicTacToeBoard
+              <TicTacToeBoard
                 board={gameState}
                 turnNumber={turnNumber}
                 handleNewGame={handleNewGame}
                 handleSelectCell={handleSelectCell}
-              /> */}
-              <h1>Comming soon...</h1>
+              />
+              {/* <h1>Comming soon...</h1> */}
             </div>
           </section>
         </main>
