@@ -51,14 +51,50 @@ export const storyRouter = createTRPCRouter({
       console.log("input:storyText", input.text);
       // const prompt = `we are having a chat ,this is our chat history so far: ${input.messages.flat()}`;
       if (!input.text) throw new TRPCError({ code: "NOT_FOUND" });
-      const prompt = `write me a short story ,the main event is ${input.text}`;
+
+      // GPT-3.5
+      //---------------------------------------------------------------------------------
+      // const prompt = `write me a short story ,the main event is ${input.text}`;
+      // const response = await openai.createChatCompletion({
+      //   model: "gpt-3.5-turbo",
+      //   messages: [{ role: "user", content: prompt }],
+
+      //   max_tokens: 400,
+      //   stop: "\n",
+      //   temperature: 0.9,
+
+      //-- differnets paramaters:
+      // temperature: 1,
+      // max_tokens: 256,
+      // top_p: 1,
+      // frequency_penalty: 0,
+      // presence_penalty: 0,
+
+      // });
+
+      //------------------------------------------------------------------------------------
+      // GPT-4:
       const response = await openai.createChatCompletion({
+        // model: "gpt-4",
         model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: prompt }],
-        max_tokens: 400,
-        stop: "\n",
-        temperature: 0.9,
+        messages: [
+          {
+            role: "system",
+            content:
+              "you are a  writer of short stories, the instructions for the story will be delimeted by ###, return only the story without anything else",
+          },
+          {
+            role: "user",
+            content: `write a story about ###${input.text}###`,
+          },
+        ],
+        temperature: 1,
+        max_tokens: 256,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
       });
+
       console.log(
         "response-----------",
         response.data.choices[0]?.message?.content
@@ -88,7 +124,7 @@ export const storyRouter = createTRPCRouter({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: query }],
         // prompt: "Say it s party time",
-        max_tokens: 90,
+        max_tokens: 200,
         stop: "\n",
         temperature: 0.9,
       });

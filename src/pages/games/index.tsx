@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { SessionsSection } from "@/components/sessions-section";
@@ -12,7 +12,9 @@ import { TicTacToeBoard } from "@/components/TicTacToeBoard";
 
 const DEFAULT_ID = "defaultId";
 // const INITIALBOARD = Array(3).fill(Array(3).fill("_"));
-const INITIALBOARD = [
+type cellOption = "_" | "X" | "O";
+type Board = cellOption[][];
+const INITIALBOARD: Board = [
   ["_", "_", "_"],
   ["_", "_", "_"],
   ["_", "_", "_"],
@@ -28,7 +30,7 @@ const COLORS = {
 };
 
 const GamesPage: NextPage = () => {
-  const [currentSession, setCurrenSession] = React.useState({
+  const [currentSession, setCurrenSession] = useState({
     id: DEFAULT_ID,
   });
   const [inputValue, setInputValue] = useState("");
@@ -49,101 +51,129 @@ const GamesPage: NextPage = () => {
   const [isShowingPrevResults, setIsShowingPrevResults] = useState(false);
   const user = useUser();
 
-  // function getWinner() {
-  //   const winConditions = [
-  //     [0, 1, 2], [3, 4, 5], [6, 7, 8], // horizontal rows
-  //     [0, 3, 6], [1, 4, 7], [2, 5, 8], // vertical columns
-  //     [0, 4, 8], [2, 4, 6], // diagonals
+  // function getWinner(gameState: Board) {
+  //   const winConditions: [number, number][][] = [
+  //     [
+  //       [0, 0],
+  //       [0, 1],
+  //       [0, 2],
+  //     ], // first row
+  //     [
+  //       [1, 0],
+  //       [1, 1],
+  //       [1, 2],
+  //     ], // second row
+  //     [
+  //       [2, 0],
+  //       [2, 1],
+  //       [2, 2],
+  //     ], // third row
+  //     [
+  //       [0, 0],
+  //       [1, 0],
+  //       [2, 0],
+  //     ], // first column
+  //     [
+  //       [0, 1],
+  //       [1, 1],
+  //       [2, 1],
+  //     ], // second column
+  //     [
+  //       [0, 2],
+  //       [1, 2],
+  //       [2, 2],
+  //     ], // third column
+  //     [
+  //       [0, 0],
+  //       [1, 1],
+  //       [2, 2],
+  //     ], // left to right diagonal
+  //     [
+  //       [0, 2],
+  //       [1, 1],
+  //       [2, 0],
+  //     ], // right to left diagonal
   //   ];
+  //   // if (!gameState == undefined || typeof gameState !== "object") return null;
   //   for (const condition of winConditions) {
-  //     const [a, b, c] = condition;
-  //     if (gameState[a] !== 'empty' && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
-  //       return gameState[a];
+  //     if (!condition[0] || !condition[1] || !condition[3]) return null;
+  //     const [[x1, y1], [x2, y2], [x3, y3]] = condition;
+  //     // if (!x1 || !x2 || !x3 || !y1 || !y2 || !y3) return null;
+
+  //     if (
+  //       gameState[x1]?.[y1] !== undefined &&
+  //       gameState[x1]?.[y1] !== "_" &&
+  //       gameState[x1]?.[y1] === gameState[x2]?.[y2] &&
+  //       gameState[x1]?.[y1] === gameState[x3]?.[y3]
+  //     ) {
+  //       console.log("wiin");
+  //       return gameState[x1]?.[y1] === "X" ? "You are the Winner" : "You lost";
   //     }
   //   }
+  //   console.log("no   -- - -  -wiin");
   //   return null;
-  const makePlay = api.games.playTicTacToe.useMutation({
-    onSuccess(data) {
-      console.log("play", data);
-      const updatedGameState = data?.split(",");
-      const formatedUpdatedGameState = [] as typeof INITIALBOARD;
-      for (let i = 0; i < 9; i += 3) {
-        const chunk = updatedGameState?.slice(i, i + 3);
-        if (chunk) formatedUpdatedGameState.push(chunk);
-      }
+  // }
+  // const makePlay = api.games.playTicTacToe.useMutation({
+  //   onSuccess(data) {
+  //     console.log("play", data);
+  //     const updatedGameState = data?.split(",");
+  //     const formatedUpdatedGameState = [] as typeof INITIALBOARD;
+  //     for (let i = 0; i < 9; i += 3) {
+  //       const chunk = updatedGameState?.slice(i, i + 3);
+  //       if (chunk) formatedUpdatedGameState.push(chunk);
+  //     }
 
-      setGameState(formatedUpdatedGameState);
-      console.log("updatedGameState", formatedUpdatedGameState);
-    },
-  });
-  const {
-    data: sessionData,
-    isLoading: sessionSectionLoading,
-    refetch: sessionRefetch,
-    isSuccess,
-  } = api.translate.getAllTranslationsByAuthorId.useQuery({
-    authorId: user.user?.id || DEFAULT_ID,
-  });
-
-  const handleRequestMove = () => {
-    // void makePlay.mutate({
-    //   board: [
-    //     ["X", "_", "_"],
-    //     ["_", "O", "_"],
-    //     ["_", "_", "X"],
-    //   ],
-    // });
-    void makePlay.mutate({
-      board: gameState,
-    });
-  };
-
-  // const deleteResult = api.translate.deleteResult.useMutation({
-  //   async onSuccess() {
-  //     toast({
-  //       title: "Deleted 1 Result",
-  //       // description: (
-  //       //   <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-  //       //     <code className="text-white">
-  //       //       Failed to summarize , please try again{" "}
-  //       //     </code>
-  //       //   </pre>
-  //       // ),
-  //     });
-  //     await sessionRefetch();
+  //     setGameState(formatedUpdatedGameState);
+  //     console.log("updatedGameState", formatedUpdatedGameState);
   //   },
   // });
-  const handleNewGame = () => {
-    console.log("ffffff");
-    setGameState(INITIALBOARD);
-    setGameOver(false);
-    setTurnNumber(0);
-    setPlayerTurn(false);
-  };
-  React.useEffect(() => {
-    console.log("refresh");
-  }, [turnNumber]);
+  // const {
+  //   data: sessionData,
+  //   isLoading: sessionSectionLoading,
+  //   refetch: sessionRefetch,
+  //   isSuccess,
+  // } = api.translate.getAllTranslationsByAuthorId.useQuery({
+  //   authorId: user.user?.id || DEFAULT_ID,
+  // });
 
-  const handleSelectCell = (cellNumber: [arg0: number, arg1: number]) => {
-    console.log("ccc", cellNumber);
-    // if(typeof cellNumber===undefined) return
-    const currentGameBoard: string[][] = [...gameState] || INITIALBOARD;
-    const [cell, row] = cellNumber;
-    // const cell = cellNumber[0]
-    console.log(currentGameBoard[row]);
-    console.log(typeof currentGameBoard, "cell");
-    if (!currentGameBoard) return;
-    // if (typeof currentGameBoard === typeof INITIALBOARD)
-    const currentRow = currentGameBoard[row] || [["_"], ["_"], ["_"]];
-    const currentcell = (currentRow[cell] = "X");
-    // const currentGameBoard
-    console.log("2222222", currentGameBoard);
-    // currentGameBoard[row][cell] = "X";
-    console.log("currentGameBoard", typeof INITIALBOARD);
-    setGameState(currentGameBoard);
-    handleRequestMove();
-  };
+  // const handleRequestMove = () => {
 
+  //   // void makePlay.mutate({
+  //   //   board: gameState,
+  //   });
+  // };
+
+  // const handleNewGame = () => {
+  //   console.log("ffffff");
+  //   setGameState(INITIALBOARD);
+  //   setGameOver(false);
+  //   setTurnNumber(0);
+  //   setPlayerTurn(false);
+  // };
+  // useEffect(() => {
+  //   console.log(getWinner(gameState));
+  // }, [turnNumber, gameState]);
+
+  // const handleSelectCell = (cellNumber: [arg0: number, arg1: number]) => {
+  //   console.log("ccc", cellNumber);
+  //   // if(typeof cellNumber===undefined) return
+  //   const currentGameBoard: string[][] = [...gameState] || INITIALBOARD;
+  //   const [cell, row] = cellNumber;
+  //   // const cell = cellNumber[0]
+  //   console.log(currentGameBoard[row]);
+  //   console.log(typeof currentGameBoard, "cell");
+  //   if (!currentGameBoard) return;
+  //   // if (typeof currentGameBoard === typeof INITIALBOARD)
+  //   const currentRow = currentGameBoard[row] || [["_"], ["_"], ["_"]];
+  //   const currentcell = (currentRow[cell] = "X");
+  //   // const currentGameBoard
+  //   console.log("2222222", currentGameBoard);
+  //   // currentGameBoard[row][cell] = "X";
+  //   console.log("currentGameBoard", typeof INITIALBOARD);
+  //   setGameState(currentGameBoard);
+  //   handleRequestMove();
+  // };
+  // console.log(getWinner(gameState));
   return (
     <>
       <Head>

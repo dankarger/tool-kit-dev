@@ -2,7 +2,7 @@ import * as React from "react";
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
 import { type NavItem } from "@/types/index";
-import { siteConfig, dashboardConfig } from "@/config/site";
+import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { usePathname } from "next/navigation";
@@ -21,16 +21,12 @@ export function MainNav({ items, children }: MainNavProps) {
   const path = usePathname();
 
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false);
-  // const user = useUser();
-  // const username = user.user?.username || "User";
   if (!items) return null;
   return (
     <div className="flex gap-6 pl-11 md:gap-10">
       <Link href="/" className="hidden items-center space-x-2 md:flex">
-        {/* <Icons.logo className="h-6 w-6" /> */}
         <span className="hidden font-bold sm:inline-block">
           {siteConfig.name}
-          {/* {username} */}
         </span>
       </Link>
       {items?.length ? (
@@ -43,36 +39,15 @@ export function MainNav({ items, children }: MainNavProps) {
                   href={item.href}
                   className={cn(
                     "flex items-center text-lg font-semibold text-muted-foreground sm:text-sm",
-                    // item.disabled && "cursor-not-allowed opacity-80"
 
-                    path === item.href
-                      ? //  ||
-                        //   dashboardConfig.sidebarNav.find(
-                        //     (item) => item.href === path
-                        //   )
-                        "underline"
-                      : "transparent"
+                    path === item.href ? "underline" : "transparent"
                   )}
                 >
                   {item.title}
                 </Link>
               )
           )}
-          {/* <UserButton
-            appearance={{
-              variables: {},
-              userProfile: {
-                elements: {
-                  breadcrumbs: "bg-slate-500",
-                  formButtonPrimary:
-                    "bg-slate-500 hover:bg-slate-400 text-sm normal-case",
 
-                  userPreviewAvatarContainer__personalWorkspace: "bg-slate-900",
-                },
-              },
-              baseTheme: theme?.theme === "dark" ? dark : "light",
-            }}
-          /> */}
           <Link href={siteConfig.links.github} target="_blank" rel="noreferrer">
             <div
               className={buttonVariants({
