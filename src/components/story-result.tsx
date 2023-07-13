@@ -58,6 +58,7 @@ export const StoryResultDiv = ({
               alt={title}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               // loading="lazy"
+              loading="eager"
               style={{ objectFit: "cover", height: "auto" }}
               // fill={true}
               // placeholder="blur"

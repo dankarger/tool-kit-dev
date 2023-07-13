@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { SessionsSection } from "@/components/sessions-section";
@@ -30,7 +30,7 @@ const COLORS = {
 };
 
 const GamesPage: NextPage = () => {
-  const [currentSession, setCurrenSession] = React.useState({
+  const [currentSession, setCurrenSession] = useState({
     id: DEFAULT_ID,
   });
   const [inputValue, setInputValue] = useState("");
@@ -171,7 +171,7 @@ const GamesPage: NextPage = () => {
     setTurnNumber(0);
     setPlayerTurn(false);
   };
-  React.useEffect(() => {
+  useEffect(() => {
     console.log(getWinner(gameState));
   }, [turnNumber, gameState]);
 
