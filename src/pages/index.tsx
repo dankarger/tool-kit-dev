@@ -88,27 +88,27 @@ const Home: NextPage = () => {
       <section>
         <div>
           <ul>
-            {HomePageConfig.content.features1.map(
-              (feature: { title: string; description: string }) => (
-                <li
-                  key={feature.title}
-                  className="my-6 ml-6 list-disc [&>li]:mt-2"
-                >
-                  <span>{feature.title} </span> {feature.description}
-                </li>
-              )
-            )}
-          </ul>
-        </div>
-        <Separator />
-        <div>
-          <ul>
             {HomePageConfig.content.features2.map((feature: string) => (
               <li key={feature} className="my-6 ml-6 list-disc [&>li]:mt-2">
                 {feature}
               </li>
             ))}
           </ul>
+        </div>
+        <Separator />
+        <div>
+          <>
+            {HomePageConfig.content.features1.map(
+              (feature: { title: string; description: string }) => (
+                <div
+                  key={feature.title}
+                  className="my-6 ml-6 list-disc [&>li]:mt-2"
+                >
+                  <span>{feature.title} </span> {feature.description}
+                </div>
+              )
+            )}
+          </>
         </div>
       </section>
       <SignedOut>

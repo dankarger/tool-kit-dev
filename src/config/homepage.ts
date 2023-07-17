@@ -15,32 +15,33 @@ export const HomePageConfig: HomePageConfigtype = {
     paragraph4: "",
     features1: [
       {
-        title: "Easy to Use",
+        title: "",
         description:
           "GPToolKit is easy to use. You can use it from your browser.",
       },
+
       {
-        title: "Chat",
-        description: "Have a chat with chat GPT.",
+        title: "Load previous results",
+        description: ": You can load from your past sessions at any time",
       },
       {
-        title: "Translate",
-        description: "Translate text from one language to another.",
+        title: "Play Games ",
+        description: "(comming soon)",
       },
       {
-        title: "Story Mode",
-        description: "Create a story and illustrations with GPT.",
+        title: "",
+        description: "Dark and Light Mode",
       },
     ],
     features2: [
-      "Chat: Build intelligent chatbots and conversational interfaces",
-      " Translate: Break language barriers with accurate text translation.",
-      "Story Generator: Ignite creativity with dynamic story and narrative generation.",
-      "Intuitive Interface: User-friendly platform for seamless integration.",
-      "Advanced AI Capabilities: Access cutting-edge technology for NLP and generation.",
-      "Scalable and Reliable: Handle high volumes of requests with stability.",
-      "Join the GPToolKit Community: Collaborate, share ideas, and learn from peers.",
-      "Experience the Power: Revolutionize your applications with AI-driven solutions.",
+      "Chat- Have chats, ask questions with ChapGPT",
+      " Translate- Break language barriers with accurate text translation.",
+      "Story Generator- Ignite creativity with dynamic story and narrative generation.",
+      "Intuitive Interface- User-friendly platform for seamless integration.",
+      "Advanced AI Capabilities- Access cutting-edge technology for NLP and generation.",
+      // "Scalable and Reliable- Handle high volumes of requests with stability.",
+      "Join the GPToolKit Community- Collaborate, share ideas, and learn from peers.",
+      "Experience the Power- Revolutionize your applications with AI-driven solutions.",
     ],
   },
 };
