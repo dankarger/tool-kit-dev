@@ -81,7 +81,7 @@ export const storyRouter = createTRPCRouter({
           {
             role: "system",
             content:
-              "you are a  writer of short stories, the instructions for the story will be delimeted by ###, return only the story without anything else",
+              "you are a writer of short stories, the premis for the story will be delimeted by ###, return only the story without anything else",
           },
           {
             role: "user",
