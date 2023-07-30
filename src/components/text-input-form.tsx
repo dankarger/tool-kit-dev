@@ -154,8 +154,10 @@ export function TextInputForm({
                         />
                       </FormControl>
                       <FormDescription>
-                        You can load and continue previous chats by using the
-                        panel on the right
+                        <p className="text-xs text-muted-foreground ">
+                          You can load and continue previous chats by using the
+                          panel on the right
+                        </p>
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

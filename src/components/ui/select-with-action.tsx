@@ -120,7 +120,12 @@ export function SelectElement({
       <CardHeader>
         <CardTitle>Previous Results</CardTitle>
         <CardDescription>
-          You can load or delete previous results
+          {/* <div className="flex flex-row"> */}
+          {/* <span className="translate-y--2">*</span> */}
+          <p className="color-muted text-xs">
+            - You can load or delete previous results
+          </p>
+          {/* </div> */}
           {/* , click on the box below and */}
           {/* press the three dots to load or delete */}
         </CardDescription>
