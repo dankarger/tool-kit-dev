@@ -38,6 +38,12 @@ import type {
   Response,
   ChatMessage,
 } from "@/types";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const FormSchema = z.object({
@@ -118,13 +124,13 @@ export function SelectElement({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Previous Results</CardTitle>
-        <CardDescription>
+        <CardTitle className="whitespace-nowrap">Previous Results</CardTitle>
+        <CardDescription className="color-muted text-[10px]">
           {/* <div className="flex flex-row"> */}
           {/* <span className="translate-y--2">*</span> */}
-          <p className="color-muted text-xs">
-            - You can load or delete previous results
-          </p>
+          {/* <p className="color-muted text-xs">In the box below you can */}
+          load or delete previous results
+          {/* </p> */}
           {/* </div> */}
           {/* , click on the box below and */}
           {/* press the three dots to load or delete */}
@@ -144,46 +150,53 @@ export function SelectElement({
               render={({ field }) => (
                 <FormItem>
                   {/* <FormLabel>Click below </FormLabel> */}
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    disabled={options.length === 0}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          placeholder={
-                            options.length > 0
-                              ? "Previous Results"
-                              : "No previous results"
-                          }
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
-                        {sortedOptions.map(
-                          (
-                            option:
-                              | Session
-                              | StoryResult
-                              | TranslationResultType
-                              | SummarizeResultType
-                          ) => (
-                            <SessionsCombobox
-                              value={option.id}
-                              valueid={option.id}
-                              label={returnLabelFromOption(option)}
-                              title={returnLabelFromOption(option)}
-                              key={option.id}
-                              onSelect={onSelect}
-                              handleDeleteResult={handleDeleteResult}
-                            />
-                          )
-                        )}
-                      </ScrollArea>
-                    </SelectContent>
-                  </Select>
+                  <TooltipProvider>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      disabled={options.length === 0}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="color-muted-foreground text-[11px]">
+                          <SelectValue
+                            placeholder={
+                              options.length > 0 ? "Previous Results" : ""
+                            }
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <ScrollArea className="h-[200px] w-[350px] rounded-md border p-4">
+                              {sortedOptions.map(
+                                (
+                                  option:
+                                    | Session
+                                    | StoryResult
+                                    | TranslationResultType
+                                    | SummarizeResultType
+                                ) => (
+                                  <SessionsCombobox
+                                    value={option.id}
+                                    valueid={option.id}
+                                    label={returnLabelFromOption(option)}
+                                    title={returnLabelFromOption(option)}
+                                    key={option.id}
+                                    onSelect={onSelect}
+                                    handleDeleteResult={handleDeleteResult}
+                                  />
+                                )
+                              )}
+                            </ScrollArea>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>hello</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </SelectContent>
+                    </Select>
+                  </TooltipProvider>
                   {/* <FormDescription>
                     You can resume a previous chat{" "}
                   </FormDescription> */}

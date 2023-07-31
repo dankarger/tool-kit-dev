@@ -1,6 +1,5 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { User } from "@prisma/client"
 import { useForm, type SubmitHandler } from "react-hook-form";
 import * as z from "zod";
 import { Textarea } from "@/components/ui/textarea";
@@ -56,21 +55,7 @@ export function TextInputForm({
 }: TextInputFormProps) {
   const form = useForm<FormData>({
     resolver: zodResolver(TextInputSchema),
-    // defaultValues,
-    // mode: "onChange",
   });
-
-  // const {
-  //   handleSubmit,
-  //   register,
-  //   formState: { errors },
-  //   reset,
-  // } = useForm<FormData>({
-  //   resolver: zodResolver(TextInputSchema),
-  //   defaultValues: {
-  //     text: "",
-  //   },
-  // });
 
   const [isSaving, setIsSaving] = React.useState<boolean>(false);
 
@@ -99,39 +84,24 @@ export function TextInputForm({
         {...props}
       >
         <Card>
-          {/* <div className="flex w-full justify-between">
-            <div> */}
-          <CardHeader>
-            {/* <CardTitle>{placeholder}</CardTitle>
-          <CardDescription>{description}</CardDescription> */}
-          </CardHeader>
+          <CardHeader></CardHeader>
           <CardContent>
             <div className="grid w-full ">
-              <Label className="sr-only" htmlFor="name">
-                Text
-              </Label>
               {inputType === "area" ? (
                 <FormField
                   control={form.control}
                   name="text"
                   render={({ field }) => (
                     <FormItem>
-                      {/* <FormLabel>Text</FormLabel> */}
                       <FormControl>
                         <Textarea
                           id="text"
-                          // className="w-full"
                           placeholder={placeholder}
                           autoFocus
-                          // max={332}
-                          // min={130}
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription>
-                        You can <span>@mention</span> other users and
-                        organizations to link to them.
-                      </FormDescription>
+
                       <FormMessage />
                     </FormItem>
                   )}
@@ -142,7 +112,6 @@ export function TextInputForm({
                   name="text"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Text</FormLabel>
                       <FormControl>
                         <Input
                           id="text"
@@ -153,12 +122,6 @@ export function TextInputForm({
                           {...form.register("text")}
                         />
                       </FormControl>
-                      <FormDescription>
-                        <p className="text-xs text-muted-foreground ">
-                          You can load and continue previous chats by using the
-                          panel on the right
-                        </p>
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -169,14 +132,7 @@ export function TextInputForm({
           <CardFooter className="grid grid-cols-4 grid-rows-1 gap-4">
             <div className="col-span-4">
               <div className="flex w-full items-center justify-between">
-                <Button
-                  // variant="default"
-                  variant={"default"}
-                  type="submit"
-                  id="chat_submit"
-                  // className={cn(buttonVariants(), className)}
-                  // disabled={isSaving}
-                >
+                <Button variant={"default"} type="submit" id="chat_submit">
                   {isSaving && (
                     <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                   )}
@@ -194,9 +150,6 @@ export function TextInputForm({
               </div>
             </div>
           </CardFooter>
-          {/* </div>
-            <div>{children}</div>
-          </div> */}
         </Card>
       </form>
     </Form>
