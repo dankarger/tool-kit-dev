@@ -78,7 +78,7 @@ export function SessionsCombobox({
 
         // setDialogueOpen={setDialogueOpen}
       /> */}
-      <p className="text-sm font-medium leading-none">
+      <p className="text-sm ">
         {/* <span className="mr-2 rounded-lg bg-primary px-2 py-1 text-xs text-primary-foreground">
           {label}
         </span> */}
