@@ -32,15 +32,10 @@ interface ChatCompletionResponse {
   };
 }
 
-// interface ChatCompletionResponse {
-//   data: ChatCompletionResponseMessage;
-// }
-
 interface ChatCompletionChoice {
   message: {
     role: string;
     content: string;
-    // Other properties specific to the message object
   };
   finish_reason: string;
   index: number;
@@ -56,17 +51,6 @@ interface ChatCompletionRequestCustom {
   stop: "\n";
   temperature: 0.5;
 }
-
-// interface ChatCompletionRequestCustom extends ChatCompletionRequestMessage {
-//   model: string;
-//   messages: Message[];
-//   max_tokens: 90;
-//   stop: "\n";
-//   temperature: 0.5;
-// }
-
-// Usage example
-// const response: ChatCompletionResponse = openai.createChatCompletion(/* ... */);
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -84,9 +68,9 @@ export const filterOptionForClient = (
 };
 
 export const chatRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
-  }),
+  // getAll: publicProcedure.query(({ ctx }) => {
+  //   return ctx.prisma.example.findMany();
+  // }),
   getAllChatMessagesByAuthorId: privateProcedure
     .input(z.object({ authorId: z.string() }))
     .query(async ({ ctx, input }) => {
