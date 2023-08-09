@@ -44,7 +44,7 @@ const Home: NextPage = () => {
           href="/chat"
           // target="_blank"
           // rel="noreferrer"
-          className={buttonVariants({ size: "lg" })}
+          className={buttonVariants({ variant: "secondary", size: "lg" })}
         >
           Chat
         </Link>
