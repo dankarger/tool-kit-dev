@@ -68,9 +68,9 @@ export const filterOptionForClient = (
 };
 
 export const chatRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
-  }),
+  // getAll: publicProcedure.query(({ ctx }) => {
+  //   return ctx.prisma.example.findMany();
+  // }),
   getAllChatMessagesByAuthorId: privateProcedure
     .input(z.object({ authorId: z.string() }))
     .query(async ({ ctx, input }) => {
