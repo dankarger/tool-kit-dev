@@ -5,7 +5,6 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import { CardExample } from "./card-example";
 import {
   Form,
   FormControl,
@@ -137,15 +136,11 @@ export function TranslateSection({
                           {...field}
                         />
                       </FormControl>
-                      {/* <FormDescription>
-                  You can view older translations results
-                </FormDescription> */}
                       <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
-              {/* </CardExample> */}
               <div className=" col-span-2 col-start-4 ">
                 <FormField
                   control={form.control}
