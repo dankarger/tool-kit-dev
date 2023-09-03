@@ -85,7 +85,6 @@ const ChatPage: NextPage = () => {
 
   const createNewSession = api.session.createChatSession.useMutation({
     onSuccess: (data) => {
-      console.log("dattttaaa", data);
       if (currentSession.id === DEFAULT_ID) {
         handleCreateNewChateMessage(chatHistory, promptValue, data);
       }
