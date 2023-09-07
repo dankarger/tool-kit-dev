@@ -224,7 +224,7 @@ export const storyRouter = createTRPCRouter({
         throw new Error(`Non-200 response: ${await response.text()}`); // Replace later wirh trpc errors
       }
       const base64 = responseJSON.artifacts[0]?.base64;
-      const image64 = `data:image/jpeg;base64,${base64}`;
+      const image64 = `data:image/jpeg;base64,${base64 as string}`;
       return image64;
     }),
 
@@ -242,6 +242,7 @@ export const storyRouter = createTRPCRouter({
         overwrite: true,
         folder: "Gptool-kit/",
       };
+
       const cloudinaryResponse = await cloudinary.v2.uploader.upload(
         input.image_url,
         options
