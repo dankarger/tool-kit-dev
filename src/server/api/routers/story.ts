@@ -9,6 +9,10 @@ import type { CloudinaryResponse } from "@/types";
 // import cloudinary from 'cloudinary'
 import cloudinary from "@/utils/cloudinary";
 
+const apiHost = process.env.API_HOST ?? "https://api.stability.ai";
+const url = `${apiHost}/v1/user/account`;
+const apiKey = process.env.STABILITY_API_KEY;
+
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(20, "1 m"),
@@ -119,7 +123,7 @@ export const storyRouter = createTRPCRouter({
       if (!success) {
         throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
       }
-      const query = `Write a promt for the openai api to create an illustration for this story: "${input.story}"`;
+      const query = `You are a promt engineer, Write me  a promt I can use in a image generator AI to create an illustration for this story: """${input.story}""", return only the prompt itself nothing more.`;
       const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: query }],
@@ -131,6 +135,9 @@ export const storyRouter = createTRPCRouter({
       if (!response.data.choices[0]?.message?.content)
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const promptResult = response.data.choices[0]?.message?.content;
+      console.log("%c-------------------", "color: yellow");
+      console.log("promt image1-", query);
+      console.log("promptResult promt image1--------", promptResult);
 
       return promptResult;
     }),
@@ -156,6 +163,71 @@ export const storyRouter = createTRPCRouter({
 
       return image_url;
     }),
+
+  // Stable Difussion
+  createImageStable: privateProcedure
+    .input(z.object({ prompt: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const authorId = ctx.userId;
+      const engineId = "stable-diffusion-xl-1024-v1-0";
+
+      if (!apiKey) throw new Error("Missing Stability API key.");
+
+      // const response = await fetch(url, {
+      //   method: "GET",
+      //   headers: {
+      //     Authorization: `Bearer ${apiKey}`,
+      //   },
+      console.log("*****************************, input.prompt", input.prompt);
+      const response = await fetch(
+        `${apiHost}/v1/generation/${engineId}/text-to-image`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            text_prompts: [
+              {
+                text: input.prompt,
+                // text: "a blue elephant fly to the moon",
+              },
+            ],
+            cfg_scale: 7,
+            height: 1024,
+            width: 1024,
+            steps: 30,
+            samples: 1,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Non-200 response: ${await response.text()}`);
+      }
+
+      interface GenerationResponse {
+        artifacts: Array<{
+          base64: string;
+          seed: number;
+          finishReason: string;
+        }>;
+      }
+
+      const responseJSON = (await response.json()) as GenerationResponse;
+
+      // })
+
+      if (!response.ok) {
+        throw new Error(`Non-200 response: ${await response.text()}`); // Replace later wirh trpc errors
+      }
+      const base64 = responseJSON.artifacts[0]?.base64;
+      const image64 = `data:image/jpeg;base64,${base64}`;
+      return image64;
+    }),
+
   uploadImageToCloudinary: privateProcedure
     .input(z.object({ image_url: z.string() }))
     .mutation(async ({ ctx, input }) => {

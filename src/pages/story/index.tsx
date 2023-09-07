@@ -107,6 +107,7 @@ const StoryPage: NextPage = () => {
       setPromptForImage(data);
       console.log("prompt result ", data);
       createImage({ prompt: data });
+      createImageStable({ prompt: data });
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -179,6 +180,47 @@ const StoryPage: NextPage = () => {
     },
   });
 
+  // Stability ai
+  const {
+    mutate: createImageStable,
+    data: imageDataStable,
+    isLoading: ImageIsLoadingStable,
+  } = api.story.createImageStable.useMutation({
+    onSuccess: (data) => {
+      // void session.refetch();
+      // setImageUrlResult(data);
+      // uplaodImageToCloudinary({ image_url: data });
+      console.log("image from stable------------------00000---  ", data);
+    },
+    onError: (error) => {
+      const errorMessage = error.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast({
+          title: errorMessage[0],
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                {JSON.stringify(errorMessage, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("errorMessage", errorMessage[0]);
+      } else {
+        toast({
+          title: "failed",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                Failed to generate story , please try again{" "}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("Failed to generate, please try again");
+      }
+    },
+  });
   const {
     mutate: createTitle,
     data: dataTitle,
@@ -258,7 +300,7 @@ const StoryPage: NextPage = () => {
 
   const handleStoryGenerateButton = (text: string) => {
     scrollDivRef.current?.scrollIntoView();
-    console.log("story", text);
+    // console.log("story", text);
     if (!text) {
       toast({
         title: "Please enter all fields",
@@ -402,6 +444,18 @@ const StoryPage: NextPage = () => {
                   title={data.title}
                   resultText={data.resultText}
                   resultImageUrl={data.resultImageUrl}
+                />
+              </section>
+            </>
+          )}
+          {data && !isShowingPrevResults && (
+            <>
+              <Separator />
+              <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
+                <StoryResultDiv
+                  title={data.title}
+                  resultText={data.resultText}
+                  resultImageUrl={imageDataStable as string}
                 />
               </section>
             </>
