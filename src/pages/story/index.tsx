@@ -505,7 +505,7 @@ const StoryPage: NextPage = () => {
                 <StoryResultDiv
                   title={data.title}
                   resultText={data.resultText}
-                  resultImageUrl={imageDataStable as string}
+                  resultImageUrl={imageDataStable}
                 />
               </section>
             </>

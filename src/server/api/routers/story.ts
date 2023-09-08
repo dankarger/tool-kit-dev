@@ -123,7 +123,7 @@ export const storyRouter = createTRPCRouter({
       if (!success) {
         throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
       }
-      const query = `You are a promt engineer, Write me  a promt I can use in a image generator AI to create an illustration for this story: """${input.story}""".`;
+      const query = `You are a promt engineer expert in image generating ai, Write me a promt that I can use to create an illustration for this story explain in your result the characters and background so the generative ai will understand the scene: """${input.story}""".`;
       const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: query }],
@@ -224,7 +224,7 @@ export const storyRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND" }); //
       }
       const base64 = responseJSON.artifacts[0]?.base64 as string;
-      const image64 = ("data:image/jpg;base64," + base64) as string;
+      const image64 = "data:image/jpg;base64," + base64;
 
       console.log(
         "+++++++++++++++++++++++++++++++++++++=image65",
