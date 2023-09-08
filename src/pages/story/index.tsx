@@ -53,6 +53,7 @@ const StoryPage: NextPage = () => {
     },
   });
 
+  // generating the story
   const {
     mutate: mutateText,
     isSuccess: textIsSuccess,
@@ -65,6 +66,7 @@ const StoryPage: NextPage = () => {
       setTextResult(data);
       console.log("sucesssdata ", data);
       createPrompt({ story: data });
+      // createImageStable({ prompt: data }); // uncomment to send the image api the story directly
       // create title
       createTitle({ story: data });
     },
@@ -107,6 +109,7 @@ const StoryPage: NextPage = () => {
       setPromptForImage(data);
       console.log("prompt result ", data);
       // createImage({ prompt: data });
+
       createImageStable({ prompt: data });
     },
     onError: (error) => {
