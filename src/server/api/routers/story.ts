@@ -9,6 +9,10 @@ import type { CloudinaryResponse } from "@/types";
 // import cloudinary from 'cloudinary'
 import cloudinary from "@/utils/cloudinary";
 
+const apiHost = process.env.API_HOST ?? "https://api.stability.ai";
+const url = `${apiHost}/v1/user/account`;
+const apiKey = process.env.STABILITY_API_KEY;
+
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(20, "1 m"),
@@ -119,7 +123,7 @@ export const storyRouter = createTRPCRouter({
       if (!success) {
         throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
       }
-      const query = `Write a promt for the openai api to create an illustration for this story: "${input.story}"`;
+      const query = `You are a promt engineer expert in image generating ai, Write me a promt that I can use to create an illustration for this story explain in your result the characters and background so the generative ai will understand the scene: """${input.story}""".`;
       const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: query }],
@@ -131,6 +135,9 @@ export const storyRouter = createTRPCRouter({
       if (!response.data.choices[0]?.message?.content)
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const promptResult = response.data.choices[0]?.message?.content;
+      console.log("%c-------------------", "color: yellow");
+      console.log("promt image1-", query);
+      console.log("promptResult promt image1--------", promptResult);
 
       return promptResult;
     }),
@@ -156,6 +163,92 @@ export const storyRouter = createTRPCRouter({
 
       return image_url;
     }),
+
+  // Stable Difussion
+  createImageStable: privateProcedure
+    .input(z.object({ prompt: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const authorId = ctx.userId;
+      const engineId = "stable-diffusion-xl-1024-v1-0";
+
+      if (!apiKey) throw new Error("Missing Stability API key.");
+
+      // const response = await fetch(url, {
+      //   method: "GET",
+      //   headers: {
+      //     Authorization: `Bearer ${apiKey}`,
+      //   },
+      console.log("*****************************, input.prompt", input.prompt);
+      const response = await fetch(
+        `${apiHost}/v1/generation/${engineId}/text-to-image`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            text_prompts: [
+              {
+                text: input.prompt,
+                // text: "a blue elephant fly to the moon",
+              },
+            ],
+            cfg_scale: 7,
+            height: 1024,
+            width: 1024,
+            steps: 30,
+            samples: 1,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Non-200 response: ${await response.text()}`);
+      }
+
+      interface GenerationResponse {
+        artifacts: Array<{
+          base64: string;
+          seed: number;
+          finishReason: string;
+        }>;
+      }
+
+      const responseJSON = (await response.json()) as GenerationResponse;
+
+      // })
+
+      if (!response.ok) {
+        throw new TRPCError({ code: "NOT_FOUND" }); //
+      }
+      const base64 = responseJSON.artifacts[0]?.base64 as string;
+      const image64 = "data:image/jpg;base64," + base64;
+
+      console.log(
+        "+++++++++++++++++++++++++++++++++++++=image65",
+        image64.substring(0, 50)
+      );
+
+      const options = {
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+        folder: "Gptool-kit/",
+      };
+
+      const cloudinaryResponse = await cloudinary.v2.uploader.upload(
+        image64,
+        options
+      );
+      if (!cloudinaryResponse) {
+        throw new TRPCError({ code: "NOT_FOUND" }); //
+      }
+      return cloudinaryResponse.secure_url;
+    }),
+  // upload image
+  // image from openai
   uploadImageToCloudinary: privateProcedure
     .input(z.object({ image_url: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -170,6 +263,10 @@ export const storyRouter = createTRPCRouter({
         overwrite: true,
         folder: "Gptool-kit/",
       };
+      console.log(
+        " input.image_url,--==========-----=_+-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-",
+        input.image_url
+      );
       const cloudinaryResponse = await cloudinary.v2.uploader.upload(
         input.image_url,
         options
@@ -179,6 +276,40 @@ export const storyRouter = createTRPCRouter({
 
       console.log(
         "cloudinaryResponse.secure_url)",
+        cloudinaryResponse.secure_url
+      );
+      return cloudinaryResponse.secure_url;
+    }),
+
+  // image from stability ai
+  uploadImageToCloudinaryStable: privateProcedure
+    .input(z.object({ base64Image: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const authorId = ctx.userId;
+      const { success } = await ratelimit.limit(authorId);
+      if (!success) {
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+      }
+      const options = {
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+        folder: "Gptool-kit/",
+      };
+      const { base64Image } = input;
+      console.log(
+        " input.image_url,--==========-----=_+-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-",
+        base64Image
+      );
+      const cloudinaryResponse = await cloudinary.v2.uploader.upload(
+        base64Image,
+        options
+      );
+
+      console.log("cloudinaryResponsestable--------------", cloudinaryResponse);
+
+      console.log(
+        "cloudinaryResponsestable.secure_url)",
         cloudinaryResponse.secure_url
       );
       return cloudinaryResponse.secure_url;

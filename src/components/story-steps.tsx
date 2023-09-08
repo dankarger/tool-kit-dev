@@ -87,7 +87,10 @@ export const StorySteps = ({
           </span>
           <h3 className="font-medium leading-tight">Generating Image</h3>
           <p className="text-sm">
-            Based on the story and title, making an illustration for the story
+            Generating an illustration from Stability ai
+          </p>
+          <p className="text-xl text-muted-foreground">
+            *This step may take a few seconds to complete.
           </p>
         </li>
       </ol>

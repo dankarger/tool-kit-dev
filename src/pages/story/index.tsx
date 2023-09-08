@@ -107,6 +107,7 @@ const StoryPage: NextPage = () => {
       setPromptForImage(data);
       console.log("prompt result ", data);
       createImage({ prompt: data });
+      createImageStable({ prompt: data });
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
@@ -145,8 +146,14 @@ const StoryPage: NextPage = () => {
   } = api.story.createImage.useMutation({
     onSuccess: (data) => {
       // void session.refetch();
-      setImageUrlResult(data);
-      uplaodImageToCloudinary({ image_url: data });
+      console.log(
+        "%c--------------------------------------------------------",
+        "color: yellow"
+      );
+      console.log("type of data", data);
+      // setImageUrlResult(data);
+      // uplaodImageToCloudinary({ image_url: data });
+
       console.log("image url result ", data);
     },
     onError: (error) => {
@@ -179,6 +186,65 @@ const StoryPage: NextPage = () => {
     },
   });
 
+  // Stability ai ----------------------------------
+  const {
+    mutate: createImageStable,
+    data: imageDataStable,
+    isLoading: ImageIsLoadingStable,
+    isSuccess: imageStableSuccess,
+    reset: resetStable,
+  } = api.story.createImageStable.useMutation({
+    onSuccess: (data) => {
+      // void session.refetch();
+      // const uri = `data:image/jpeg;base64,${data}`;
+      // const stringifyData = JSON.stringify(data);
+      console.log("SSSSSS", data.substring(0, 10));
+      setImageUrlResult(data);
+      setImageCloudinaryUrl(data);
+      createFullStoryResult({
+        title: title,
+        text: userPromt,
+        resultText: textResult,
+        resultPrompt: promptForImage,
+        resultImageUrl: data,
+      });
+      // uplaodImageToCloudinary({ image_url: data });
+      console.log(
+        "%c--------------------------------------------------------",
+        "color: red"
+      );
+      console.log("type of data stable", typeof data);
+      console.log("image from stable------------------00000---  ", data);
+    },
+    onError: (error) => {
+      const errorMessage = error.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast({
+          title: errorMessage[0],
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                {JSON.stringify(errorMessage, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("errorMessage", errorMessage[0]);
+      } else {
+        toast({
+          title: "failed",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                Failed to generate story , please try again{" "}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("Failed to generate, please try again");
+      }
+    },
+  });
   const {
     mutate: createTitle,
     data: dataTitle,
@@ -220,27 +286,54 @@ const StoryPage: NextPage = () => {
     },
   });
 
-  const {
-    mutate: uplaodImageToCloudinary,
-    data: imageCloudinaryData,
-    status: imageCloudinaryStatus,
-    reset: imageCloudinaryReset,
-    isLoading: cloudinaryIsLoading,
-    isSuccess: imageIsSuccess,
-  } = api.story.uploadImageToCloudinary.useMutation({
-    onSuccess(data: string) {
-      console.log(";cloudinary result", data);
-      setImageCloudinaryUrl(data);
-      createFullStoryResult({
-        title: title,
-        text: userPromt,
-        resultText: textResult,
-        resultPrompt: promptForImage,
-        resultImageUrl: data,
-      });
-    },
-    //TODO : ADD ERROR handeling
-  });
+  // const {
+  //   mutate: uplaodImageToCloudinary,
+  //   data: imageCloudinaryData,
+  //   status: imageCloudinaryStatus,
+  //   reset: imageCloudinaryReset,
+  //   isLoading: cloudinaryIsLoading,
+  //   isSuccess: imageIsSuccess,
+  // } = api.story.uploadImageToCloudinary.useMutation({
+  //   onSuccess(data: string) {
+  //     console.log(";cloudinary result", data);
+  //     setImageCloudinaryUrl(data);
+  //     createFullStoryResult({
+  //       title: title,
+  //       text: userPromt,
+  //       resultText: textResult,
+  //       resultPrompt: promptForImage,
+  //       resultImageUrl: data,
+  //     });
+  //   },
+  //   onError: (error) => {
+  //     const errorMessage = error.data?.zodError?.fieldErrors.content;
+  //     if (errorMessage && errorMessage[0]) {
+  //       toast({
+  //         title: errorMessage[0],
+  //         description: (
+  //           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+  //             <code className="text-white">
+  //               {JSON.stringify(errorMessage, null, 2)}
+  //             </code>
+  //           </pre>
+  //         ),
+  //       });
+  //       console.log("errorMessage", errorMessage[0]);
+  //     } else {
+  //       toast({
+  //         title: "failed",
+  //         description: (
+  //           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+  //             <code className="text-white">
+  //               Failed to generate story , please try again,
+  //             </code>
+  //           </pre>
+  //         ),
+  //       });
+  //       console.log("Failed to generate, please try again");
+  //     }
+  //   },
+  // });
 
   const {
     mutate: createFullStoryResult,
@@ -258,7 +351,7 @@ const StoryPage: NextPage = () => {
 
   const handleStoryGenerateButton = (text: string) => {
     scrollDivRef.current?.scrollIntoView();
-    console.log("story", text);
+    // console.log("story", text);
     if (!text) {
       toast({
         title: "Please enter all fields",
@@ -271,9 +364,10 @@ const StoryPage: NextPage = () => {
       return;
     }
     selectedStoryReset();
+    fullStoryReset();
     textReset();
     titleReset();
-    imageCloudinaryReset();
+    resetStable();
     setIsShowingPrevResults(false);
     setUserPrompt(text);
     handleCreateNewSession();
@@ -302,7 +396,6 @@ const StoryPage: NextPage = () => {
     selectedStoryReset();
     textReset();
     titleReset();
-    imageCloudinaryReset();
     setIsShowingPrevResults(false);
     setCurrenSession({ storyId: "default-id" });
     setImageUrlResult("");
@@ -377,7 +470,6 @@ const StoryPage: NextPage = () => {
             isFullStoryLoading ||
             ImageIsLoading ||
             titleisLoading ||
-            cloudinaryIsLoading ||
             promptIsLoading) && (
             <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
               <div className="flex h-full w-full flex-col items-center justify-center">
@@ -389,12 +481,12 @@ const StoryPage: NextPage = () => {
                 <StorySteps
                   completedStep1={textIsSuccess}
                   completedStep2={titleSuccess}
-                  completedStep3={imageIsSuccess}
+                  completedStep3={imageStableSuccess}
                 />
               </div>
             </section>
           )}
-          {data && !isShowingPrevResults && (
+          {/* {data && !isShowingPrevResults && (
             <>
               <Separator />
               <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
@@ -402,6 +494,18 @@ const StoryPage: NextPage = () => {
                   title={data.title}
                   resultText={data.resultText}
                   resultImageUrl={data.resultImageUrl}
+                />
+              </section>
+            </>
+          )} */}
+          {data && imageDataStable && !isShowingPrevResults && (
+            <>
+              <Separator />
+              <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
+                <StoryResultDiv
+                  title={data.title}
+                  resultText={data.resultText}
+                  resultImageUrl={imageDataStable}
                 />
               </section>
             </>
