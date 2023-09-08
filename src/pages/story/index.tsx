@@ -146,8 +146,13 @@ const StoryPage: NextPage = () => {
   } = api.story.createImage.useMutation({
     onSuccess: (data) => {
       // void session.refetch();
-      setImageUrlResult(data);
-      uplaodImageToCloudinary({ image_url: data });
+      console.log(
+        "%c--------------------------------------------------------",
+        "color: yellow"
+      );
+      console.log("type of data", typeof data);
+      // setImageUrlResult(data);
+      // uplaodImageToCloudinary({ image_url: data });
       console.log("image url result ", data);
     },
     onError: (error) => {
@@ -180,7 +185,7 @@ const StoryPage: NextPage = () => {
     },
   });
 
-  // Stability ai
+  // Stability ai ----------------------------------
   const {
     mutate: createImageStable,
     data: imageDataStable,
@@ -190,8 +195,14 @@ const StoryPage: NextPage = () => {
       // void session.refetch();
       // const uri = `data:image/jpeg;base64,${data}`;
       // const stringifyData = JSON.stringify(data);
-      // setImageUrlResult(data);
-      // uplaodImageToCloudinary({ image_url: data });
+      console.log("SSSSSS", data.substring(0, 10));
+      setImageUrlResult(data);
+      uplaodImageToCloudinary({ image_url: data });
+      console.log(
+        "%c--------------------------------------------------------",
+        "color: red"
+      );
+      console.log("type of data stable", typeof data);
       console.log("image from stable------------------00000---  ", data);
     },
     onError: (error) => {
@@ -283,7 +294,34 @@ const StoryPage: NextPage = () => {
         resultImageUrl: data,
       });
     },
-    //TODO : ADD ERROR handeling
+    onError: (error) => {
+      const errorMessage = error.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast({
+          title: errorMessage[0],
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                {JSON.stringify(errorMessage, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
+        console.log("errorMessage", errorMessage[0]);
+      } else {
+        toast({
+          title: "failed",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                Failed to generate story , please try again,
+              </code>
+            </pre>
+          ),
+        });
+        console.log("Failed to generate, please try again");
+      }
+    },
   });
 
   const {

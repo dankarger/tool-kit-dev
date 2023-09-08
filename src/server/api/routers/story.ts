@@ -223,11 +223,17 @@ export const storyRouter = createTRPCRouter({
       if (!response.ok) {
         throw new Error(`Non-200 response: ${await response.text()}`); // Replace later wirh trpc errors
       }
-      const base64 = responseJSON.artifacts[0]?.base64;
-      const image64 = `data:image/jpeg;base64,${base64 as string}`;
+      const base64 = responseJSON.artifacts[0]?.base64 as string;
+      const image64 = ("data:image/png;gbase64," + base64) as string;
+
+      console.log(
+        "+++++++++++++++++++++++++++++++++++++=image65",
+        image64.substring(0, 50)
+      );
       return image64;
     }),
-
+  // upload image
+  // image from openai
   uploadImageToCloudinary: privateProcedure
     .input(z.object({ image_url: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -255,6 +261,40 @@ export const storyRouter = createTRPCRouter({
 
       console.log(
         "cloudinaryResponse.secure_url)",
+        cloudinaryResponse.secure_url
+      );
+      return cloudinaryResponse.secure_url;
+    }),
+
+  // image from stability ai
+  uploadImageToCloudinaryStable: privateProcedure
+    .input(z.object({ base64Image: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const authorId = ctx.userId;
+      const { success } = await ratelimit.limit(authorId);
+      if (!success) {
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
+      }
+      const options = {
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+        folder: "Gptool-kit/",
+      };
+      const { base64Image } = input;
+      console.log(
+        " input.image_url,--==========-----=_+-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-",
+        base64Image
+      );
+      const cloudinaryResponse = await cloudinary.v2.uploader.upload(
+        base64Image,
+        options
+      );
+
+      console.log("cloudinaryResponsestable--------------", cloudinaryResponse);
+
+      console.log(
+        "cloudinaryResponsestable.secure_url)",
         cloudinaryResponse.secure_url
       );
       return cloudinaryResponse.secure_url;
