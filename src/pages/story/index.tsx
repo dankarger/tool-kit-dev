@@ -188,6 +188,8 @@ const StoryPage: NextPage = () => {
   } = api.story.createImageStable.useMutation({
     onSuccess: (data) => {
       // void session.refetch();
+      // const uri = `data:image/jpeg;base64,${data}`;
+      // const stringifyData = JSON.stringify(data);
       // setImageUrlResult(data);
       // uplaodImageToCloudinary({ image_url: data });
       console.log("image from stable------------------00000---  ", data);

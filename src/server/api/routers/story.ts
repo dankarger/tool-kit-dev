@@ -123,7 +123,7 @@ export const storyRouter = createTRPCRouter({
       if (!success) {
         throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
       }
-      const query = `You are a promt engineer, Write me  a promt I can use in a image generator AI to create an illustration for this story: """${input.story}""", return only the prompt itself nothing more.`;
+      const query = `You are a promt engineer, Write me  a promt I can use in a image generator AI to create an illustration for this story: """${input.story}""".`;
       const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [{ role: "user", content: query }],
@@ -242,7 +242,10 @@ export const storyRouter = createTRPCRouter({
         overwrite: true,
         folder: "Gptool-kit/",
       };
-
+      console.log(
+        " input.image_url,--==========-----=_+-=-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-",
+        input.image_url
+      );
       const cloudinaryResponse = await cloudinary.v2.uploader.upload(
         input.image_url,
         options
