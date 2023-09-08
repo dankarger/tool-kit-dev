@@ -89,7 +89,7 @@ export const StorySteps = ({
           <p className="text-sm">
             Generating an illustration from Stability ai
           </p>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             *This step may take a few seconds to complete.
           </p>
         </li>
