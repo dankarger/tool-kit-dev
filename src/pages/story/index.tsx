@@ -106,7 +106,7 @@ const StoryPage: NextPage = () => {
     onSuccess: (data) => {
       setPromptForImage(data);
       console.log("prompt result ", data);
-      createImage({ prompt: data });
+      // createImage({ prompt: data });
       createImageStable({ prompt: data });
     },
     onError: (error) => {
