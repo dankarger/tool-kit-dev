@@ -468,7 +468,8 @@ const StoryPage: NextPage = () => {
           </div>
           {(isLoading ||
             isFullStoryLoading ||
-            ImageIsLoading ||
+            // ImageIsLoading ||
+            ImageIsLoadingStable ||
             titleisLoading ||
             promptIsLoading) && (
             <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
@@ -480,8 +481,8 @@ const StoryPage: NextPage = () => {
                 </div>
                 <StorySteps
                   completedStep1={textIsSuccess}
-                  completedStep2={titleSuccess}
-                  completedStep3={imageStableSuccess}
+                  completedStep2={!!dataTitle}
+                  completedStep3={!!imageDataStable}
                 />
               </div>
             </section>
