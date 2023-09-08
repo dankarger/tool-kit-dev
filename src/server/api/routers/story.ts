@@ -221,16 +221,31 @@ export const storyRouter = createTRPCRouter({
       // })
 
       if (!response.ok) {
-        throw new Error(`Non-200 response: ${await response.text()}`); // Replace later wirh trpc errors
+        throw new TRPCError({ code: "NOT_FOUND" }); //
       }
       const base64 = responseJSON.artifacts[0]?.base64 as string;
-      const image64 = ("data:image/png;gbase64," + base64) as string;
+      const image64 = ("data:image/jpg;base64," + base64) as string;
 
       console.log(
         "+++++++++++++++++++++++++++++++++++++=image65",
         image64.substring(0, 50)
       );
-      return image64;
+
+      const options = {
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+        folder: "Gptool-kit/",
+      };
+
+      const cloudinaryResponse = await cloudinary.v2.uploader.upload(
+        image64,
+        options
+      );
+      if (!cloudinaryResponse) {
+        throw new TRPCError({ code: "NOT_FOUND" }); //
+      }
+      return cloudinaryResponse.secure_url;
     }),
   // upload image
   // image from openai
