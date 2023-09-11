@@ -200,9 +200,6 @@ const StoryPage: NextPage = () => {
     reset: resetStable,
   } = api.story.createImageStable.useMutation({
     onSuccess: (data) => {
-      // void session.refetch();
-      // const uri = `data:image/jpeg;base64,${data}`;
-      // const stringifyData = JSON.stringify(data);
       console.log("SSSSSS", data.substring(0, 10));
       setImageUrlResult(data);
       setImageCloudinaryUrl(data);
@@ -290,55 +287,6 @@ const StoryPage: NextPage = () => {
       }
     },
   });
-
-  // const {
-  //   mutate: uplaodImageToCloudinary,
-  //   data: imageCloudinaryData,
-  //   status: imageCloudinaryStatus,
-  //   reset: imageCloudinaryReset,
-  //   isLoading: cloudinaryIsLoading,
-  //   isSuccess: imageIsSuccess,
-  // } = api.story.uploadImageToCloudinary.useMutation({
-  //   onSuccess(data: string) {
-  //     console.log(";cloudinary result", data);
-  //     setImageCloudinaryUrl(data);
-  //     createFullStoryResult({
-  //       title: title,
-  //       text: userPromt,
-  //       resultText: textResult,
-  //       resultPrompt: promptForImage,
-  //       resultImageUrl: data,
-  //     });
-  //   },
-  //   onError: (error) => {
-  //     const errorMessage = error.data?.zodError?.fieldErrors.content;
-  //     if (errorMessage && errorMessage[0]) {
-  //       toast({
-  //         title: errorMessage[0],
-  //         description: (
-  //           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-  //             <code className="text-white">
-  //               {JSON.stringify(errorMessage, null, 2)}
-  //             </code>
-  //           </pre>
-  //         ),
-  //       });
-  //       console.log("errorMessage", errorMessage[0]);
-  //     } else {
-  //       toast({
-  //         title: "failed",
-  //         description: (
-  //           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-  //             <code className="text-white">
-  //               Failed to generate story , please try again,
-  //             </code>
-  //           </pre>
-  //         ),
-  //       });
-  //       console.log("Failed to generate, please try again");
-  //     }
-  //   },
-  // });
 
   const {
     mutate: createFullStoryResult,
@@ -492,18 +440,6 @@ const StoryPage: NextPage = () => {
               </div>
             </section>
           )}
-          {/* {data && !isShowingPrevResults && (
-            <>
-              <Separator />
-              <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
-                <StoryResultDiv
-                  title={data.title}
-                  resultText={data.resultText}
-                  resultImageUrl={data.resultImageUrl}
-                />
-              </section>
-            </>
-          )} */}
           {data && imageDataStable && !isShowingPrevResults && (
             <>
               <Separator />

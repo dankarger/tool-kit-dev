@@ -6,7 +6,6 @@ import { TRPCError } from "@trpc/server";
 import { Analytics, Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis";
 import type { CloudinaryResponse } from "@/types";
-// import cloudinary from 'cloudinary'
 import cloudinary from "@/utils/cloudinary";
 
 const apiHost = process.env.API_HOST ?? "https://api.stability.ai";
@@ -125,7 +124,6 @@ export const storyRouter = createTRPCRouter({
       }
       const system = `You are a promt engineer and an illustrator of books, Write me a promt that will create an illustration for a story explain in your result the characters and background so the generative ai will understand the scene, return the prompt you have created (make the prompt not longer than 2000 words)`;
       const query = ` the story that need to illustrate is : """${input.story}""". return only the resulting promt`;
-      // const query = `You are a promt engineer ,you are being asked to illustrat a story , Write a promt to input  a generative image generator AI ,the promt you provide should illustrate best this story (dont forget to give details about how the characters looks and the envirement), the story is : """${input.story}""". return the resulting prompt you wrote`;
       const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [
@@ -140,8 +138,6 @@ export const storyRouter = createTRPCRouter({
       if (!response.data.choices[0]?.message?.content)
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const promptResult = response.data.choices[0]?.message?.content;
-      console.log("%c-------------------", "color: yellow");
-      console.log("promt image1-=======================", query);
       console.log(
         "promptResult promt image1--------+++++++++++++++++++++++++++++++++++++++++++++++++++++",
         promptResult
@@ -162,8 +158,6 @@ export const storyRouter = createTRPCRouter({
         n: 1,
         size: "512x512",
       });
-
-      // console.log('response2',response.data.choices)
 
       if (!response) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const image_url = response.data?.data[0]?.url;
