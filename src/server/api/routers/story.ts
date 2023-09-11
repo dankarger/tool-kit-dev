@@ -93,7 +93,7 @@ export const storyRouter = createTRPCRouter({
           },
         ],
         temperature: 1,
-        max_tokens: 256,
+        // max_tokens: 3000,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
@@ -123,7 +123,7 @@ export const storyRouter = createTRPCRouter({
       if (!success) {
         throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
       }
-      const query = `You are a promt engineer expert in image generating ai, Write me a promt that I can use to create an illustration for this story explain in your result the characters and background so the generative ai will understand the scene: """${input.story}""".`;
+      const query = `You are a promt engineer and an illustrator of books, Write me a promt that will create an illustration for a story explain in your result the characters and background so the generative ai will understand the scene, the story is : """${input.story}""". return only the resulting promt`;
       // const query = `You are a promt engineer ,you are being asked to illustrat a story , Write a promt to input  a generative image generator AI ,the promt you provide should illustrate best this story (dont forget to give details about how the characters looks and the envirement), the story is : """${input.story}""". return the resulting prompt you wrote`;
       const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
