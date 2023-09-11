@@ -123,11 +123,15 @@ export const storyRouter = createTRPCRouter({
       if (!success) {
         throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
       }
-      const query = `You are a promt engineer and an illustrator of books, Write me a promt that will create an illustration for a story explain in your result the characters and background so the generative ai will understand the scene, the story is : """${input.story}""". return only the resulting promt`;
+      const system = `You are a promt engineer and an illustrator of books, Write me a promt that will create an illustration for a story explain in your result the characters and background so the generative ai will understand the scene, return the prompt you have created (make the prompt not longer than 2000 words)`;
+      const query = ` the story that need to illustrate is : """${input.story}""". return only the resulting promt`;
       // const query = `You are a promt engineer ,you are being asked to illustrat a story , Write a promt to input  a generative image generator AI ,the promt you provide should illustrate best this story (dont forget to give details about how the characters looks and the envirement), the story is : """${input.story}""". return the resulting prompt you wrote`;
       const response = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: query }],
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: query },
+        ],
         // prompt: "Say it s party time",
         max_tokens: 200,
         stop: "\n",
@@ -137,8 +141,11 @@ export const storyRouter = createTRPCRouter({
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const promptResult = response.data.choices[0]?.message?.content;
       console.log("%c-------------------", "color: yellow");
-      console.log("promt image1-", query);
-      console.log("promptResult promt image1--------", promptResult);
+      console.log("promt image1-=======================", query);
+      console.log(
+        "promptResult promt image1--------+++++++++++++++++++++++++++++++++++++++++++++++++++++",
+        promptResult
+      );
 
       return promptResult;
     }),

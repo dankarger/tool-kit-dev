@@ -108,11 +108,11 @@ const StoryPage: NextPage = () => {
     onSuccess: (data) => {
       setPromptForImage(data);
       console.log("prompt result ", data);
-      createImage({ prompt: data });
+      // createImage({ prompt: data }); // openai image creation
 
-      // createImageStable({ prompt: data }); //  to create dedicated promt for image
+      createImageStable({ prompt: data }); //  to create dedicated promt for image with stability
 
-      if (textData) createImageStable({ prompt: textData }); // to create image with the story as prompt;
+      // if (textData) createImageStable({ prompt: textData }); // to create image with the story as prompt;
     },
     onError: (error) => {
       const errorMessage = error.data?.zodError?.fieldErrors.content;
