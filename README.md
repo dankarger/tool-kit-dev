@@ -46,6 +46,8 @@ GPToolkit is not just another AI application; it's a full-fledged ecosystem offe
 
 - [tRPC](https://trpc.io) - A framework for building typesafe APIs.
 - [PlanetScale](https://planetscale.com/) - Planet-scale MySQL—scalable, reliable, worry-free.
+- [OpenAi API](https://openai.com/blog/openai-api) - Transforming work and creativity with AI
+- [Stability.ai API](https://platform.stability.ai/docs/api-reference) - For generating amazing images.
 
 ### 🚀 Bootstrapped With
 
