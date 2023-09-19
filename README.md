@@ -6,7 +6,7 @@
 
 #### Developed by: Dan Karger
 
-#### 🌐 [Explore Live Demo](https://tool-kit-dev.vercel.app)
+#### 🌐 [Explore Live Site](https://tool-kit-dev.vercel.app)
 
 ---
 
