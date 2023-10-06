@@ -139,7 +139,7 @@ export const storyRouter = createTRPCRouter({
         throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
       const promptResult = response.data.choices[0]?.message?.content;
       console.log(
-        "promptResult promt image1--------+++++++++++++++++++++++++++++++++++++++++++++++++++++",
+        "promptResult promt --------+++++++++++++++++++++++++++++++++++++++++++++++++++++",
         promptResult
       );
 
