@@ -18,6 +18,10 @@ const ratelimit = new Ratelimit({
   analytics: true,
 });
 
+export const config = {
+  maxDuration: 20,
+};
+
 export const storyRouter = createTRPCRouter({
   getAllStoriesByAuthorId: privateProcedure
     .input(z.object({ authorId: z.string() }))
