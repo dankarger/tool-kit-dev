@@ -1,7 +1,6 @@
 {
   "functions": {
-    "src/server/**": {
-      "memory": 3008,
+    "pages/api/**": {
       "maxDuration": 60
     }
   }
