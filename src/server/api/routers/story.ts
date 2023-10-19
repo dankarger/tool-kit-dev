@@ -144,7 +144,7 @@ export const storyRouter = createTRPCRouter({
       const promptResult = response.data.choices[0]?.message?.content;
       console.log(
         "promptResult promt --------+++++++++++++++++++++++++++++++++++++++++++++++++++++",
-        promptResult
+        response
       );
 
       return promptResult;
