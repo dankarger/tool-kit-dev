@@ -426,9 +426,9 @@ const StoryPage: NextPage = () => {
             titleisLoading ||
             promptIsLoading) && (
             <section className="container space-y-2 bg-slate-50  py-6 dark:bg-transparent md:py-8 lg:py-14">
-              <div className="flex h-full w-full flex-col items-center justify-center">
-                <div className=" flex h-1/2 w-1/2 flex-col justify-center pl-4">
-                  <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+              <div className="flex h-full w-full flex-col items-start justify-start">
+                <div className=" flex h-1/2 w-1/2 flex-col justify-start pl-4">
+                  <h4 className="scroll-m-20 text-center text-xl font-semibold tracking-tight">
                     Please wait...
                   </h4>
                 </div>
